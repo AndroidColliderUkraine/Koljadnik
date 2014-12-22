@@ -48,6 +48,12 @@ public class SplashScreenActivity extends Activity {
                     dataSource.checkAndUpdateTables();
                 }
 
+                Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);
+                finish();
+                startActivity(intent);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+
             }
 
             @Override

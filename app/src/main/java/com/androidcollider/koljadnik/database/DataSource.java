@@ -3,6 +3,7 @@ package com.androidcollider.koljadnik.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -59,6 +60,10 @@ public class DataSource {
 
         ArrayList<Date> localUpdates = getLocalUpdates();
         ArrayList<Date> serverUpdates = getServerUpdates();
+
+        Log.i(TAG, localUpdates.toString());
+        Log.i(TAG, serverUpdates.toString());
+
 
         for (int i = 0; i < tables.length; i++) {
             if (serverUpdates.get(i).getTime() > localUpdates.get(i).getTime()) {
@@ -167,6 +172,26 @@ public class DataSource {
 
         setLocalUpdates(tableName, parseObject.getUpdatedAt().getTime());
         closeLocal();
+    }
+
+    public String[] getSongTypes(){
+        openLocal();
+        Cursor cursor = dbLocal.query("SongType", null, null, null, null, null, null);
+        String[] songTypesArray = new String[cursor.getCount()];
+
+        if (cursor.moveToFirst()) {
+           int nameColIndex = cursor.getColumnIndex("name");
+
+           for (int i=0; i<cursor.getCount(); i++){
+               songTypesArray[i]=cursor.getString(nameColIndex);
+               cursor.moveToNext();
+           }
+        }
+        cursor.close();
+        closeLocal();
+        return songTypesArray;
+
+
     }
 
 }
