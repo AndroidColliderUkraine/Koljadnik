@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.androidcollider.koljadnik.database.DBupdater;
 import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.utils.InternetHelper;
 
@@ -44,16 +45,15 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (InternetHelper.isConnectionEnabled(getApplicationContext())){
-                    DataSource dataSource = new DataSource(getApplicationContext());
-                    dataSource.checkAndUpdateTables();
+                    DBupdater dBupdater = new DBupdater(getApplicationContext());
+                    dBupdater.checkAndUpdateTables();
                 }
+
 
                 Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);
                 finish();
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-
-
             }
 
             @Override
