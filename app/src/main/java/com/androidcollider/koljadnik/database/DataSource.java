@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.database.local_db.DBhelperLocalDB;
+import com.androidcollider.koljadnik.objects.Song;
+import com.androidcollider.koljadnik.objects.SongType;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -145,25 +147,30 @@ public class DataSource {
     }
 
 
-
-    public String[] getSongTypes(){
+    public ArrayList<SongType> getSongTypes(){
         openLocal();
         Cursor cursor = dbLocal.query("SongType", null, null, null, null, null, null);
-        String[] songTypesArray = new String[cursor.getCount()];
+        ArrayList<SongType> songTypesList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
            int nameColIndex = cursor.getColumnIndex("name");
+           int idTypeColIndex =  cursor.getColumnIndex("id_type");
 
            for (int i=0; i<cursor.getCount(); i++){
-               songTypesArray[i]=cursor.getString(nameColIndex);
+               String songTypeName =cursor.getString(nameColIndex);
+               int songTypeId = cursor.getInt(idTypeColIndex);
+               songTypesList.add(new SongType(songTypeId, songTypeName, getSongTypeQuantity(songTypeId)));
                cursor.moveToNext();
            }
         }
         cursor.close();
         closeLocal();
-        return songTypesArray;
+        return songTypesList;
+    }
 
-
+    private int getSongTypeQuantity(int songType){
+        Cursor cursor = dbLocal.query("Song", null,"id_type = ?", new String[]{String.valueOf(songType)}, null, null, null);
+        return cursor.getCount();
     }
 
     public Cursor getUpdatebleRowsFromLocal(String tableName, long updateFrom){
@@ -294,6 +301,41 @@ public class DataSource {
         cv.clear();
 
         setLocalUpdates("Comment", currentTime);
+    }
+
+    public ArrayList<Song> getSongMainInfo(int idType){
+        openLocal();
+        Cursor cursor = dbLocal.query("Song", null, "id_type = ?", new String[]{String.valueOf(idType)}, null, null, null);
+        ArrayList<Song> songsList = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            int nameColIndex = cursor.getColumnIndex("name");
+            int ratingColIndex = cursor.getColumnIndex("rating");
+            int idColIndex =  cursor.getColumnIndex("id_song");
+
+            long minRating = cursor.getLong(ratingColIndex);
+            long maxRating = cursor.getLong(ratingColIndex);
+
+            for (int i=0; i<cursor.getCount(); i++){
+                String songName =cursor.getString(nameColIndex);
+                int songId = cursor.getInt(idColIndex);
+                long songRating = cursor.getInt(ratingColIndex);
+                songsList.add(new Song(songId, songRating, songName));
+
+                if (songRating>maxRating){
+                    maxRating=songRating;
+                }
+                if (songRating<minRating){
+                    minRating=songRating;
+                }
+                cursor.moveToNext();
+            }
+            Song.current_max_rating = maxRating;
+            Song.current_min_rating = minRating;
+        }
+        cursor.close();
+        closeLocal();
+        return songsList;
     }
 
 }

@@ -20,5 +20,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_song_types">SongTypesActivity</string>
+    <string name="title_activity_song_list">SongListActivity</string>
 
 </resources>

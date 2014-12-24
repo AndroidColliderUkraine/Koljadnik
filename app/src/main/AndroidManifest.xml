@@ -23,6 +23,10 @@
             android:name=".SongTypesActivity"
             android:label="@string/title_activity_song_types" >
         </activity>
+        <activity
+            android:name=".SongListActivity"
+            android:label="@string/title_activity_song_list" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,21 +1,28 @@
 package com.androidcollider.koljadnik;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.androidcollider.koljadnik.adapters.SongTypeAdapter;
 import com.androidcollider.koljadnik.database.DataSource;
+import com.androidcollider.koljadnik.objects.SongType;
+
+import java.util.ArrayList;
 
 
 public class SongTypesActivity  extends Activity {
 
     private final static String TAG = "Андроідний Коллайдер";
 
-
-    private String[] songTypesArray;
+    private ArrayList<SongType> songTypesList;
     private ListView lv_category;
+    private SongTypeAdapter songTypeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +34,29 @@ public class SongTypesActivity  extends Activity {
         setContentView(R.layout.activity_song_types);
 
         initFields();
+        initListeners();
 
         DataSource dataSource = new DataSource(this);
         //dataSource.addCommentToLocal(1,"Крута пісня");
-        songTypesArray = dataSource.getSongTypes();
+        songTypesList = dataSource.getSongTypes();
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, songTypesArray);
-        lv_category.setAdapter(adapter);
+        songTypeAdapter = new SongTypeAdapter(this,songTypesList);
+        lv_category.setAdapter(songTypeAdapter);
 
     }
 
     private void initFields(){
         lv_category = (ListView)findViewById(R.id.lv_category);
+    }
+    private void initListeners(){
+        lv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(),SongListActivity.class);
+                Log.i(TAG+"peredaemo id",songTypeAdapter.getItem(position).getId()+"");
+                intent.putExtra("SongType", songTypeAdapter.getItem(position).getId());
+                startActivity(intent);
+            }
+        });
     }
 }
