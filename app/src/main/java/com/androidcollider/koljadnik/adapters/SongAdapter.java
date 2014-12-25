@@ -73,7 +73,7 @@ public class SongAdapter extends BaseAdapter {
         ViewHolder holder;
         View view = convertView;
         if (view == null) {
-            view = lInflater.inflate(R.layout.item_song_type, parent, false);
+            view = lInflater.inflate(R.layout.item_song, parent, false);
 
             holder = new ViewHolder();
             holder.tv_name = (TextView) view.findViewById(R.id.tv_item_song_name);
@@ -92,10 +92,18 @@ public class SongAdapter extends BaseAdapter {
         } else if (ratingRange<5){
             switch ((int)(Song.current_max_rating-song.getRating())){
                 case 0: holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_5));
+                    break;
                 case 1: holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_4));
+                    break;
                 case 2: holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_3));
+                    break;
                 case 3: holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_2));
+                    break;
                 case 4: holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_1));
+                    break;
+                default:
+                    holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_5));
+                    break;
             }
         } else {
             double onePoint = ratingRange/5;
@@ -107,16 +115,24 @@ public class SongAdapter extends BaseAdapter {
             switch ((int)curentRatingRound) {
                 case 1:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_1));
+                    break;
                 case 2:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_2));
+                    break;
                 case 3:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_3));
+                    break;
                 case 4:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_4));
+                    break;
                 case 5:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_5));
-                case 6:
+                    break;
+                default:
                     holder.iv_rating.setImageDrawable(context.getResources().getDrawable(R.drawable.rating_5));
+                    break;
+
+
             }
         }
 

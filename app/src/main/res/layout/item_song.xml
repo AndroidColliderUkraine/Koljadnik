@@ -10,7 +10,8 @@
         android:textSize="24dp" />
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="25dp"
-        android:id="@+id/iv_item_song_rating" />
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:id="@+id/iv_item_song_rating"
+        android:layout_gravity="right" />
 </LinearLayout>

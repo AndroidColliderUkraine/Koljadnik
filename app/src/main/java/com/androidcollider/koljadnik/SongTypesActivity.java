@@ -24,6 +24,8 @@ public class SongTypesActivity  extends Activity {
     private ListView lv_category;
     private SongTypeAdapter songTypeAdapter;
 
+    private DataSource dataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -36,7 +38,7 @@ public class SongTypesActivity  extends Activity {
         initFields();
         initListeners();
 
-        DataSource dataSource = new DataSource(this);
+        dataSource = new DataSource(this);
         //dataSource.addCommentToLocal(1,"Крута пісня");
         songTypesList = dataSource.getSongTypes();
 
@@ -53,10 +55,18 @@ public class SongTypesActivity  extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(),SongListActivity.class);
-                Log.i(TAG+"peredaemo id",songTypeAdapter.getItem(position).getId()+"");
-                intent.putExtra("SongType", songTypeAdapter.getItem(position).getId());
+                int idType =  songTypeAdapter.getItem(position).getId();
+                Log.i(TAG + " peredaemo id", idType + "");
+                intent.putExtra("SongType", idType);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        dataSource.updateServerRatings();
+        super.onBackPressed();
+
     }
 }

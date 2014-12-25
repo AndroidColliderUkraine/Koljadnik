@@ -11,7 +11,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:gravity="right"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_song_type_quantity" />
+        android:id="@+id/tv_item_song_type_quantity"
+        android:layout_gravity="right" />
 </LinearLayout>

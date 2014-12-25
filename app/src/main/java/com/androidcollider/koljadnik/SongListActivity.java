@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidcollider.koljadnik.adapters.SongAdapter;
@@ -18,9 +20,12 @@ import java.util.ArrayList;
 
 public class SongListActivity extends Activity {
 
+    private final static String TAG = "Андроідний Коллайдер";
+
     private ListView lv_songs_list;
     private ArrayList<Song> songList;
     private SongAdapter songAdapter;
+    private DataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +33,14 @@ public class SongListActivity extends Activity {
         setContentView(R.layout.activity_song_list);
 
         initFields();
-        DataSource dataSource = new DataSource(this);
-        Intent intent = new Intent();
+        initListeners();
+        dataSource = new DataSource(this);
+        Intent intent = getIntent();
 
-        Log.i("Parkh", intent.getIntExtra("SongType", 0)+"");
-        songList = dataSource.getSongMainInfo(intent.getIntExtra("SongType",0));
+        Log.i("Parkh", intent.getIntExtra("SongType",-1)+"");
+        songList = dataSource.getSongMainInfo(intent.getIntExtra("SongType",-1));
         for (Song song: songList){
-            Log.i("Parkh", song.getName());
+            Log.i("T", song.getName());
         }
 
         songAdapter = new SongAdapter(this, songList);
@@ -45,6 +51,47 @@ public class SongListActivity extends Activity {
     private void initFields(){
         lv_songs_list = (ListView)findViewById(R.id.lv_songs_list);
     }
+    private void initListeners() {
+        lv_songs_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int idSong = songAdapter.getItem(position).getId();
 
+                addOnePointToListRating(idSong);
+                addOnePointToLocalDBRating(idSong);
+
+                songAdapter.updateData(songList);
+
+                /*Log.i(TAG+" peredaemo id", idType+"");
+                intent.putExtra("SongType",idType);
+                startActivity(intent);*/
+            }
+        });
+    }
+
+    private void addOnePointToListRating(int idSong){
+        for (Song song : songList) {
+            if (song.getId() == idSong) {
+                song.setRating(song.getRating() + 1);
+            }
+        }
+        long minRating = songList.get(0).getRating();
+        long maxRating = songList.get(0).getRating();
+        for (Song song : songList) {
+            long songRating = song.getRating();
+            if (songRating>maxRating){
+                maxRating=songRating;
+            }
+            if (songRating<minRating){
+                minRating=songRating;
+            }
+        }
+        Song.current_max_rating = maxRating;
+        Song.current_min_rating = minRating;
+    }
+
+    private void addOnePointToLocalDBRating(int idSong){
+        dataSource.addPointToLocalRating(idSong);
+    }
 
 }

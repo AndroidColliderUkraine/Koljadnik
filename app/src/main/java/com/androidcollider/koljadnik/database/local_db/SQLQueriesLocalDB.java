@@ -6,15 +6,16 @@ package com.androidcollider.koljadnik.database.local_db;
 public class SQLQueriesLocalDB {
     //make a string SQL request for Song table
     public static final String create_song_table = "CREATE TABLE Song (" +
-            "id_song          INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "id_song          INTEGER PRIMARY KEY NOT NULL," +
             "update_time      INTEGER NOT NULL," +
             "name             TEXT NOT NULL," +
             "id_type          INTEGER NOT NULL," +
-            "rating           INTEGER NOT NULL" +
+            "rating           INTEGER NOT NULL," +
+            "my_local_rating  INTEGER NOT NULL" +
             ");";
     //make a string SQL request for SongType table
     public static final String create_song_type_table = "CREATE TABLE SongType (" +
-            "id_type          INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "id_type          INTEGER PRIMARY KEY NOT NULL," +
             "update_time      INTEGER NOT NULL," +
             "name             TEXT NOT NULL" +
             ");";
