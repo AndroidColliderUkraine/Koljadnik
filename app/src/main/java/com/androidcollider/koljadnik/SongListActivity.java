@@ -62,9 +62,9 @@ public class SongListActivity extends Activity {
 
                 songAdapter.updateData(songList);
 
-                /*Log.i(TAG+" peredaemo id", idType+"");
-                intent.putExtra("SongType",idType);
-                startActivity(intent);*/
+                Intent intent = new Intent(SongListActivity.this,TextActivity.class);
+                intent.putExtra("Song", songAdapter.getItem(position));
+                startActivity(intent);
             }
         });
     }

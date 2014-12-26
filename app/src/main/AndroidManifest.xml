@@ -27,6 +27,10 @@
             android:name=".SongListActivity"
             android:label="@string/title_activity_song_list" >
         </activity>
+        <activity
+            android:name=".TextActivity"
+            android:label="@string/title_activity_text" >
+        </activity>
     </application>
 
 </manifest>

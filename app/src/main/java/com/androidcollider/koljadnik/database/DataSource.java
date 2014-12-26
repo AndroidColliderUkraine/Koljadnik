@@ -324,7 +324,7 @@ public class DataSource {
                 String songName = cursor.getString(nameColIndex);
                 int songId = cursor.getInt(idColIndex);
                 long songRating = cursor.getInt(ratingColIndex);
-                songsList.add(new Song(songId, songRating, songName));
+                songsList.add(new Song(songId, songName, songRating, idType, null, null, null, null));
 
                 if (songRating > maxRating) {
                     maxRating = songRating;
@@ -398,6 +398,45 @@ public class DataSource {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Song getSongAdvancedInfo(Song song) {
+        openLocal();
+        Cursor cursor = dbLocal.query("Text", null, "id_song = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
+        //ArrayList<Song> songsList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int dataColIndex = cursor.getColumnIndex("data");
+            int remarksColIndex = cursor.getColumnIndex("remarks");
+            int sourceColIndex = cursor.getColumnIndex("source");
+            int idSongColumnIndex = cursor.getColumnIndex("id_song");
+
+            int idSong = cursor.getInt(idSongColumnIndex);
+
+            String text = cursor.getString(dataColIndex);
+            String remarks = cursor.getString(remarksColIndex);
+            String source = cursor.getString(sourceColIndex);
+            song.setText(text);
+            song.setRemarks(remarks);
+            song.setSource(source);
+        }
+        cursor.close();
+        cursor = dbLocal.query("Comment", null, "id_song = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
+
+        ArrayList<String> commentList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int commentDataColIndex = cursor.getColumnIndex("data");
+
+            for (int i = 0; i<cursor.getCount();i++){
+                commentList.add(cursor.getString(commentDataColIndex));
+            }
+            song.setComments(commentList);
+        }
+        cursor.close();
+        closeLocal();
+        return song;
     }
 
 }
