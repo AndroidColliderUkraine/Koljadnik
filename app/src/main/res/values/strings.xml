@@ -12,9 +12,7 @@
     <string name="splash_title">Колядник</string>
     <string name="android_collider_company">Android Collider © 2014</string>
 
-    <!-- colors -->
-    <color name="bg_color">#ff27250a</color>
-    <color name="element_color">#fffdfdcc</color>
+
 
     <string name="title_activity_category">CategoryActivity</string>
     <string name="hello_world">Hello world!</string>

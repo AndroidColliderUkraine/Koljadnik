@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="7dp"
+    android:background="@color/element_color">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_item_song_type_name"
-        android:textSize="24dp" />
+        android:textColor="@color/text_color"
+        android:textSize="21dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_item_song_type_quantity"
-        android:layout_gravity="right" />
+        android:textColor="@color/text_color"
+        android:layout_gravity="right"
+        android:textSize="16dp"/>
 </LinearLayout>

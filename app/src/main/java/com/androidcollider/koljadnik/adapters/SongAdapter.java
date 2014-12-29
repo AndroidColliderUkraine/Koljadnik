@@ -1,6 +1,7 @@
 package com.androidcollider.koljadnik.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +22,31 @@ public class SongAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    public ArrayList<Song> songsList;
+    public ArrayList<Song> songsList, allSongList;
     //public ArrayList<Route> allRouteArrayList;
 
     public SongAdapter(Context context, ArrayList<Song> songsList) {
         this.context = context;
         this.songsList = songsList;
+
         lInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        allSongList = new ArrayList<Song>();
+        allSongList.addAll(this.songsList);
     }
 
-    /*//form an arraylist of objects Route for dynamic listview
-    public void search(String search) {
-        routeArrayList.clear();
-        for (int i = 0; i < allRouteArrayList.size(); i++) {
-            if ((allRouteArrayList.get(i).getName().contains(search))) {
-                routeArrayList.add(allRouteArrayList.get(i));
+    //form an arraylist of objects Route for dynamic listview
+    public void search(String text) {
+        Log.i("Parkh",songsList.toString());
+        Log.i("Parkh",allSongList.toString());
+        songsList.clear();
+        for (int i = 0; i < allSongList.size(); i++) {
+            if ((allSongList.get(i).getName().contains(text))) {
+                songsList.add(allSongList.get(i));
             }
         }
         notifyDataSetChanged();
-    }*/
+    }
 
     // the number of elements
     @Override
@@ -141,6 +147,7 @@ public class SongAdapter extends BaseAdapter {
 
     public void updateData(ArrayList<Song> songsList) {
         this.songsList= songsList;
+        this.allSongList = songsList;
         this.notifyDataSetChanged();
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,5 +69,13 @@ public class SongTypesActivity  extends Activity {
         dataSource.updateServerRatings();
         super.onBackPressed();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_song_types, menu);
+        //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
+        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+        return true;
     }
 }
