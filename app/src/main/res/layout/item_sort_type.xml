@@ -3,19 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="7dp"
-    android:background="@drawable/background_for_songs">
+    android:background="@drawable/background_for_sort_types">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_song_name"
-        android:textSize="21dp"
+        android:id="@+id/tv_sort_type_name"
+        android:textSize="18dp"
         android:textColor="@color/text_color"/>
-
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="20dp"
-        android:layout_gravity="right"
-        android:id="@+id/iv_item_song_rating"
-        android:textColor="@color/edit_text_white_color"/>
 </LinearLayout>

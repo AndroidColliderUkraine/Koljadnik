@@ -16,7 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_item_song_type_quantity"
-        android:textColor="@color/text_color"
+        android:textColor="@color/christmas_tree_color"
         android:layout_gravity="right"
-        android:textSize="16dp"/>
+        android:textStyle="bold"
+        android:textSize="17dp"/>
 </LinearLayout>

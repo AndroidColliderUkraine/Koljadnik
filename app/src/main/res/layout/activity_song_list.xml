@@ -13,19 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
         <ImageView
+            android:background="@drawable/background_sort"
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/iv_search_sort"/>
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/iv_search_sort"
+            android:src="@drawable/search_sort"/>
             <!--android:src="@drawable/route_saver_search_icon"-->
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/edit_text_white_color"
+            android:layout_height="35dp"
+            android:background="@drawable/background_search_field"
             android:textColor="@color/text_color"
             android:id="@+id/et_search_song"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:textCursorDrawable="@drawable/cursor"
+            android:maxLines="1"/>
     </LinearLayout>
 
     <ListView
@@ -35,11 +41,13 @@
         android:id="@+id/lv_songs_list"
         android:footerDividersEnabled="false"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:dividerHeight="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="30dp"
+        android:scrollbarStyle="insideInset"/>
+<!--
+    android:scrollbarThumbVertical="@drawable/scroll_bar"-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -52,5 +60,13 @@
         android:gravity="center"
         android:padding="5dp"
         android:textSize="15dp" />
+    <ListView
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/lv_sort_types"
+        android:visibility="gone"
+        android:background="@color/splash_screen_bg_color" />
 
 </RelativeLayout>

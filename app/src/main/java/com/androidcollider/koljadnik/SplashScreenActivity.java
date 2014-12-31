@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.database.DBupdater;
@@ -23,20 +24,29 @@ import com.androidcollider.koljadnik.utils.InternetHelper;
 
 public class SplashScreenActivity extends Activity {
 
-    private TextView tv_splash_title;
+    private ImageView iv_splash_title_main, iv_splash_title_hat;
     boolean closed = false;
     boolean fromOnCreate;
+    private Animation slideDownMain, slideDownHat, fadeInAC;
+    private TextView tv_ac;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        Animation slideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        tv_splash_title = (TextView) findViewById(R.id.tv_splash_title);
-        tv_splash_title.setAnimation(slideUp);
+        slideDownMain = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        iv_splash_title_main = (ImageView) findViewById(R.id.iv_splash_title_main);
+        iv_splash_title_main.setAnimation(slideDownMain);
 
-        slideUp.setAnimationListener(new Animation.AnimationListener() {
+        slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        iv_splash_title_hat = (ImageView) findViewById(R.id.iv_splash_title_hat);
+
+        fadeInAC = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+        tv_ac = (TextView)findViewById(R.id.tv_ac);
+
+
+        slideDownMain.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -44,6 +54,43 @@ public class SplashScreenActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+
+                iv_splash_title_hat.setAnimation(slideDownMain);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        slideDownHat.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tv_ac.setAnimation(fadeInAC);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        fadeInAC.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
                 if (InternetHelper.isConnectionEnabled(getApplicationContext())){
                     DBupdater dBupdater = new DBupdater(getApplicationContext());
                     dBupdater.checkAndUpdateTables();

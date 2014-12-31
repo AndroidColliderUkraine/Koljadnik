@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    android:background="@color/splash_screen_bg_color"
     android:orientation="vertical" >
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tv_splash_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -13,14 +13,33 @@
         android:textColor="@color/element_color"
         android:textSize="40dp"
         android:textStyle="bold|italic"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"/>-->
+
+    <ImageView
+        android:layout_width="250dp"
+        android:id="@+id/iv_splash_title_main"
+        android:src="@drawable/logo_main"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="162dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:id="@+id/iv_splash_title_hat"
+        android:src="@drawable/logo_hat"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/iv_splash_title_main"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_ac"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/android_collider_company"
-        android:textColor="@color/element_color"
+        android:textColor="@color/splash_screen_site_color"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:layout_marginBottom="10dp" />

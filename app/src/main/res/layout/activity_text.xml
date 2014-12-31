@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/element_color"
     tools:context="com.androidcollider.koljadnik.TextActivity">
 
     <ScrollView
@@ -17,28 +18,32 @@
             android:layout_height="fill_parent">
             <TextView
                 android:id="@+id/tv_song_text"
-                android:gravity="center"
+                android:gravity="left"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"></TextView>
+                android:layout_width="match_parent"
+                android:textColor="@color/bg_color"/>
             <TextView
                 android:id="@+id/tv_song_remarks"
                 android:gravity="left"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"></TextView>
+                android:layout_marginTop="20dp"
+                android:textColor="@color/bg_color"/>
             <TextView
                 android:id="@+id/tv_song_source"
                 android:gravity="left"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"></TextView>
+                android:layout_marginTop="20dp"
+                android:textColor="@color/bg_color"/>
 
             <TextView
                 android:id="@+id/tv_song_comments"
                 android:gravity="left"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:textColor="@color/bg_color"/>
         </LinearLayout>
 
     </ScrollView>

@@ -8,49 +8,39 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.objects.SongType;
-import com.androidcollider.koljadnik.utils.NumberConverter;
+import com.androidcollider.koljadnik.objects.Song;
 
 import java.util.ArrayList;
 
 /**
  * Created by pseverin on 24.12.14.
  */
-public class SongTypeAdapter extends BaseAdapter {
+public class SortTypeAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    public ArrayList<SongType> songTypesList;
+    public ArrayList<String> sortTypesList;
     //public ArrayList<Route> allRouteArrayList;
 
-    public SongTypeAdapter(Context context, ArrayList<SongType> songTypesList) {
+    public SortTypeAdapter(Context context, ArrayList<String> sortTypesList) {
         this.context = context;
-        this.songTypesList = songTypesList;
+        this.sortTypesList = sortTypesList;
+
         lInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    /*//form an arraylist of objects Route for dynamic listview
-    public void search(String search) {
-        routeArrayList.clear();
-        for (int i = 0; i < allRouteArrayList.size(); i++) {
-            if ((allRouteArrayList.get(i).getName().contains(search))) {
-                routeArrayList.add(allRouteArrayList.get(i));
-            }
-        }
-        notifyDataSetChanged();
-    }*/
 
     // the number of elements
     @Override
     public int getCount() {
-        return songTypesList.size();
+        return sortTypesList.size();
     }
 
     // element at position
     @Override
-    public SongType getItem(int position) {
-        return songTypesList.get(position);
+    public Object getItem(int position) {
+        return sortTypesList.get(position);
     }
 
     // id at position
@@ -61,8 +51,7 @@ public class SongTypeAdapter extends BaseAdapter {
 
     // create viewholder
     static class ViewHolder {
-        public TextView tv_name;
-        public TextView tv_quantity;
+        public TextView tv_sort_type;
     }
 
     // list item_for_routes_listview
@@ -72,25 +61,20 @@ public class SongTypeAdapter extends BaseAdapter {
         ViewHolder holder;
         View view = convertView;
         if (view == null) {
-            view = lInflater.inflate(R.layout.item_song_type, parent, false);
+            view = lInflater.inflate(R.layout.item_sort_type, parent, false);
 
             holder = new ViewHolder();
-            holder.tv_name = (TextView) view.findViewById(R.id.tv_item_song_type_name);
-            holder.tv_quantity = (TextView) view.findViewById(R.id.tv_item_song_type_quantity);
+            holder.tv_sort_type = (TextView) view.findViewById(R.id.tv_sort_type_name);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        SongType songType = getItem(position);
-        holder.tv_name.setText(songType.getName());
-        holder.tv_quantity.setText(String.valueOf(NumberConverter.convert(songType.getQuantity())));
+        holder.tv_sort_type.setText((String) getItem(position));
+
         return view;
     }
 
-    public void updateData(ArrayList<SongType> songTypesList) {
-        this.songTypesList= songTypesList;
-        this.notifyDataSetChanged();
-    }
+
 
    /* public void updateRouteLists(ArrayList<Route> list){
         this.routeArrayList.clear();

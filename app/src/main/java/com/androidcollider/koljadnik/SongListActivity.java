@@ -2,19 +2,23 @@ package com.androidcollider.koljadnik;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.androidcollider.koljadnik.adapters.SongAdapter;
+import com.androidcollider.koljadnik.adapters.SortTypeAdapter;
 import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.objects.Song;
 
@@ -27,16 +31,22 @@ public class SongListActivity extends Activity {
 
     private final static String TAG = "Андроідний Коллайдер";
 
-    private ListView lv_songs_list;
+    private ListView lv_songs_list, lv_sort_types;
     private EditText et_search_song;
     private ArrayList<Song> songList;
     private SongAdapter songAdapter;
     private DataSource dataSource;
+    private ArrayList<String> sortTypeArrayList;
+    private ImageView iv_search_sort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
+
+        sortTypeArrayList = new ArrayList<>();
+        sortTypeArrayList.add("За алфавітом");
+        sortTypeArrayList.add("За рейтингом");
 
         initFields();
         initListeners();
@@ -53,11 +63,15 @@ public class SongListActivity extends Activity {
 
         lv_songs_list.setAdapter(songAdapter);
         //sortByRating();
+        SortTypeAdapter sortTypeAdapter = new SortTypeAdapter(this, sortTypeArrayList);
+        lv_sort_types.setAdapter(sortTypeAdapter);
     }
 
     private void initFields(){
         lv_songs_list = (ListView)findViewById(R.id.lv_songs_list);
         et_search_song = (EditText)findViewById(R.id.et_search_song);
+        lv_sort_types = (ListView)findViewById(R.id.lv_sort_types);
+        iv_search_sort = (ImageView)findViewById(R.id.iv_search_sort);
     }
     private void initListeners() {
         lv_songs_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,6 +104,16 @@ public class SongListActivity extends Activity {
             public void afterTextChanged(Editable s) {
             }
         });
+        iv_search_sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lv_sort_types.getVisibility()==View.VISIBLE){
+                    showHideSortTypes(false);
+                }else {
+                    showHideSortTypes(true);
+                }
+            }
+        });
     }
 
     private void addOnePointToListRating(int idSong){
@@ -119,7 +143,8 @@ public class SongListActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_song_list, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_song_list, menu);
         //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
         getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
         return true;
@@ -147,6 +172,15 @@ public class SongListActivity extends Activity {
             }
         });
         songAdapter.updateData(songList);
+    }
+
+    private void showHideSortTypes(boolean isShow){
+        if(isShow){
+            lv_sort_types.setVisibility(View.VISIBLE);
+        } else {
+            lv_sort_types.setVisibility(View.GONE);
+        }
+
     }
 
 }
