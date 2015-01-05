@@ -61,4 +61,11 @@ public class AppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+    public boolean isRequestQoeueFinished(){
+        if (mRequestQueue != null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -6,12 +6,18 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.renderscript.Sampler;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.database.local_db.DBhelperLocalDB;
 import com.androidcollider.koljadnik.objects.Song;
 import com.androidcollider.koljadnik.objects.SongType;
+import com.androidcollider.koljadnik.utils.AppController;
 import com.androidcollider.koljadnik.utils.NumberConverter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -38,6 +44,7 @@ public class DataSource {
 
     private final static String TAG = "Андроідний Коллайдер";
 
+    private DBupdater dBupdater;
     private DBhelperLocalDB dbHelperLocal;
     private SQLiteDatabase dbLocal;
     private Context context;
@@ -45,6 +52,9 @@ public class DataSource {
     private final static String APP_PREFERENCES = "KoljadnikPref";
 
     private final static String[] tables = new String[]{"Song", "SongType", "Text", "Chord", "Note", "Comment"};
+
+    private int isUpdatedCount = 0;
+    private int needToUpdate = 0;
 
     public DataSource(Context context) {
         this.context = context;
@@ -76,7 +86,7 @@ public class DataSource {
         return localUpdates;
     }
 
-    public ArrayList<Long> getServerUpdates() {
+    /*public ArrayList<Long> getServerUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("LastUpdate");
         ParseObject parseObject = null;
         try {
@@ -93,7 +103,7 @@ public class DataSource {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
 
     /*public void putParseObjectToLocalTable(String tableName, ParseObject parseObject) {
@@ -154,17 +164,20 @@ public class DataSource {
 
     public void putJsonObjectToLocalTable(String tableName, JSONArray jsonArray) {
 
+        long updateTime = 0;
+
         if (tableName.equals("Song")) {
             openLocal();
             try {
                 int idSongServer = jsonArray.getInt(0);
+                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
                 //Add data to table Song
                 ContentValues cv = new ContentValues();
                 cv.put("rating", jsonArray.getLong(2));
                 int updateCount = dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
                 if (updateCount == 0) {
                     cv.put("id_song", idSongServer);
-                    cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(3)));
+                    cv.put("update_time", updateTime);
                     cv.put("name", jsonArray.getString(1));
                     cv.put("id_type", jsonArray.getInt(4));
                     cv.put("rating", jsonArray.getLong(2));
@@ -182,8 +195,9 @@ public class DataSource {
             //Add data to table Song
             ContentValues cv = new ContentValues();
             try {
+                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(2));
                 cv.put("id_type", jsonArray.getInt(0));
-                cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(2)));
+                cv.put("update_time", updateTime);
                 cv.put("name", jsonArray.getString(1));
                 dbLocal.insert("SongType", null, cv);
                 cv.clear();
@@ -195,10 +209,12 @@ public class DataSource {
             //Add data to table Song
             ContentValues cv = new ContentValues();
             try {
-                cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(3)));
+                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
+                cv.put("update_time", updateTime);
                 cv.put("id_song", jsonArray.getInt(1));
                 cv.put("data", jsonArray.getString(2));
-                //cv.put("source", parseObject.getString("source"));
+                cv.put("remarks", "");
+                cv.put("source", jsonArray.getString(4));
                 dbLocal.insert("Text", null, cv);
                 cv.clear();
             } catch (JSONException e) {
@@ -216,12 +232,8 @@ public class DataSource {
             dbLocal.insert(tableName, null, cv);
             cv.clear();
         }*/
+        setLocalUpdates(tableName, updateTime);
 
-        try {
-            setLocalUpdates(tableName, NumberConverter.dateToLongConverter(jsonArray.getString(3)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         closeLocal();
     }
 
@@ -371,20 +383,6 @@ public class DataSource {
         }
     }
 
-    public void addCommentToLocal(int idSong, String data) {
-        openLocal();
-        //Add data to table Comment
-        long currentTime = System.currentTimeMillis();
-        ContentValues cv = new ContentValues();
-        cv.put("update_time", currentTime);
-        cv.put("id_song", idSong);
-        cv.put("data", data);
-        dbLocal.insert("Comment", null, cv);
-        cv.clear();
-
-        setLocalUpdates("Comment", currentTime);
-    }
-
     public ArrayList<Song> getSongMainInfo(int idType) {
         openLocal();
         Cursor cursor = dbLocal.query("Song", null, "id_type = ?", new String[]{String.valueOf(idType)}, null, null, null);
@@ -435,47 +433,83 @@ public class DataSource {
         closeLocal();
     }
 
-    public void updateServerRatings() {
+    public void updateServerRatings(DBupdater dBupdater) {
+        this.dBupdater = dBupdater;
         openLocal();
         Cursor cursor = dbLocal.query("Song", null, "my_local_rating > 0", null, null, null, null);
 
+        needToUpdate = cursor.getCount();
+        if (needToUpdate==0){
+            isUpdatedCount = 0;
+            needToUpdate = 0;
+            dBupdater.getServerUpdates();
+        }else {
+            if (cursor.moveToFirst()) {
+                int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
+                int idColIndex = cursor.getColumnIndex("id_song");
 
-        if (cursor.moveToFirst()) {
-            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
-            int idColIndex = cursor.getColumnIndex("id_song");
 
-            for (int i = 0; i < cursor.getCount(); i++) {
-                long currentTime = System.currentTimeMillis();
-                long myLocalRating = cursor.getLong(localRatingColIndex);
-                int songId = cursor.getInt(idColIndex);
-                updateServerSongRating(songId, myLocalRating, currentTime);
-                if ((cursor.getCount() - 1) == i) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    long myLocalRating = cursor.getLong(localRatingColIndex);
+                    int songId = cursor.getInt(idColIndex);
+                    updateServerSongRating(songId, myLocalRating);
+                /*if ((cursor.getCount() - 1) == i) {
                     setServerUpdates("song_update", currentTime);
+                }*/
+                    cursor.moveToNext();
                 }
-                cursor.moveToNext();
-            }
-            ContentValues cv = new ContentValues();
-            cv.put("my_local_rating", 0);
-            dbLocal.update("Song", cv, null, null);
+                ContentValues cv = new ContentValues();
+                cv.put("my_local_rating", 0);
+                dbLocal.update("Song", cv, null, null);
 
+            }
         }
+
         cursor.close();
         closeLocal();
 
     }
 
-    private void updateServerSongRating(int idSong, long ratingIncrese, long currentTime) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Song");
-        query.whereEqualTo("id_song", idSong);
-        try {
-            ParseObject parseObject = query.getFirst();
-            long rating = parseObject.getLong("rating");
-            parseObject.put("rating", rating + ratingIncrese);
-            parseObject.put("update_time", currentTime);
-            parseObject.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    private void updateServerSongRating(final int idSong, final long ratingIncrese) {
+
+        String tag_string_req = "string_req";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppController.BASE_URL_KEY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE ratings", "     " + response);
+                isUpdatedCount++;
+                if (isUpdatedCount==needToUpdate){
+                    isUpdatedCount = 0;
+                    needToUpdate = 0;
+                    dBupdater.getServerUpdates();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.i(TAG + " error", volleyError.toString());
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("action", "update_song_rating");
+                params.put("param1", String.valueOf(idSong));
+                params.put("param2", String.valueOf(ratingIncrese));
+                return params;
+            }
+        };
+        // Adding request to request queue
+        /*strReq.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
 
@@ -507,7 +541,7 @@ public class DataSource {
         if (cursor.moveToFirst()) {
             int commentDataColIndex = cursor.getColumnIndex("data");
 
-            for (int i = 0; i<cursor.getCount();i++){
+            for (int i = 0; i < cursor.getCount(); i++) {
                 commentList.add(cursor.getString(commentDataColIndex));
             }
             song.setComments(commentList);
@@ -517,7 +551,7 @@ public class DataSource {
         return song;
     }
 
-    public boolean isTextPresent (int songId, String text){
+    public boolean isTextPresent(int songId, String text) {
         openLocal();
         Cursor cursor = dbLocal.query("Text", null, "id_song = ?", new String[]{String.valueOf(songId)}, null, null, null);
         //ArrayList<Song> songsList = new ArrayList<>();

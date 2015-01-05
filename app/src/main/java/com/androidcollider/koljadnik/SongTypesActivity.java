@@ -11,8 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.androidcollider.koljadnik.adapters.SongTypeAdapter;
+import com.androidcollider.koljadnik.database.DBupdater;
 import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.objects.SongType;
+import com.androidcollider.koljadnik.utils.AppController;
+import com.androidcollider.koljadnik.utils.InternetHelper;
 
 import java.util.ArrayList;
 
@@ -35,7 +38,7 @@ public class SongTypesActivity  extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_types);
-
+        Log.d("RESPONSE is finished", "     "+ AppController.getInstance().isRequestQoeueFinished());
         initFields();
         initListeners();
 
@@ -66,8 +69,12 @@ public class SongTypesActivity  extends Activity {
 
     @Override
     public void onBackPressed() {
-        dataSource.updateServerRatings();
-        super.onBackPressed();
+        if (InternetHelper.isConnectionEnabled(this)){
+            DBupdater dBupdater = new DBupdater(this,"finish");
+            dBupdater.checkAndUpdateTables();
+        } else {
+            finish();
+        }
 
     }
 

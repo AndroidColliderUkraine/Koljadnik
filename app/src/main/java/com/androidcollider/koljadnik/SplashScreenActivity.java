@@ -62,7 +62,7 @@ public class SplashScreenActivity extends Activity {
             public void onAnimationEnd(Animation animation) {
 
                 if (InternetHelper.isConnectionEnabled(context)){
-                    DBupdater dBupdater = new DBupdater(context);
+                    DBupdater dBupdater = new DBupdater(context,"start");
                     dBupdater.checkAndUpdateTables();
                 } else {
                     Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);

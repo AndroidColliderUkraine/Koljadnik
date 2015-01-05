@@ -48,21 +48,27 @@ public class DBupdater {
 
     private final static int MY_SOCKET_TIMEOUT_MS = 30000;
     private final static String TAG = "Андроідний Коллайдер";
-    private static boolean appIsStarted = false;
+    private String mode ="";
 
-    private HashMap<String,String> params;
+    private HashMap<String, String> params;
     private DataSource dataSource;
     private Context context;
     private ArrayList<Long> localUpdates, serverUpdates;
 
-    private final static String[] tables = new String[]{"Song", "SongType", "Text", "Chord", "Note", "Comment"};
+    private final static String[] localTables = new String[]{"Song", "SongType", "Text", "Chord", "Note", "Comment"};
+    private final static String[] serverTables = new String[]{"Songs", "Types", "Texts", "Chords", "Nots", "Comments"};
 
-    public DBupdater(Context context) {
+    private int isUpdatedCount = 0;
+    private int needToUpdate = 0;
+
+
+    public DBupdater(Context context, String mode) {
         this.context = context;
         /*Parse.initialize(context, context.getString(R.string.parse_application_id),
                 context.getString(R.string.parse_client_key));*/
         dataSource = new DataSource(context);
         params = new HashMap<>();
+        this.mode = mode;
     }
 
 
@@ -73,93 +79,77 @@ public class DBupdater {
         serverUpdates.clear();
 
         localUpdates = dataSource.getLocalUpdates();
-        getServerUpdates();
+        updateServerRatings();
+        //getServerUpdates();
 
     }
 
-    private void updateLocalTable(final String tableName, final long updateFrom) {
+    private void updateLocalTable(final int tableIndex, final long updateFrom) {
 
-        String serverTableName = null;
-        if (tableName.equals("Song")){
-            serverTableName = "Songs";
-        }
-        if (tableName.equals("SongType")){
-            serverTableName = "Types";
-        }
-        if (tableName.equals("Text")){
-            serverTableName = "Texts";
-        }
-        if (tableName.equals("Chord")){
-            serverTableName = "Chords";
-        }
-        if (tableName.equals("Note")){
-            serverTableName = "Nots";
-        }
-        if (tableName.equals("Comment")){
-            serverTableName = "Comments";
-        }
-        final String sTableName = serverTableName;
+        Log.i(TAG, "оновлюємо локальну таблицю " + localTables[tableIndex]);
 
-        Log.i(TAG, "оновлюємо локальну таблицю " + tableName);
+        String tag_string_req = "string_req";
 
-        params.clear();
-        params.put("action", "get_updates_from_table");
-        params.put("param1", sTableName);
-        params.put("param2", NumberConverter.longToDateConverter(updateFrom));
-
-        stringRequest(new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppController.BASE_URL_KEY, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("RESPONSE", response);
+                Log.d("RESPONSE number", "     " + AppController.getInstance().getRequestQueue().getSequenceNumber() + " ");
+                Log.d("RESPONSE tables", "     " + response);
                 try {
                     JSONObject res = new JSONObject(response);
                     JSONArray result = res.getJSONArray("result");
 
-                    for (int i=0; i<result.length();i++){
-                        dataSource.putJsonObjectToLocalTable(tableName, result.getJSONArray(i));
+                    for (int i = 0; i < result.length(); i++) {
+                        dataSource.putJsonObjectToLocalTable(localTables[tableIndex], result.getJSONArray(i));
                     }
-                   /* if (!appIsStarted){
-                        appIsStarted = true;
-                        startProgram();
-                    }*/
+                    isUpdatedCount++;
+
+                    if (needToUpdate == isUpdatedCount) {
+                        needToUpdate = 0;
+                        isUpdatedCount = 0;
+                        setProgramChange();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    /*if (!appIsStarted){
-                        appIsStarted = true;
-                        startProgram();
-                    }*/
                 }
             }
 
-        });
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.i(TAG + " error", volleyError.toString());
 
-
-       /* ParseQuery<ParseObject> query = ParseQuery.getQuery(tableName);
-        query.whereGreaterThan("update_time", updateFrom);
-        try {
-            List<ParseObject> parseObjects = query.find();
-            for (ParseObject parseObject : parseObjects) {
-                dataSource.putParseObjectToLocalTable(tableName, parseObject);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("action", "get_updates_from_table");
+                params.put("param1", serverTables[tableIndex]);
+                params.put("param2", NumberConverter.longToDateConverter(updateFrom));
+                return params;
+            }
+        };
+        // Adding request to request queue
+        /*strReq.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-   /* private void updateServerTable(String tableName, long updateFrom) {
 
-        Log.i(TAG, "оновлюємо серверну таблицю " + tableName);
-        Cursor cursor = dataSource.getUpdatebleRowsFromLocal(tableName, updateFrom);
-        dataSource.putLocalRowsToServerTable(tableName, cursor);
-        }*/
-
-    private void getServerUpdates(){
+    public void getServerUpdates() {
         params.clear();
         params.put("action", "get_last_updates");
         stringRequest(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 Log.d("RESPONSE", response);
                 try {
                     JSONObject res = new JSONObject(response);
@@ -184,15 +174,23 @@ public class DBupdater {
                             result.getString("comment_up")
                     ));
 
-                    Log.i(TAG +" local updates", localUpdates.toString());
-                    Log.i(TAG +" server updates", serverUpdates.toString());
+                    Log.i(TAG + " local updates", localUpdates.toString());
+                    Log.i(TAG + " server updates", serverUpdates.toString());
 
-                    for (int i = 0; i < tables.length; i++) {
+                    for (int i = 0; i < localTables.length; i++) {
 
                         if (serverUpdates.get(i) > localUpdates.get(i)) {
-                            updateLocalTable(tables[i], localUpdates.get(i));
+                            needToUpdate++;
                         }
-
+                    }
+                    if (needToUpdate == 0) {
+                        setProgramChange();
+                    } else {
+                        for (int i = 0; i < localTables.length; i++) {
+                            if (serverUpdates.get(i) > localUpdates.get(i)) {
+                                updateLocalTable(i, localUpdates.get(i));
+                            }
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -200,20 +198,23 @@ public class DBupdater {
                 }
 
             }
-        });
+        }, params);
 
     }
 
-    private void startProgram(){
-        Intent intent = new Intent(DBupdater.this.context, SongTypesActivity.class);
-        ((SplashScreenActivity)DBupdater.this.context).finish();
-        DBupdater.this.context.startActivity(intent);
-        ((SplashScreenActivity)DBupdater.this.context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+    private void setProgramChange() {
+        if (mode.equals("start")) {
+            Intent intent = new Intent(DBupdater.this.context, SongTypesActivity.class);
+            ((SplashScreenActivity) DBupdater.this.context).finish();
+            DBupdater.this.context.startActivity(intent);
+            ((SplashScreenActivity) DBupdater.this.context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        } else if (mode.equals("finish")) {
+            ((SongTypesActivity) context).finish();
+        }
     }
 
-    private void stringRequest(Response.Listener<String> responseListener) {
+    private void stringRequest(Response.Listener<String> responseListener, final HashMap<String, String> currentParams) {
         String tag_string_req = "string_req";
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppController.BASE_URL_KEY, responseListener, new Response.ErrorListener() {
             @Override
@@ -225,7 +226,7 @@ public class DBupdater {
 
             @Override
             protected Map<String, String> getParams() {
-                return params;
+                return currentParams;
             }
         };
         // Adding request to request queue
@@ -235,6 +236,11 @@ public class DBupdater {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
 
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+
+    public void updateServerRatings() {
+        dataSource.updateServerRatings(this);
     }
 
 
