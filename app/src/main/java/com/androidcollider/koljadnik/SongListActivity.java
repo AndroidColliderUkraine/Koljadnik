@@ -62,7 +62,7 @@ public class SongListActivity extends Activity {
         songAdapter = new SongAdapter(this, songList);
 
         lv_songs_list.setAdapter(songAdapter);
-        //sortByRating();
+        sortByRating();
         SortTypeAdapter sortTypeAdapter = new SortTypeAdapter(this, sortTypeArrayList);
         lv_sort_types.setAdapter(sortTypeAdapter);
     }
@@ -87,6 +87,26 @@ public class SongListActivity extends Activity {
                 Intent intent = new Intent(SongListActivity.this,TextActivity.class);
                 intent.putExtra("Song", songAdapter.getItem(position));
                 startActivity(intent);
+            }
+        });
+
+        lv_sort_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG,songList.toString());
+                switch (position){
+                    case 0:
+                        sortByName();
+                        showHideSortTypes(false);
+                        Log.i(TAG,songList.toString());
+                        break;
+
+                    case 1:
+                        sortByRating();
+                        showHideSortTypes(false);
+                        Log.i(TAG,songList.toString());
+                        break;
+                }
             }
         });
 
@@ -147,6 +167,21 @@ public class SongListActivity extends Activity {
         menuInflater.inflate(R.menu.menu_song_list, menu);
         //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
         getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //return super.onOptionsItemSelected(item);
+
+        if (item.getItemId()==R.id.add_song){
+            Intent intent = new Intent(this, SubmitActivity.class);
+            startActivity(intent);
+        }
+        if(item.getItemId()==android.R.id.home){
+            finish();
+        }
         return true;
     }
 
@@ -168,7 +203,7 @@ public class SongListActivity extends Activity {
             @Override
             public int compare(Song song1, Song song2) {
 
-                return new Long(song1.getRating()).compareTo(new Long(song2.getRating()));
+                return new Long(song2.getRating()).compareTo(new Long(song1.getRating()));
             }
         });
         songAdapter.updateData(songList);

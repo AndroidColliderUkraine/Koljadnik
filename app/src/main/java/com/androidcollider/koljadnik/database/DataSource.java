@@ -439,4 +439,22 @@ public class DataSource {
         return song;
     }
 
+    public boolean isTextPresent (int songId, String text){
+        openLocal();
+        Cursor cursor = dbLocal.query("Text", null, "id_song = ?", new String[]{String.valueOf(songId)}, null, null, null);
+        //ArrayList<Song> songsList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int dataColIndex = cursor.getColumnIndex("data");
+            String data = cursor.getString(dataColIndex);
+            if (data.contains(text)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

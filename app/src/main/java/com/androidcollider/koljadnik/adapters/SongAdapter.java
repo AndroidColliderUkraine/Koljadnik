@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
+import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.objects.Song;
 import com.androidcollider.koljadnik.objects.SongType;
 
@@ -23,11 +24,13 @@ public class SongAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater lInflater;
     public ArrayList<Song> songsList, allSongList;
+    private DataSource dataSource;
     //public ArrayList<Route> allRouteArrayList;
 
     public SongAdapter(Context context, ArrayList<Song> songsList) {
         this.context = context;
         this.songsList = songsList;
+
 
         lInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -40,12 +43,18 @@ public class SongAdapter extends BaseAdapter {
         Log.i("Parkh",songsList.toString());
         Log.i("Parkh",allSongList.toString());
         songsList.clear();
+
+        Log.i("Parkh",songsList.toString());
+        Log.i("Parkh",allSongList.toString());
         for (int i = 0; i < allSongList.size(); i++) {
-            if ((allSongList.get(i).getName().contains(text))) {
+            if ((allSongList.get(i).getName().contains(text))||dataSource.isTextPresent(allSongList.get(i).getId(),text)) {
                 songsList.add(allSongList.get(i));
             }
         }
         notifyDataSetChanged();
+
+        Log.i("Parkh",songsList.toString());
+        Log.i("Parkh",allSongList.toString());
     }
 
     // the number of elements
@@ -146,8 +155,16 @@ public class SongAdapter extends BaseAdapter {
     }
 
     public void updateData(ArrayList<Song> songsList) {
-        this.songsList= songsList;
-        this.allSongList = songsList;
+
+
+        ArrayList<Song> songs = new ArrayList<>();
+        songs.addAll(songsList);
+
+        this.songsList.clear();
+        this.allSongList.clear();
+
+        this.songsList.addAll(songs);
+        this.allSongList.addAll(songs);
         this.notifyDataSetChanged();
     }
 

@@ -12,7 +12,6 @@
         android:id="@+id/song_list_layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp">
         <ImageView
@@ -31,7 +30,9 @@
             android:id="@+id/et_search_song"
             android:layout_marginTop="5dp"
             android:textCursorDrawable="@drawable/cursor"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
     </LinearLayout>
 
     <ListView
@@ -66,7 +67,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
         android:id="@+id/lv_sort_types"
-        android:visibility="gone"
-        android:background="@color/splash_screen_bg_color" />
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -163,6 +163,13 @@ public class Song implements Parcelable{
         if (comments!=null){
             comm=comments.toString();
         }
-        return id+"  "+name+"  "+rating+"  "+idType+"  "+text+"  "+remarks+"  "+source+"  "+comm;
+        return "id="+id+"  "+
+               "name="+name+"  "+
+               "rating="+rating+"  "+
+               "idType="+idType+"  "+
+               "text="+text+"  "+
+               "remarks="+remarks+"  "+
+               "source="+source+"  "+
+               "comments="+comm;
     }
 }

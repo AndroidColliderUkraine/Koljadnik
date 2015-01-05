@@ -27,7 +27,7 @@ public class SplashScreenActivity extends Activity {
     private ImageView iv_splash_title_main, iv_splash_title_hat;
     boolean closed = false;
     boolean fromOnCreate;
-    private Animation slideDownMain, slideDownHat, fadeInAC;
+    private Animation slideUpMain, slideDownHat, fadeInAC;
     private TextView tv_ac;
 
     @Override
@@ -35,54 +35,21 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        slideDownMain = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        iv_splash_title_main = (ImageView) findViewById(R.id.iv_splash_title_main);
-        iv_splash_title_main.setAnimation(slideDownMain);
-
-        slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        iv_splash_title_hat = (ImageView) findViewById(R.id.iv_splash_title_hat);
-
+        slideUpMain = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_hat);
+        slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         fadeInAC = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+
+        iv_splash_title_main = (ImageView) findViewById(R.id.iv_splash_title_main);
+        iv_splash_title_hat = (ImageView) findViewById(R.id.iv_splash_title_hat);
         tv_ac = (TextView)findViewById(R.id.tv_ac);
 
 
-        slideDownMain.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+        iv_splash_title_main.setAnimation(fadeInAC);
+        iv_splash_title_hat.setAnimation(slideDownHat);
+        tv_ac.setAnimation(fadeInAC);
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                iv_splash_title_hat.setAnimation(slideDownMain);
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
 
         slideDownHat.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                tv_ac.setAnimation(fadeInAC);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        fadeInAC.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -101,6 +68,7 @@ public class SplashScreenActivity extends Activity {
                 finish();
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
             }
 
             @Override
@@ -108,6 +76,9 @@ public class SplashScreenActivity extends Activity {
 
             }
         });
+
+
+
 
         /*new Handler().postDelayed(new Runnable() {
             @Override
