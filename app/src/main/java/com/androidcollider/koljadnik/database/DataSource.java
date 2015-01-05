@@ -12,12 +12,17 @@ import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.database.local_db.DBhelperLocalDB;
 import com.androidcollider.koljadnik.objects.Song;
 import com.androidcollider.koljadnik.objects.SongType;
+import com.androidcollider.koljadnik.utils.NumberConverter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,8 +49,8 @@ public class DataSource {
     public DataSource(Context context) {
         this.context = context;
         this.sharedPreferences = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        Parse.initialize(context, context.getString(R.string.parse_application_id),
-                context.getString(R.string.parse_client_key));
+        /*Parse.initialize(context, context.getString(R.string.parse_application_id),
+                context.getString(R.string.parse_client_key));*/
         dbHelperLocal = new DBhelperLocalDB(context);
     }
 
@@ -91,7 +96,7 @@ public class DataSource {
     }
 
 
-    public void putParseObjectToLocalTable(String tableName, ParseObject parseObject) {
+    /*public void putParseObjectToLocalTable(String tableName, ParseObject parseObject) {
 
         if (tableName.equals("Song")) {
             openLocal();
@@ -144,6 +149,79 @@ public class DataSource {
         }
 
         setLocalUpdates(tableName, (Long) parseObject.getNumber("update_time"));
+        closeLocal();
+    }*/
+
+    public void putJsonObjectToLocalTable(String tableName, JSONArray jsonArray) {
+
+        if (tableName.equals("Song")) {
+            openLocal();
+            try {
+                int idSongServer = jsonArray.getInt(0);
+                //Add data to table Song
+                ContentValues cv = new ContentValues();
+                cv.put("rating", jsonArray.getLong(2));
+                int updateCount = dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
+                if (updateCount == 0) {
+                    cv.put("id_song", idSongServer);
+                    cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(3)));
+                    cv.put("name", jsonArray.getString(1));
+                    cv.put("id_type", jsonArray.getInt(4));
+                    cv.put("rating", jsonArray.getLong(2));
+                    cv.put("my_local_rating", 0);
+                    dbLocal.insert("Song", null, cv);
+                }
+                cv.clear();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else if (tableName.equals("SongType")) {
+            openLocal();
+            //Add data to table Song
+            ContentValues cv = new ContentValues();
+            try {
+                cv.put("id_type", jsonArray.getInt(0));
+                cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(2)));
+                cv.put("name", jsonArray.getString(1));
+                dbLocal.insert("SongType", null, cv);
+                cv.clear();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (tableName.equals("Text")) {
+            openLocal();
+            //Add data to table Song
+            ContentValues cv = new ContentValues();
+            try {
+                cv.put("update_time", NumberConverter.dateToLongConverter(jsonArray.getString(3)));
+                cv.put("id_song", jsonArray.getInt(1));
+                cv.put("data", jsonArray.getString(2));
+                //cv.put("source", parseObject.getString("source"));
+                dbLocal.insert("Text", null, cv);
+                cv.clear();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } /*else if (tableName.equals("Chord") ||
+                tableName.equals("Note") ||
+                tableName.equals("Comment")) {
+            openLocal();
+            //Add data to table Song
+            ContentValues cv = new ContentValues();
+            cv.put("update_time", parseObject.getUpdatedAt().getTime());
+            cv.put("id_song", parseObject.getInt("id_song"));
+            cv.put("data", parseObject.getString("data"));
+            dbLocal.insert(tableName, null, cv);
+            cv.clear();
+        }*/
+
+        try {
+            setLocalUpdates(tableName, NumberConverter.dateToLongConverter(jsonArray.getString(3)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         closeLocal();
     }
 
@@ -447,6 +525,7 @@ public class DataSource {
         if (cursor.moveToFirst()) {
             int dataColIndex = cursor.getColumnIndex("data");
             String data = cursor.getString(dataColIndex);
+            data = data.toLowerCase();
             if (data.contains(text)) {
                 return true;
             } else {

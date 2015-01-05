@@ -29,11 +29,14 @@ public class SplashScreenActivity extends Activity {
     boolean fromOnCreate;
     private Animation slideUpMain, slideDownHat, fadeInAC;
     private TextView tv_ac;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        context = this;
 
         slideUpMain = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_hat);
         slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
@@ -58,16 +61,18 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                if (InternetHelper.isConnectionEnabled(getApplicationContext())){
-                    DBupdater dBupdater = new DBupdater(getApplicationContext());
+                if (InternetHelper.isConnectionEnabled(context)){
+                    DBupdater dBupdater = new DBupdater(context);
                     dBupdater.checkAndUpdateTables();
+                } else {
+                    Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 }
 
 
-                Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);
-                finish();
-                startActivity(intent);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
 
             }
 

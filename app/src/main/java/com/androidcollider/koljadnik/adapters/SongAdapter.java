@@ -31,7 +31,7 @@ public class SongAdapter extends BaseAdapter {
         this.context = context;
         this.songsList = songsList;
 
-
+        dataSource = new DataSource(context);
         lInflater = (LayoutInflater) this.context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         allSongList = new ArrayList<Song>();
@@ -40,21 +40,15 @@ public class SongAdapter extends BaseAdapter {
 
     //form an arraylist of objects Route for dynamic listview
     public void search(String text) {
-        Log.i("Parkh",songsList.toString());
-        Log.i("Parkh",allSongList.toString());
         songsList.clear();
-
-        Log.i("Parkh",songsList.toString());
-        Log.i("Parkh",allSongList.toString());
         for (int i = 0; i < allSongList.size(); i++) {
-            if ((allSongList.get(i).getName().contains(text))||dataSource.isTextPresent(allSongList.get(i).getId(),text)) {
+            String name = allSongList.get(i).getName().toLowerCase();
+            text = text.toLowerCase();
+            if ((name.contains(text))||dataSource.isTextPresent(allSongList.get(i).getId(),text)) {
                 songsList.add(allSongList.get(i));
             }
         }
         notifyDataSetChanged();
-
-        Log.i("Parkh",songsList.toString());
-        Log.i("Parkh",allSongList.toString());
     }
 
     // the number of elements
