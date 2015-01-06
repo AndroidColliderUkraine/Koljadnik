@@ -43,4 +43,15 @@
         android:gravity="center"
         android:layout_marginBottom="10dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_loading_status"
+        android:layout_below="@+id/iv_splash_title_main"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:textColor="@color/edit_text_white_color"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"/>
+
 </RelativeLayout>

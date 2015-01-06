@@ -1,7 +1,9 @@
 package com.androidcollider.koljadnik;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,15 +20,23 @@ import com.androidcollider.koljadnik.utils.AppController;
 import com.androidcollider.koljadnik.utils.InternetHelper;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class SongTypesActivity  extends Activity {
 
     private final static String TAG = "Андроідний Коллайдер";
+    private final static int UPDATE_DATA_TIME = 1000*3600;
 
     private ArrayList<SongType> songTypesList;
     private ListView lv_category;
     private SongTypeAdapter songTypeAdapter;
+    private Timer t;
+    private DBupdater dBupdater;
+
+
+
 
     private DataSource dataSource;
 
@@ -34,10 +44,11 @@ public class SongTypesActivity  extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.i(TAG,"відкрилася 2-га активіті");
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_types);
+
+        dBupdater = new DBupdater(this, "timer");
+        startTimerUpdating();
         Log.d("RESPONSE is finished", "     "+ AppController.getInstance().isRequestQoeueFinished());
         initFields();
         initListeners();
@@ -62,6 +73,7 @@ public class SongTypesActivity  extends Activity {
                 int idType =  songTypeAdapter.getItem(position).getId();
                 Log.i(TAG + " peredaemo id", idType + "");
                 intent.putExtra("SongType", idType);
+                intent.putExtra("SongTypeName", songTypeAdapter.getItem(position).getName());
                 startActivity(intent);
             }
         });
@@ -84,5 +96,30 @@ public class SongTypesActivity  extends Activity {
         //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
         getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
         return true;
+    }
+
+
+    private void startTimerUpdating() {
+        //Declare the timer
+        t = new Timer();
+        //Set the schedule function and rate
+        t.scheduleAtFixedRate(new TimerTask() {
+
+                                  @Override
+                                  public void run() {
+                                      dBupdater.checkAndUpdateTables();
+                                  }
+
+                              },
+                //Set how long before to start calling the TimerTask (in milliseconds)
+                UPDATE_DATA_TIME,
+                //Set the amount of time between each execution (in milliseconds)
+                UPDATE_DATA_TIME);
+    }
+
+    @Override
+    protected void onDestroy() {
+        t.cancel();
+        super.onDestroy();
     }
 }

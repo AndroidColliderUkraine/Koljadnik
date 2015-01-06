@@ -59,8 +59,6 @@ public class DataSource {
     public DataSource(Context context) {
         this.context = context;
         this.sharedPreferences = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        /*Parse.initialize(context, context.getString(R.string.parse_application_id),
-                context.getString(R.string.parse_client_key));*/
         dbHelperLocal = new DBhelperLocalDB(context);
     }
 
@@ -86,82 +84,6 @@ public class DataSource {
         return localUpdates;
     }
 
-    /*public ArrayList<Long> getServerUpdates() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("LastUpdate");
-        ParseObject parseObject = null;
-        try {
-            parseObject = query.getFirst();
-            ArrayList<Long> serverUpdates = new ArrayList<>();
-            serverUpdates.add((Long) parseObject.getNumber("song_update"));
-            serverUpdates.add((Long) parseObject.getNumber("songtype_update"));
-            serverUpdates.add((Long) parseObject.getNumber("text_update"));
-            serverUpdates.add((Long) parseObject.getNumber("chord_update"));
-            serverUpdates.add((Long) parseObject.getNumber("note_update"));
-            serverUpdates.add((Long) parseObject.getNumber("comment_update"));
-            return serverUpdates;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
-
-
-    /*public void putParseObjectToLocalTable(String tableName, ParseObject parseObject) {
-
-        if (tableName.equals("Song")) {
-            openLocal();
-            int idSong = parseObject.getInt("id_song");
-            //Add data to table Song
-            ContentValues cv = new ContentValues();
-            cv.put("rating", parseObject.getInt("rating"));
-            int updateCount = dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSong)});
-            if (updateCount == 0) {
-                cv.put("id_song", idSong);
-                cv.put("update_time", parseObject.getUpdatedAt().getTime());
-                cv.put("name", parseObject.getString("name"));
-                cv.put("id_type", parseObject.getInt("id_type"));
-                cv.put("rating", parseObject.getInt("rating"));
-                cv.put("my_local_rating", 0);
-                dbLocal.insert("Song", null, cv);
-            }
-            cv.clear();
-        } else if (tableName.equals("SongType")) {
-            openLocal();
-            //Add data to table Song
-            ContentValues cv = new ContentValues();
-            cv.put("id_type", parseObject.getInt("id_type"));
-            cv.put("update_time", parseObject.getUpdatedAt().getTime());
-            cv.put("name", parseObject.getString("name"));
-            dbLocal.insert("SongType", null, cv);
-            cv.clear();
-        } else if (tableName.equals("Text")) {
-            openLocal();
-            //Add data to table Song
-            ContentValues cv = new ContentValues();
-            cv.put("update_time", parseObject.getUpdatedAt().getTime());
-            cv.put("id_song", parseObject.getInt("id_song"));
-            cv.put("data", parseObject.getString("data"));
-            cv.put("remarks", parseObject.getString("remarks"));
-            cv.put("source", parseObject.getString("source"));
-            dbLocal.insert("Text", null, cv);
-            cv.clear();
-        } else if (tableName.equals("Chord") ||
-                tableName.equals("Note") ||
-                tableName.equals("Comment")) {
-            openLocal();
-            //Add data to table Song
-            ContentValues cv = new ContentValues();
-            cv.put("update_time", parseObject.getUpdatedAt().getTime());
-            cv.put("id_song", parseObject.getInt("id_song"));
-            cv.put("data", parseObject.getString("data"));
-            dbLocal.insert(tableName, null, cv);
-            cv.clear();
-        }
-
-        setLocalUpdates(tableName, (Long) parseObject.getNumber("update_time"));
-        closeLocal();
-    }*/
-
     public void putJsonObjectToLocalTable(String tableName, JSONArray jsonArray) {
 
         long updateTime = 0;
@@ -173,15 +95,20 @@ public class DataSource {
                 updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
                 //Add data to table Song
                 ContentValues cv = new ContentValues();
+                //cv.put("id_song", idSongServer);
+                cv.put("update_time", updateTime);
+                cv.put("name", jsonArray.getString(1));
+                cv.put("id_type", jsonArray.getInt(4));
                 cv.put("rating", jsonArray.getLong(2));
+                cv.put("my_local_rating", 0);
                 int updateCount = dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
                 if (updateCount == 0) {
                     cv.put("id_song", idSongServer);
-                    cv.put("update_time", updateTime);
+                    /*cv.put("update_time", updateTime);
                     cv.put("name", jsonArray.getString(1));
                     cv.put("id_type", jsonArray.getInt(4));
                     cv.put("rating", jsonArray.getLong(2));
-                    cv.put("my_local_rating", 0);
+                    cv.put("my_local_rating", 0);*/
                     dbLocal.insert("Song", null, cv);
                 }
                 cv.clear();
@@ -195,11 +122,21 @@ public class DataSource {
             //Add data to table Song
             ContentValues cv = new ContentValues();
             try {
+                int idTypeServer = jsonArray.getInt(0);
                 updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(2));
-                cv.put("id_type", jsonArray.getInt(0));
+                //cv.put("id_type", jsonArray.getInt(0));
                 cv.put("update_time", updateTime);
                 cv.put("name", jsonArray.getString(1));
-                dbLocal.insert("SongType", null, cv);
+                int updateCount = dbLocal.update("SongType", cv, "id_type = ?", new String[]{String.valueOf(idTypeServer)});
+                if (updateCount == 0) {
+                    cv.put("id_type", idTypeServer);
+                    /*cv.put("update_time", updateTime);
+                    cv.put("name", jsonArray.getString(1));
+                    cv.put("id_type", jsonArray.getInt(4));
+                    cv.put("rating", jsonArray.getLong(2));
+                    cv.put("my_local_rating", 0);*/
+                    dbLocal.insert("SongType", null, cv);
+                }
                 cv.clear();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -209,13 +146,18 @@ public class DataSource {
             //Add data to table Song
             ContentValues cv = new ContentValues();
             try {
+                int idTextServer = jsonArray.getInt(0);
                 updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
                 cv.put("update_time", updateTime);
                 cv.put("id_song", jsonArray.getInt(1));
                 cv.put("data", jsonArray.getString(2));
                 cv.put("remarks", "");
                 cv.put("source", jsonArray.getString(4));
-                dbLocal.insert("Text", null, cv);
+                int updateCount = dbLocal.update("Text", cv, "id_text = ?", new String[]{String.valueOf(idTextServer)});
+                if (updateCount == 0) {
+                    cv.put("id_text", idTextServer);
+                    dbLocal.insert("Text", null, cv);
+                }
                 cv.clear();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -391,6 +333,7 @@ public class DataSource {
         if (cursor.moveToFirst()) {
             int nameColIndex = cursor.getColumnIndex("name");
             int ratingColIndex = cursor.getColumnIndex("rating");
+            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
             int idColIndex = cursor.getColumnIndex("id_song");
 
             long minRating = cursor.getLong(ratingColIndex);
@@ -399,7 +342,7 @@ public class DataSource {
             for (int i = 0; i < cursor.getCount(); i++) {
                 String songName = cursor.getString(nameColIndex);
                 int songId = cursor.getInt(idColIndex);
-                long songRating = cursor.getInt(ratingColIndex);
+                long songRating = cursor.getLong(ratingColIndex) + cursor.getLong(localRatingColIndex);
                 songsList.add(new Song(songId, songName, songRating, idType, null, null, null, null));
 
                 if (songRating > maxRating) {
@@ -568,6 +511,16 @@ public class DataSource {
         } else {
             return false;
         }
+    }
+
+    public void savePref(boolean wasStarted){
+        sharedPreferences.edit().
+                putBoolean("wasStarted",wasStarted)
+                .apply();
+    }
+
+    public boolean loadPref(){
+        return sharedPreferences.getBoolean("wasStarted",false);
     }
 
 }

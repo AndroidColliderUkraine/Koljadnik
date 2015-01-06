@@ -16,8 +16,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.androidcollider.koljadnik.adapters.SongTypeAdapter;
+import com.androidcollider.koljadnik.adapters.SortTypeAdapter;
 import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.objects.Song;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class SubmitActivity extends Activity {
@@ -41,7 +47,12 @@ public class SubmitActivity extends Activity {
         submitArray = getResources().getStringArray(R.array.submit_array);
         initFields();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,submitArray);
+        List<String> list = Arrays.asList(submitArray);
+        ArrayList<String> submitList = new ArrayList<>();
+        submitList.addAll(list);
+
+        SortTypeAdapter adapter = new SortTypeAdapter(this, submitList);
+        //ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,submitArray);
         spinner_submit.setAdapter(adapter);
     }
 
@@ -75,7 +86,7 @@ public class SubmitActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_text, menu);
+        menuInflater.inflate(R.menu.menu_song_types, menu);
         //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
         getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
         getActionBar().setDisplayHomeAsUpEnabled(true);

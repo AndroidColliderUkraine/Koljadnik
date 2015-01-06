@@ -21,7 +21,7 @@ public class SQLQueriesLocalDB {
             ");";
     //make a string SQL request for Text table
     public static final String create_text_table = "CREATE TABLE Text (" +
-            "id_text          INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "id_text          INTEGER PRIMARY KEY NOT NULL," +
             "update_time      INTEGER NOT NULL," +
             "id_song          INTEGER NOT NULL," +
             "data             TEXT NOT NULL," +

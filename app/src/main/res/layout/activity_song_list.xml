@@ -63,10 +63,13 @@
         android:textSize="15dp" />
     <ListView
         android:layout_width="150dp"
-        android:layout_height="80dp"
+        android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
         android:id="@+id/lv_sort_types"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="2dp"
+        android:background="@drawable/background_for_songs"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -15,7 +15,7 @@ import org.acra.annotation.ReportsCrashes;
  * Created by pseverin on 05.11.14.
  */
 @ReportsCrashes(formKey = "", // This is required for backward compatibility but not used
-        formUri = "http://acra.sannacode.com/report/report.php",
+        formUri = "http://acra.acolider.com/report/report.php",
         httpMethod = org.acra.sender.HttpSender.Method.POST,
         reportType = org.acra.sender.HttpSender.Type.JSON)
 public class AppController extends Application {
@@ -29,7 +29,7 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ACRA.init(this);
+        //ACRA.init(this);
         mInstance = this;
     }
 

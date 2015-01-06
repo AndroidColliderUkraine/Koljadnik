@@ -10,12 +10,13 @@
 
     <!-- labels -->
     <string name="splash_title">Колядник</string>
-    <string name="android_collider_company">Android Collider © 2014</string>
+    <string name="android_collider_company">Android Collider © 2015</string>
     <string name="dzerela">Джерела</string>
     <string name="nadislaty_rozrobniku">Надіслати Розробнику</string>
     <string name="pishit_sudi">Пишіть сюди...</string>
 
 
+    <string name="slava_ukraini">\n\nПісня відправлена з \"Колядник\"\nСлава Україні!</string>
 
     <string name="title_activity_category">CategoryActivity</string>
     <string name="hello_world">Hello world!</string>

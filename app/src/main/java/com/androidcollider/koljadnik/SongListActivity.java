@@ -38,6 +38,7 @@ public class SongListActivity extends Activity {
     private DataSource dataSource;
     private ArrayList<String> sortTypeArrayList;
     private ImageView iv_search_sort;
+    private String typeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +49,13 @@ public class SongListActivity extends Activity {
         sortTypeArrayList.add("За алфавітом");
         sortTypeArrayList.add("За рейтингом");
 
-        initFields();
-        initListeners();
         dataSource = new DataSource(this);
         Intent intent = getIntent();
 
-        Log.i("Parkh", intent.getIntExtra("SongType",-1)+"");
+        typeName = intent.getStringExtra("SongTypeName");
+        initFields();
+        initListeners();
+
         songList = dataSource.getSongMainInfo(intent.getIntExtra("SongType",-1));
         for (Song song: songList){
             Log.i("T", song.getName());
@@ -68,6 +70,7 @@ public class SongListActivity extends Activity {
     }
 
     private void initFields(){
+        getActionBar().setTitle(typeName);
         lv_songs_list = (ListView)findViewById(R.id.lv_songs_list);
         et_search_song = (EditText)findViewById(R.id.et_search_song);
         lv_sort_types = (ListView)findViewById(R.id.lv_sort_types);

@@ -186,6 +186,9 @@ public class DBupdater {
                     if (needToUpdate == 0) {
                         setProgramChange();
                     } else {
+                        if (mode.equals("start")){
+                            ((SplashScreenActivity)context).setLoadingStatus("Оновлення бази пісень");
+                        }
                         for (int i = 0; i < localTables.length; i++) {
                             if (serverUpdates.get(i) > localUpdates.get(i)) {
                                 updateLocalTable(i, localUpdates.get(i));
@@ -241,6 +244,9 @@ public class DBupdater {
 
     public void updateServerRatings() {
         dataSource.updateServerRatings(this);
+        if (mode.equals("start")){
+            ((SplashScreenActivity)context).setLoadingStatus("Завантаження рейтингів");
+        }
     }
 
 

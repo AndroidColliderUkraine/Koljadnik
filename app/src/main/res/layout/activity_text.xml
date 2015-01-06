@@ -27,13 +27,13 @@
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="10dp"
         android:layout_alignParentTop="true"
-        android:scrollbarStyle="insideInset">
+        android:scrollbarStyle="insideInset"
+        android:id="@+id/scrollView">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/background_for_songs"
             android:paddingLeft="3dp"
             android:paddingTop="3dp"
             android:paddingRight="3dp"
@@ -43,7 +43,14 @@
                 android:gravity="left"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:textColor="@color/text_color"/>
+                android:textColor="@color/text_color"
+                android:textIsSelectable="true"
+                android:background="@drawable/background_for_songs"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="6dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:paddingRight="6dp" />
             <!--<TextView
                 android:id="@+id/tv_song_remarks"
                 android:gravity="left"
@@ -53,14 +60,16 @@
                 android:textColor="@color/bg_color"/>-->
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_dzherelo"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/text_color"
-                android:textSize="18dp"
-                android:text="@string/dzerela" />
+                android:textSize="16dp"
+                android:text="@string/dzerela"
+                android:background="@drawable/background_for_songs"
+                android:padding="5dp" />
 
             <TextView
                 android:gravity="left"
@@ -69,7 +78,9 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/text_color" />
+                android:textColor="@color/text_color"
+                android:background="@drawable/background_for_songs"
+                android:padding="5dp" />
 <!--
             <TextView
                 android:id="@+id/tv_song_comments"
@@ -78,9 +89,44 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/bg_color"/>-->
+            <!--<SeekBar
+                android:id="@+id/text_size_seek_bar"
+                style="@android:style/Widget.SeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>-->
         </LinearLayout>
 
     </ScrollView>
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/minus"
+        android:id="@+id/iv_minus"
+        android:layout_above="@+id/textView"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignEnd="@+id/scrollView"
+        android:alpha="0.9"
+        android:adjustViewBounds="true" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/plus"
+        android:id="@+id/iv_plus"
+        android:layout_above="@+id/iv_minus"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:alpha="0.9" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -92,7 +138,8 @@
         android:background="@color/action_bar_color"
         android:gravity="center"
         android:padding="5dp"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:id="@+id/textView" />
 
 
 </RelativeLayout>
