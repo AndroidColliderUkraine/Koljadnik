@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -51,7 +52,7 @@ public class DataSource {
     private SharedPreferences sharedPreferences;
     private final static String APP_PREFERENCES = "KoljadnikPref";
 
-    private final static String[] tables = new String[]{"Song", "SongType", "Text", "Chord", "Note", "Comment"};
+    private final static String[] tables = new String[]{"CarolSong", "CarolType", "CarolText", "CarolChord", "CarolNote", "CarolComment"};
 
     private int isUpdatedCount = 0;
     private int needToUpdate = 0;
@@ -84,81 +85,100 @@ public class DataSource {
         return localUpdates;
     }
 
-    public void putJsonObjectToLocalTable(String tableName, JSONArray jsonArray) {
 
+
+    public void putJsonObjectToLocalTable(String tableName, JSONObject jsonObject) {
+
+        //Log.i(TAG + " jsong obj "+ tableName,jsonObject.toString());
         long updateTime = 0;
 
-        if (tableName.equals("Song")) {
+        if (tableName.equals("CarolSong")) {
             openLocal();
             try {
-                int idSongServer = jsonArray.getInt(0);
-                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
-                //Add data to table Song
-                ContentValues cv = new ContentValues();
-                //cv.put("id_song", idSongServer);
-                cv.put("update_time", updateTime);
-                cv.put("name", jsonArray.getString(1));
-                cv.put("id_type", jsonArray.getInt(4));
-                cv.put("rating", jsonArray.getLong(2));
-                cv.put("my_local_rating", 0);
-                int updateCount = dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
-                if (updateCount == 0) {
-                    cv.put("id_song", idSongServer);
-                    /*cv.put("update_time", updateTime);
-                    cv.put("name", jsonArray.getString(1));
-                    cv.put("id_type", jsonArray.getInt(4));
-                    cv.put("rating", jsonArray.getLong(2));
-                    cv.put("my_local_rating", 0);*/
-                    dbLocal.insert("Song", null, cv);
+                int idSongServer = jsonObject.getInt("id");
+                updateTime = NumberConverter.dateToLongConverter(jsonObject.getString("Date"));
+                int showTo = jsonObject.getInt("ToShow");;
+                if (showTo==1){
+                    //Add data to table Song
+                    ContentValues cv = new ContentValues();
+                    cv.put("update_time", updateTime);
+                    cv.put("name", jsonObject.getString("Name"));
+                    cv.put("id_type", jsonObject.getInt("Type"));
+                    cv.put("rating", jsonObject.getLong("Rating"));
+                    cv.put("my_local_rating", 0);
+                    int updateCount = dbLocal.update(tableName, cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
+                    if (updateCount == 0) {
+                        cv.put("id_song", idSongServer);
+                        long insertCount = dbLocal.insert("CarolSong", null, cv);
+                        //Log.i(TAG + " insert "+ tableName, insertCount+" ");
+                    }
+                    cv.clear();
+                } else {
+                    int delCount = dbLocal.delete(tableName, "id_song = ?", new String[]{String.valueOf(idSongServer)});
                 }
-                cv.clear();
-
+               /* Intent intent = new Intent();
+                intent.setAction("update_songs");
+                context.sendBroadcast(intent);*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-        } else if (tableName.equals("SongType")) {
+        } else if (tableName.equals("CarolType")) {
             openLocal();
             //Add data to table Song
-            ContentValues cv = new ContentValues();
+
             try {
-                int idTypeServer = jsonArray.getInt(0);
-                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(2));
-                //cv.put("id_type", jsonArray.getInt(0));
-                cv.put("update_time", updateTime);
-                cv.put("name", jsonArray.getString(1));
-                int updateCount = dbLocal.update("SongType", cv, "id_type = ?", new String[]{String.valueOf(idTypeServer)});
-                if (updateCount == 0) {
-                    cv.put("id_type", idTypeServer);
-                    /*cv.put("update_time", updateTime);
-                    cv.put("name", jsonArray.getString(1));
-                    cv.put("id_type", jsonArray.getInt(4));
-                    cv.put("rating", jsonArray.getLong(2));
-                    cv.put("my_local_rating", 0);*/
-                    dbLocal.insert("SongType", null, cv);
+                int idTypeServer = jsonObject.getInt("id");
+                updateTime = NumberConverter.dateToLongConverter(jsonObject.getString("Date"));
+                int showTo = jsonObject.getInt("ShowTo");;
+                if (showTo==1){
+                    ContentValues cv = new ContentValues();
+                    cv.put("update_time", updateTime);
+                    cv.put("name", jsonObject.getString("Type"));
+                    int updateCount = dbLocal.update(tableName, cv, "id_type = ?", new String[]{String.valueOf(idTypeServer)});
+                    if (updateCount == 0) {
+                        cv.put("id_type", idTypeServer);
+                        long insertCount = dbLocal.insert(tableName, null, cv);
+                       // Log.i(TAG + " insert "+ tableName, insertCount+" ");
+                    }
+                    cv.clear();
+                } else {
+                    int delCount = dbLocal.delete(tableName, "id_type = ?", new String[]{String.valueOf(idTypeServer)});
                 }
-                cv.clear();
+                Intent intent = new Intent();
+                intent.setAction("update_types");
+                context.sendBroadcast(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (tableName.equals("Text")) {
+        } else if (tableName.equals("CarolText")) {
             openLocal();
             //Add data to table Song
-            ContentValues cv = new ContentValues();
+
             try {
-                int idTextServer = jsonArray.getInt(0);
-                updateTime = NumberConverter.dateToLongConverter(jsonArray.getString(3));
-                cv.put("update_time", updateTime);
-                cv.put("id_song", jsonArray.getInt(1));
-                cv.put("data", jsonArray.getString(2));
-                cv.put("remarks", "");
-                cv.put("source", jsonArray.getString(4));
-                int updateCount = dbLocal.update("Text", cv, "id_text = ?", new String[]{String.valueOf(idTextServer)});
-                if (updateCount == 0) {
-                    cv.put("id_text", idTextServer);
-                    dbLocal.insert("Text", null, cv);
+                int idTextServer = jsonObject.getInt("id");
+
+                updateTime = NumberConverter.dateToLongConverter(jsonObject.getString("Date"));
+                int showTo = jsonObject.getInt("ShowTo");;
+                if (showTo==1){
+                    ContentValues cv = new ContentValues();
+                    cv.put("update_time", updateTime);
+                    cv.put("id_song", jsonObject.getInt("id_Song"));
+                    cv.put("data", jsonObject.getString("Data"));
+                    cv.put("remarks", "");
+                    cv.put("source", jsonObject.getString("Source"));
+                    int updateCount = dbLocal.update(tableName, cv, "id_text = ?", new String[]{String.valueOf(idTextServer)});
+                    if (updateCount == 0) {
+                        cv.put("id_text", idTextServer);
+                        dbLocal.insert(tableName, null, cv);
+                    }
+                    cv.clear();
+                } else {
+                    int delCount = dbLocal.delete(tableName, "id_text = ?", new String[]{String.valueOf(idTextServer)});
                 }
-                cv.clear();
+                Intent intent = new Intent();
+                intent.setAction("update_texts");
+                context.sendBroadcast(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -180,9 +200,10 @@ public class DataSource {
     }
 
 
+
     public ArrayList<SongType> getSongTypes() {
         openLocal();
-        Cursor cursor = dbLocal.query("SongType", null, null, null, null, null, null);
+        Cursor cursor = dbLocal.query("CarolType", null, null, null, null, null, null);
         ArrayList<SongType> songTypesList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
@@ -203,10 +224,223 @@ public class DataSource {
     }
 
     private int getSongTypeQuantity(int songType) {
-        Cursor cursor = dbLocal.query("Song", null, "id_type = ?", new String[]{String.valueOf(songType)}, null, null, null);
+        Cursor cursor = dbLocal.query("CarolSong", null, "id_type = ?", new String[]{String.valueOf(songType)}, null, null, null);
         //Log.i(TAG + " кількість", cursor.getCount()+"");
         return cursor.getCount();
     }
+
+    public ArrayList<Song> getSongMainInfo(int idType) {
+        openLocal();
+        Cursor cursor = dbLocal.query("CarolSong", null, "id_type = ?", new String[]{String.valueOf(idType)}, null, null, null);
+        ArrayList<Song> songsList = new ArrayList<>();
+        Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int nameColIndex = cursor.getColumnIndex("name");
+            int ratingColIndex = cursor.getColumnIndex("rating");
+            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
+            int idColIndex = cursor.getColumnIndex("id_song");
+
+            long minRating = cursor.getLong(ratingColIndex);
+            long maxRating = cursor.getLong(ratingColIndex);
+
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String songName = cursor.getString(nameColIndex);
+                int songId = cursor.getInt(idColIndex);
+                long songRating = cursor.getLong(ratingColIndex) + cursor.getLong(localRatingColIndex);
+                songsList.add(new Song(songId, songName, songRating, idType, null, null, null, null));
+
+                if (songRating > maxRating) {
+                    maxRating = songRating;
+                }
+                if (songRating < minRating) {
+                    minRating = songRating;
+                }
+                cursor.moveToNext();
+            }
+            Song.current_max_rating = maxRating;
+            Song.current_min_rating = minRating;
+        }
+        cursor.close();
+        closeLocal();
+        return songsList;
+    }
+
+    public void addPointToLocalRating(int idSong) {
+        openLocal();
+        Cursor cursor = dbLocal.query("CarolSong", null, "id_song = ?", new String[]{String.valueOf(idSong)}, null, null, null);
+        long myLocalRating = 0;
+        if (cursor.moveToFirst()) {
+            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
+            myLocalRating = cursor.getLong(localRatingColIndex);
+        }
+
+        ContentValues cv = new ContentValues();
+        cv.put("my_local_rating", myLocalRating + 1);
+        dbLocal.update("CarolSong", cv, "id_song = ?", new String[]{String.valueOf(idSong)});
+        closeLocal();
+    }
+
+    public void updateServerRatings(DBupdater dBupdater) {
+        this.dBupdater = dBupdater;
+        openLocal();
+        Cursor cursor = dbLocal.query("CarolSong", null, "my_local_rating > 0", null, null, null, null);
+
+        needToUpdate = cursor.getCount();
+        if (needToUpdate==0){
+            isUpdatedCount = 0;
+            needToUpdate = 0;
+            dBupdater.getServerUpdates();
+        }else {
+            if (cursor.moveToFirst()) {
+                int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
+                int idColIndex = cursor.getColumnIndex("id_song");
+
+
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    long myLocalRating = cursor.getLong(localRatingColIndex);
+                    int songId = cursor.getInt(idColIndex);
+                    updateServerSongRating(songId, myLocalRating);
+
+                    cursor.moveToNext();
+                }
+                ContentValues cv = new ContentValues();
+                cv.put("my_local_rating", 0);
+                dbLocal.update("CarolSong", cv, null, null);
+
+            }
+        }
+
+        cursor.close();
+        closeLocal();
+
+    }
+
+    private void updateServerSongRating(final int idSong, final long ratingIncrese) {
+
+        String url = AppController.BASE_URL_KEY + "update_song_rating.php";
+
+        String tag_string_req = "string_req";
+        StringRequest strReq = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE ratings", "     " + response);
+
+                isUpdatedCount++;
+                if (isUpdatedCount==needToUpdate){
+                    isUpdatedCount = 0;
+                    needToUpdate = 0;
+                    dBupdater.getServerUpdates();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.i(TAG + " error", volleyError.toString());
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("action", "update_song_rating");
+                params.put("id", String.valueOf(idSong));
+                params.put("rating", String.valueOf(ratingIncrese));
+                return params;
+            }
+        };
+        // Adding request to request queue
+        /*strReq.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+
+    public Song getSongAdvancedInfo(Song song) {
+        openLocal();
+        Cursor cursor = dbLocal.query("CarolText", null, "id_song = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
+        //ArrayList<Song> songsList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int dataColIndex = cursor.getColumnIndex("data");
+            int remarksColIndex = cursor.getColumnIndex("remarks");
+            int sourceColIndex = cursor.getColumnIndex("source");
+            int idSongColumnIndex = cursor.getColumnIndex("id_song");
+
+            int idSong = cursor.getInt(idSongColumnIndex);
+
+            String text = cursor.getString(dataColIndex);
+            String remarks = cursor.getString(remarksColIndex);
+            String source = cursor.getString(sourceColIndex);
+            song.setText(text);
+            song.setRemarks(remarks);
+            song.setSource(source);
+        }
+        cursor.close();
+        /*cursor = dbLocal.query("CarolComment", null, "id_text = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
+
+        ArrayList<String> commentList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int commentDataColIndex = cursor.getColumnIndex("data");
+
+            for (int i = 0; i < cursor.getCount(); i++) {
+                commentList.add(cursor.getString(commentDataColIndex));
+            }
+            song.setComments(commentList);
+        }
+        cursor.close();
+        closeLocal();*/
+        return song;
+    }
+
+    public boolean isTextContainsChars(int songId, String text) {
+        openLocal();
+        Cursor cursor = dbLocal.query("CarolText", null, "id_song = ?", new String[]{String.valueOf(songId)}, null, null, null);
+        //ArrayList<Song> songsList = new ArrayList<>();
+        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
+        if (cursor.moveToFirst()) {
+            int dataColIndex = cursor.getColumnIndex("data");
+            String data = cursor.getString(dataColIndex);
+            data = data.toLowerCase();
+            if (data.contains(text)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public void savePref(String sPrefType, boolean wasStarted){
+        if (sPrefType.equals("wasStarted")){
+            sharedPreferences.edit().
+                    putBoolean(sPrefType,wasStarted)
+                    .apply();
+        }
+
+    }
+    public boolean loadStartPref(){
+        return sharedPreferences.getBoolean("wasStarted", false);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public Cursor getUpdatebleRowsFromLocal(String tableName, long updateFrom) {
         openLocal();
@@ -303,7 +537,7 @@ public class DataSource {
 
                     try {
                         parseObject.save();
-                        setServerUpdates("comment_update", cursor.getLong(updateTimeIndex));
+                        //setServerUpdates("comment_update", cursor.getLong(updateTimeIndex));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -312,215 +546,6 @@ public class DataSource {
         }
         closeLocal();
 
-    }
-
-    public void setServerUpdates(String columnName, long updateTime) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("LastUpdate");
-        try {
-            ParseObject parseObject = query.getFirst();
-            parseObject.put(columnName, updateTime);
-            parseObject.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ArrayList<Song> getSongMainInfo(int idType) {
-        openLocal();
-        Cursor cursor = dbLocal.query("Song", null, "id_type = ?", new String[]{String.valueOf(idType)}, null, null, null);
-        ArrayList<Song> songsList = new ArrayList<>();
-        Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
-        if (cursor.moveToFirst()) {
-            int nameColIndex = cursor.getColumnIndex("name");
-            int ratingColIndex = cursor.getColumnIndex("rating");
-            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
-            int idColIndex = cursor.getColumnIndex("id_song");
-
-            long minRating = cursor.getLong(ratingColIndex);
-            long maxRating = cursor.getLong(ratingColIndex);
-
-            for (int i = 0; i < cursor.getCount(); i++) {
-                String songName = cursor.getString(nameColIndex);
-                int songId = cursor.getInt(idColIndex);
-                long songRating = cursor.getLong(ratingColIndex) + cursor.getLong(localRatingColIndex);
-                songsList.add(new Song(songId, songName, songRating, idType, null, null, null, null));
-
-                if (songRating > maxRating) {
-                    maxRating = songRating;
-                }
-                if (songRating < minRating) {
-                    minRating = songRating;
-                }
-                cursor.moveToNext();
-            }
-            Song.current_max_rating = maxRating;
-            Song.current_min_rating = minRating;
-        }
-        cursor.close();
-        closeLocal();
-        return songsList;
-    }
-
-    public void addPointToLocalRating(int idSong) {
-        openLocal();
-        Cursor cursor = dbLocal.query("Song", null, "id_song = ?", new String[]{String.valueOf(idSong)}, null, null, null);
-        long myLocalRating = 0;
-        if (cursor.moveToFirst()) {
-            int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
-            myLocalRating = cursor.getLong(localRatingColIndex);
-        }
-
-        ContentValues cv = new ContentValues();
-        cv.put("my_local_rating", myLocalRating + 1);
-        dbLocal.update("Song", cv, "id_song = ?", new String[]{String.valueOf(idSong)});
-        closeLocal();
-    }
-
-    public void updateServerRatings(DBupdater dBupdater) {
-        this.dBupdater = dBupdater;
-        openLocal();
-        Cursor cursor = dbLocal.query("Song", null, "my_local_rating > 0", null, null, null, null);
-
-        needToUpdate = cursor.getCount();
-        if (needToUpdate==0){
-            isUpdatedCount = 0;
-            needToUpdate = 0;
-            dBupdater.getServerUpdates();
-        }else {
-            if (cursor.moveToFirst()) {
-                int localRatingColIndex = cursor.getColumnIndex("my_local_rating");
-                int idColIndex = cursor.getColumnIndex("id_song");
-
-
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    long myLocalRating = cursor.getLong(localRatingColIndex);
-                    int songId = cursor.getInt(idColIndex);
-                    updateServerSongRating(songId, myLocalRating);
-                /*if ((cursor.getCount() - 1) == i) {
-                    setServerUpdates("song_update", currentTime);
-                }*/
-                    cursor.moveToNext();
-                }
-                ContentValues cv = new ContentValues();
-                cv.put("my_local_rating", 0);
-                dbLocal.update("Song", cv, null, null);
-
-            }
-        }
-
-        cursor.close();
-        closeLocal();
-
-    }
-
-    private void updateServerSongRating(final int idSong, final long ratingIncrese) {
-
-        String tag_string_req = "string_req";
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppController.BASE_URL_KEY, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("RESPONSE ratings", "     " + response);
-                isUpdatedCount++;
-                if (isUpdatedCount==needToUpdate){
-                    isUpdatedCount = 0;
-                    needToUpdate = 0;
-                    dBupdater.getServerUpdates();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.i(TAG + " error", volleyError.toString());
-
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("action", "update_song_rating");
-                params.put("param1", String.valueOf(idSong));
-                params.put("param2", String.valueOf(ratingIncrese));
-                return params;
-            }
-        };
-        // Adding request to request queue
-        /*strReq.setRetryPolicy(new DefaultRetryPolicy(
-                MY_SOCKET_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-
-    public Song getSongAdvancedInfo(Song song) {
-        openLocal();
-        Cursor cursor = dbLocal.query("Text", null, "id_song = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
-        //ArrayList<Song> songsList = new ArrayList<>();
-        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
-        if (cursor.moveToFirst()) {
-            int dataColIndex = cursor.getColumnIndex("data");
-            int remarksColIndex = cursor.getColumnIndex("remarks");
-            int sourceColIndex = cursor.getColumnIndex("source");
-            int idSongColumnIndex = cursor.getColumnIndex("id_song");
-
-            int idSong = cursor.getInt(idSongColumnIndex);
-
-            String text = cursor.getString(dataColIndex);
-            String remarks = cursor.getString(remarksColIndex);
-            String source = cursor.getString(sourceColIndex);
-            song.setText(text);
-            song.setRemarks(remarks);
-            song.setSource(source);
-        }
-        cursor.close();
-        cursor = dbLocal.query("Comment", null, "id_song = ?", new String[]{String.valueOf(song.getId())}, null, null, null);
-
-        ArrayList<String> commentList = new ArrayList<>();
-        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
-        if (cursor.moveToFirst()) {
-            int commentDataColIndex = cursor.getColumnIndex("data");
-
-            for (int i = 0; i < cursor.getCount(); i++) {
-                commentList.add(cursor.getString(commentDataColIndex));
-            }
-            song.setComments(commentList);
-        }
-        cursor.close();
-        closeLocal();
-        return song;
-    }
-
-    public boolean isTextPresent(int songId, String text) {
-        openLocal();
-        Cursor cursor = dbLocal.query("Text", null, "id_song = ?", new String[]{String.valueOf(songId)}, null, null, null);
-        //ArrayList<Song> songsList = new ArrayList<>();
-        //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
-        if (cursor.moveToFirst()) {
-            int dataColIndex = cursor.getColumnIndex("data");
-            String data = cursor.getString(dataColIndex);
-            data = data.toLowerCase();
-            if (data.contains(text)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public void savePref(boolean wasStarted){
-        sharedPreferences.edit().
-                putBoolean("wasStarted",wasStarted)
-                .apply();
-    }
-
-    public boolean loadPref(){
-        return sharedPreferences.getBoolean("wasStarted",false);
     }
 
 }

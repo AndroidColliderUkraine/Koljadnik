@@ -25,4 +25,6 @@
     <string name="title_activity_song_list">SongListActivity</string>
     <string name="title_activity_text">TextActivity</string>
 
+    <string name="crash_toast_text">Oooops, crach!</string>
+
 </resources>

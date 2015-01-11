@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -70,7 +71,6 @@ public class SongListActivity extends Activity {
     }
 
     private void initFields(){
-        getActionBar().setTitle(typeName);
         lv_songs_list = (ListView)findViewById(R.id.lv_songs_list);
         et_search_song = (EditText)findViewById(R.id.et_search_song);
         lv_sort_types = (ListView)findViewById(R.id.lv_sort_types);
@@ -117,16 +117,15 @@ public class SongListActivity extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 songAdapter.search(et_search_song.getText().toString());
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
+
         iv_search_sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,17 +165,21 @@ public class SongListActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (Build.VERSION.SDK_INT>10){
+            if (getActionBar()!=null){
+                getActionBar().setTitle(typeName);
+            }
+            getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_song_list, menu);
-        //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
-        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //return super.onOptionsItemSelected(item);
 
         if (item.getItemId()==R.id.add_song){
             Intent intent = new Intent(this, SubmitActivity.class);

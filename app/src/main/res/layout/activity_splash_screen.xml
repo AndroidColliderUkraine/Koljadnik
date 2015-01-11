@@ -15,23 +15,22 @@
         android:gravity="center_horizontal"/>-->
 
     <ImageView
-        android:layout_width="250dp"
+        android:layout_width="180dp"
         android:id="@+id/iv_splash_title_main"
         android:src="@drawable/logo_main"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_centerInParent="true" />
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/iv_splash_title_hat"
         android:src="@drawable/logo_hat"
-        android:layout_above="@+id/iv_splash_title_main"
         android:layout_alignRight="@+id/iv_splash_title_main"
         android:layout_alignEnd="@+id/iv_splash_title_main"
-        android:layout_marginRight="170dp"
-        android:layout_marginEnd="170dp"
-        android:layout_alignBottom="@+id/iv_splash_title_main"/>
+        android:layout_marginRight="154dp"
+        android:layout_alignBottom="@+id/iv_splash_title_main"
+        android:layout_marginBottom="19dp" />
 
     <TextView
         android:id="@+id/tv_ac"

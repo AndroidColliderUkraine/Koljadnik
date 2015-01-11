@@ -65,7 +65,7 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 DataSource dataSource = new DataSource(context);
-                if (dataSource.loadPref()){
+                if (dataSource.loadStartPref()){
                     if (InternetHelper.isConnectionEnabled(context)) {
                         DBupdater dBupdater = new DBupdater(context, "start");
                         dBupdater.checkAndUpdateTables();
@@ -77,7 +77,7 @@ public class SplashScreenActivity extends Activity {
                     }
                 } else {
                     if (InternetHelper.isConnectionEnabled(context)) {
-                        dataSource.savePref(true);
+                        dataSource.savePref("wasStarted",true);
                         DBupdater dBupdater = new DBupdater(context, "start");
                         dBupdater.checkAndUpdateTables();
                     } else {

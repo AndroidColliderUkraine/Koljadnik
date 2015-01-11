@@ -1,9 +1,12 @@
 package com.androidcollider.koljadnik;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,8 +21,13 @@ import com.androidcollider.koljadnik.database.DataSource;
 import com.androidcollider.koljadnik.objects.SongType;
 import com.androidcollider.koljadnik.utils.AppController;
 import com.androidcollider.koljadnik.utils.InternetHelper;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,16 +43,13 @@ public class SongTypesActivity  extends Activity {
     private Timer t;
     private DBupdater dBupdater;
 
-
-
-
     private DataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Log.i(TAG,"відкрилася 2-га активіті");
         super.onCreate(savedInstanceState);
+        sendDataToAnalytics();
+
         setContentView(R.layout.activity_song_types);
 
         dBupdater = new DBupdater(this, "timer");
@@ -54,12 +59,12 @@ public class SongTypesActivity  extends Activity {
         initListeners();
 
         dataSource = new DataSource(this);
-        //dataSource.addCommentToLocal(1,"Крута пісня");
         songTypesList = dataSource.getSongTypes();
 
         songTypeAdapter = new SongTypeAdapter(this,songTypesList);
         lv_category.setAdapter(songTypeAdapter);
 
+        registerReceiver(broadcastReceiver, new IntentFilter("update_types"));
     }
 
     private void initFields(){
@@ -93,8 +98,11 @@ public class SongTypesActivity  extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_song_types, menu);
-        //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
-        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+        if (Build.VERSION.SDK_INT>10) {
+            if (getActionBar() != null) {
+                getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+            }
+        }
         return true;
     }
 
@@ -120,6 +128,31 @@ public class SongTypesActivity  extends Activity {
     @Override
     protected void onDestroy() {
         t.cancel();
+        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
+    }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals("update_types")){
+                Log.i(TAG + " будуємо типи","");
+                ArrayList<SongType> songTypesList = dataSource.getSongTypes();
+                songTypeAdapter.updateData(songTypesList);
+            }
+        }
+    };
+
+    private void sendDataToAnalytics(){
+        // Get tracker.
+        Tracker t = ((AppController) getApplication()).getTracker(
+                AppController.TrackerName.APP_TRACKER);
+
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName("SongTypeActivity");
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 }

@@ -48,15 +48,15 @@ public class DBupdater {
 
     private final static int MY_SOCKET_TIMEOUT_MS = 30000;
     private final static String TAG = "Андроідний Коллайдер";
-    private String mode ="";
+    private String mode = "";
 
     private HashMap<String, String> params;
     private DataSource dataSource;
     private Context context;
     private ArrayList<Long> localUpdates, serverUpdates;
 
-    private final static String[] localTables = new String[]{"Song", "SongType", "Text", "Chord", "Note", "Comment"};
-    private final static String[] serverTables = new String[]{"Songs", "Types", "Texts", "Chords", "Nots", "Comments"};
+    private final static String[] tableNames = new String[]{"CarolSong", "CarolType", "CarolText", "CarolChord", "CarolNote", "CarolComment"};
+   // private final static String[] serverTables = new String[]{"Songs", "Types", "Texts", "Chords", "Nots", "Comments"};
 
     private int isUpdatedCount = 0;
     private int needToUpdate = 0;
@@ -78,6 +78,7 @@ public class DBupdater {
         localUpdates.clear();
         serverUpdates.clear();
 
+
         localUpdates = dataSource.getLocalUpdates();
         updateServerRatings();
         //getServerUpdates();
@@ -86,31 +87,32 @@ public class DBupdater {
 
     private void updateLocalTable(final int tableIndex, final long updateFrom) {
 
-        Log.i(TAG, "оновлюємо локальну таблицю " + localTables[tableIndex]);
-
-        String tag_string_req = "string_req";
-
+        Log.i(TAG, "оновлюємо локальну таблицю " + tableNames[tableIndex]);
+        String url = AppController.BASE_URL_KEY + "get_updates_from_table.php";
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppController.BASE_URL_KEY, new Response.Listener<String>() {
+                url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("RESPONSE number", "     " + AppController.getInstance().getRequestQueue().getSequenceNumber() + " ");
                 Log.d("RESPONSE tables", "     " + response);
                 try {
                     JSONObject res = new JSONObject(response);
-                    JSONArray result = res.getJSONArray("result");
+                    if (res.getString("status").equals("True")){
+                        JSONArray result = res.getJSONArray("results");
 
-                    for (int i = 0; i < result.length(); i++) {
-                        dataSource.putJsonObjectToLocalTable(localTables[tableIndex], result.getJSONArray(i));
+                        for (int i = 0; i < result.length(); i++) {
+                            dataSource.putJsonObjectToLocalTable(tableNames[tableIndex], result.getJSONObject(i));
+                        }
+                        isUpdatedCount++;
+
+                        if (needToUpdate == isUpdatedCount) {
+                            needToUpdate = 0;
+                            isUpdatedCount = 0;
+                            if (mode.equals("finish")) {
+                                ((SongTypesActivity) context).finish();
+                            }
+                        }
                     }
-                    isUpdatedCount++;
-
-                    if (needToUpdate == isUpdatedCount) {
-                        needToUpdate = 0;
-                        isUpdatedCount = 0;
-                        setProgramChange();
-                    }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -128,8 +130,8 @@ public class DBupdater {
             protected Map<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("action", "get_updates_from_table");
-                params.put("param1", serverTables[tableIndex]);
-                params.put("param2", NumberConverter.longToDateConverter(updateFrom));
+                params.put("table_name", tableNames[tableIndex]);
+                params.put("date", NumberConverter.longToDateConverter(updateFrom));
                 return params;
             }
         };
@@ -139,59 +141,64 @@ public class DBupdater {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
 
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tableNames[tableIndex]+" update");
     }
 
 
     public void getServerUpdates() {
-        params.clear();
-        params.put("action", "get_last_updates");
-        stringRequest(new Response.Listener<String>() {
+        String url = AppController.BASE_URL_KEY + "get_last_updates.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                 Log.d("RESPONSE", response);
                 try {
                     JSONObject res = new JSONObject(response);
-                    JSONObject result = res.getJSONObject("result");
+                    if (res.getString("status").equals("True")) {
+                        JSONObject result = res.getJSONObject("results");
 
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("song_up")
-                    ));
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("type_up")
-                    ));
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("text_up")
-                    ));
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("chord_up")
-                    ));
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("nota_up")
-                    ));
-                    serverUpdates.add(NumberConverter.dateToLongConverter(
-                            result.getString("comment_up")
-                    ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolSong_up")
+                        ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolType_up")
+                        ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolText_up")
+                        ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolChord_up")
+                        ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolNote_up")
+                        ));
+                        serverUpdates.add(NumberConverter.dateToLongConverter(
+                                result.getString("CarolComment_up")
+                        ));
 
-                    Log.i(TAG + " local updates", localUpdates.toString());
-                    Log.i(TAG + " server updates", serverUpdates.toString());
+                        Log.i(TAG + " local updates", localUpdates.toString());
+                        Log.i(TAG + " server updates", serverUpdates.toString());
 
-                    for (int i = 0; i < localTables.length; i++) {
-
-                        if (serverUpdates.get(i) > localUpdates.get(i)) {
-                            needToUpdate++;
-                        }
-                    }
-                    if (needToUpdate == 0) {
-                        setProgramChange();
-                    } else {
-                        if (mode.equals("start")){
-                            ((SplashScreenActivity)context).setLoadingStatus("Оновлення бази пісень");
-                        }
-                        for (int i = 0; i < localTables.length; i++) {
+                        //calculating needToUpdate Tables
+                        for (int i = 0; i < tableNames.length; i++) {
                             if (serverUpdates.get(i) > localUpdates.get(i)) {
-                                updateLocalTable(i, localUpdates.get(i));
+                                needToUpdate++;
+                            }
+                        }
+
+                        if (needToUpdate == 0) {
+                            setProgramChange();
+                        } else {
+                            if (mode.equals("start")) {
+                                Intent intent = new Intent(DBupdater.this.context, SongTypesActivity.class);
+                                ((SplashScreenActivity) DBupdater.this.context).finish();
+                                DBupdater.this.context.startActivity(intent);
+                                ((SplashScreenActivity) DBupdater.this.context).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            }
+                            for (int i = 0; i < tableNames.length; i++) {
+                                if (serverUpdates.get(i) > localUpdates.get(i)) {
+                                    updateLocalTable(i, localUpdates.get(i));
+                                }
                             }
                         }
                     }
@@ -201,7 +208,28 @@ public class DBupdater {
                 }
 
             }
-        }, params);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.i(TAG + " error", volleyError.toString());
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("action", "get_last_updates");
+                return params;
+            }
+        };
+        // Adding request to request queue
+        /*strReq.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
+        AppController.getInstance().addToRequestQueue(strReq, "last_updates");
 
     }
 
@@ -244,8 +272,8 @@ public class DBupdater {
 
     public void updateServerRatings() {
         dataSource.updateServerRatings(this);
-        if (mode.equals("start")){
-            ((SplashScreenActivity)context).setLoadingStatus("Завантаження рейтингів");
+        if (mode.equals("start")) {
+            ((SplashScreenActivity) context).setLoadingStatus("Завантаження рейтингів");
         }
     }
 

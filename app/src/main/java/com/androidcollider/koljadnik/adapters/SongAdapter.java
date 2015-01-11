@@ -44,7 +44,7 @@ public class SongAdapter extends BaseAdapter {
         for (int i = 0; i < allSongList.size(); i++) {
             String name = allSongList.get(i).getName().toLowerCase();
             text = text.toLowerCase();
-            if ((name.contains(text))||dataSource.isTextPresent(allSongList.get(i).getId(),text)) {
+            if ((name.contains(text))||dataSource.isTextContainsChars(allSongList.get(i).getId(),text)) {
                 songsList.add(allSongList.get(i));
             }
         }
