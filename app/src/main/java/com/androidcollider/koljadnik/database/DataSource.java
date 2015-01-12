@@ -116,9 +116,6 @@ public class DataSource {
                 } else {
                     int delCount = dbLocal.delete(tableName, "id_song = ?", new String[]{String.valueOf(idSongServer)});
                 }
-               /* Intent intent = new Intent();
-                intent.setAction("update_songs");
-                context.sendBroadcast(intent);*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -145,9 +142,6 @@ public class DataSource {
                 } else {
                     int delCount = dbLocal.delete(tableName, "id_type = ?", new String[]{String.valueOf(idTypeServer)});
                 }
-                Intent intent = new Intent();
-                intent.setAction("update_types");
-                context.sendBroadcast(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -202,6 +196,7 @@ public class DataSource {
 
 
     public ArrayList<SongType> getSongTypes() {
+
         openLocal();
         Cursor cursor = dbLocal.query("CarolType", null, null, null, null, null, null);
         ArrayList<SongType> songTypesList = new ArrayList<>();

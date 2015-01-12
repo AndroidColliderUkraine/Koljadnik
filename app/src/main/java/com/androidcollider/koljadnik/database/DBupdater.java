@@ -111,6 +111,11 @@ public class DBupdater {
                             if (mode.equals("finish")) {
                                 ((SongTypesActivity) context).finish();
                             }
+                            if (mode.equals("start")) {
+                                Intent intent = new Intent();
+                                intent.setAction("updating_is_over");
+                                context.sendBroadcast(intent);
+                            }
                         }
                     }
                 } catch (JSONException e) {
