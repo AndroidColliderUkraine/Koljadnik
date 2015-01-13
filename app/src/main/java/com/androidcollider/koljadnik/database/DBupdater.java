@@ -40,7 +40,7 @@ public class DBupdater {
     private final static String[] tableNames = new String[]{"CarolSong", "CarolType", "CarolText", "CarolChord", "CarolNote", "CarolComment"};
    // private final static String[] serverTables = new String[]{"Songs", "Types", "Texts", "Chords", "Nots", "Comments"};
 
-    private int alreadyUpdTables = 0;
+    privjate int alreadyUpdTables = 0;
     private int needToUpdTables = 0;
 
     private int alreadyUpdRatings = 0;
