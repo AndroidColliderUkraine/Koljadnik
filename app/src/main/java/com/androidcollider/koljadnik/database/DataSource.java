@@ -191,6 +191,7 @@ public class DataSource {
 
 
     public ArrayList<SongType> getSongTypes() {
+
         openLocal();
         Cursor cursor = dbLocal.query("CarolType", null, null, null, null, null, null);
         ArrayList<SongType> songTypesList = new ArrayList<>();
