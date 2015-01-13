@@ -23,7 +23,7 @@ public class DBhelperLocalDB  extends SQLiteOpenHelper {
         // Create table Route and table Point
         db.execSQL(SQLQueriesLocalDB.create_song_table);
         db.execSQL(SQLQueriesLocalDB.create_song_type_table);
-        db.execSQL(SQLQueriesLocalDB.create_text_table);
+        //db.execSQL(SQLQueriesLocalDB.create_text_table);
         db.execSQL(SQLQueriesLocalDB.create_chord_table);
         db.execSQL(SQLQueriesLocalDB.create_note_table);
         db.execSQL(SQLQueriesLocalDB.create_comment_table);
@@ -42,7 +42,7 @@ public class DBhelperLocalDB  extends SQLiteOpenHelper {
 
             db.execSQL(SQLQueriesLocalDB.create_song_table);
             db.execSQL(SQLQueriesLocalDB.create_song_type_table);
-            db.execSQL(SQLQueriesLocalDB.create_text_table);
+            //db.execSQL(SQLQueriesLocalDB.create_text_table);
             db.execSQL(SQLQueriesLocalDB.create_chord_table);
             db.execSQL(SQLQueriesLocalDB.create_note_table);
             db.execSQL(SQLQueriesLocalDB.create_comment_table);

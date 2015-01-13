@@ -55,7 +55,7 @@ public class DBupdater {
     private Context context;
     private ArrayList<Long> localUpdates, serverUpdates;
 
-    private final static String[] tableNames = new String[]{"CarolSong", "CarolType", "CarolText", "CarolChord", "CarolNote", "CarolComment"};
+    private final static String[] tableNames = new String[]{"Carol", "CarolType", "CarolChord", "CarolNote", "CarolComment"};
    // private final static String[] serverTables = new String[]{"Songs", "Types", "Texts", "Chords", "Nots", "Comments"};
 
     private int isUpdatedCount = 0;
@@ -163,13 +163,10 @@ public class DBupdater {
                         JSONObject result = res.getJSONObject("results");
 
                         serverUpdates.add(NumberConverter.dateToLongConverter(
-                                result.getString("CarolSong_up")
+                                result.getString("Carol_up")
                         ));
                         serverUpdates.add(NumberConverter.dateToLongConverter(
                                 result.getString("CarolType_up")
-                        ));
-                        serverUpdates.add(NumberConverter.dateToLongConverter(
-                                result.getString("CarolText_up")
                         ));
                         serverUpdates.add(NumberConverter.dateToLongConverter(
                                 result.getString("CarolChord_up")

@@ -52,7 +52,7 @@ public class DataSource {
     private SharedPreferences sharedPreferences;
     private final static String APP_PREFERENCES = "KoljadnikPref";
 
-    private final static String[] tables = new String[]{"CarolSong", "CarolType", "CarolText", "CarolChord", "CarolNote", "CarolComment"};
+    private final static String[] tables = new String[]{"Carol", "CarolType", "CarolChord", "CarolNote", "CarolComment"};
 
     private int isUpdatedCount = 0;
     private int needToUpdate = 0;
@@ -92,7 +92,7 @@ public class DataSource {
         //Log.i(TAG + " jsong obj "+ tableName,jsonObject.toString());
         long updateTime = 0;
 
-        if (tableName.equals("CarolSong")) {
+        if (tableName.equals("Carol")) {
             openLocal();
             try {
                 int idSongServer = jsonObject.getInt("id");
@@ -104,13 +104,14 @@ public class DataSource {
                     cv.put("update_time", updateTime);
                     cv.put("name", jsonObject.getString("Name"));
                     cv.put("id_type", jsonObject.getInt("Type"));
+                    cv.put("text", jsonObject.getString("Data"));
+                    cv.put("source", jsonObject.getInt("Source"));
                     cv.put("rating", jsonObject.getLong("Rating"));
                     cv.put("my_local_rating", 0);
                     int updateCount = dbLocal.update(tableName, cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
                     if (updateCount == 0) {
                         cv.put("id_song", idSongServer);
                         long insertCount = dbLocal.insert("CarolSong", null, cv);
-                        //Log.i(TAG + " insert "+ tableName, insertCount+" ");
                     }
                     cv.clear();
                 } else {
@@ -123,7 +124,6 @@ public class DataSource {
         } else if (tableName.equals("CarolType")) {
             openLocal();
             //Add data to table Song
-
             try {
                 int idTypeServer = jsonObject.getInt("id");
                 updateTime = NumberConverter.dateToLongConverter(jsonObject.getString("Date"));
@@ -170,9 +170,6 @@ public class DataSource {
                 } else {
                     int delCount = dbLocal.delete(tableName, "id_text = ?", new String[]{String.valueOf(idTextServer)});
                 }
-                Intent intent = new Intent();
-                intent.setAction("update_texts");
-                context.sendBroadcast(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
