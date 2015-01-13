@@ -1,7 +1,9 @@
 package com.androidcollider.koljadnik;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
@@ -29,12 +31,16 @@ public class TextActivity extends Activity {
     private DataSource dataSource;
     private Song song;
     private ImageView iv_minus, iv_plus;
-    private int textSize=14;
+    private int textSize;
+    private SharedPreferences sharedPreferences;
+    private final static String APP_PREFERENCES = "KoljadnikPref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
+        this.sharedPreferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        textSize = sharedPreferences.getInt("fontSize", 14);
 
         Intent intent = getIntent();
         song = intent.getParcelableExtra("Song");
@@ -56,14 +62,21 @@ public class TextActivity extends Activity {
             tv_song_source.setText(song.getSource());
         }
 
+        if(song.getSource()!=null&!song.getSource().isEmpty()){
+            tv_song_source.setTextSize(textSize);
+        }
+        tv_song_text.setTextSize(textSize);
+        ((TextView)findViewById(R.id.tv_dzherelo)).setTextSize(textSize+1);
+
         iv_minus = (ImageView)findViewById(R.id.iv_minus);
         iv_plus = (ImageView)findViewById(R.id.iv_plus);
 
         iv_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textSize<20){
+                if (textSize<25){
                     textSize++;
+                    sharedPreferences.edit().putInt("fontSize",textSize).commit();
                     if(song.getSource()!=null&!song.getSource().isEmpty()){
                         tv_song_source.setTextSize(textSize);
                     }
@@ -76,8 +89,9 @@ public class TextActivity extends Activity {
         iv_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textSize>12){
+                if (textSize>10){
                     textSize--;
+                    sharedPreferences.edit().putInt("fontSize",textSize).commit();
                     if(song.getSource()!=null&!song.getSource().isEmpty()){
                         tv_song_source.setTextSize(textSize);
                     }

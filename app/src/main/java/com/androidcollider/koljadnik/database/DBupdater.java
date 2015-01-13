@@ -2,7 +2,11 @@ package com.androidcollider.koljadnik.database;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PermissionGroupInfo;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -172,7 +176,7 @@ public class DBupdater {
                             setProgramChange();
                         } else {
                             if (mode.equals("start")) {
-                                ((SplashScreenActivity) context).setLoadingStatus("Оновлення бази пісень");
+                                ((SplashScreenActivity) context).setLoadingStatus("Завантаження нових данних");
                             }
                             /*for (int i = 0; i < tableNames.length; i++) {
                                 if (serverUpdateDates.get(i) > localUpdateDates.get(i)) {
@@ -222,25 +226,9 @@ public class DBupdater {
                 url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("RESPONSE number", "     " + AppController.getInstance().getRequestQueue().getSequenceNumber() + " ");
-                Log.d("RESPONSE tables", "     " + response);
                 try {
-                    JSONObject res = new JSONObject(response);
-                    if (res.getString("status").equals("True")){
-
-                        JSONArray resultCarol = res.getJSONObject("Carol").getJSONArray("results");
-                        JSONArray resultType = res.getJSONObject("CarolType").getJSONArray("results");
-
-                        for (int i = 0; i < resultType.length(); i++) {
-                            dataSource.putJsonObjectToLocalTable("CarolType", resultCarol.getJSONObject(i));
-                        }
-
-                        for (int i = 0; i < resultCarol.length(); i++) {
-                            dataSource.putJsonObjectToLocalTable("Carol", resultCarol.getJSONObject(i));
-                        }
-                        setProgramChange();
-
-                    }
+                    SavingDataTask savingDataTask = new SavingDataTask();
+                    savingDataTask.execute(new JSONObject(response));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -310,6 +298,78 @@ public class DBupdater {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
 
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+
+    class SavingDataTask extends AsyncTask<JSONObject, Integer, Void> {
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mode.equals("start")) {
+                ((SplashScreenActivity) context).setLoadingStatus("Оновлення бази пісень");
+                ((SplashScreenActivity)context).setProgressVisible(View.VISIBLE);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject... jsonObjects) {
+
+            try {
+                JSONObject res = jsonObjects[0];
+                //if (res.get            String("status").equals("True")){
+
+                JSONArray resultCarol =  res.getJSONObject("Carol").getJSONArray("results");
+                JSONArray resultType = res.getJSONObject("CarolType").getJSONArray("results");
+
+
+                //((SplashScreenActivity)context).setProgressMax(resultType.length()+resultCarol.length());
+
+                int totalLenght = resultType.length()+resultCarol.length();
+                double percent = totalLenght/100;
+                int currentPercent= 0;
+                for (int i = 0; i < resultType.length(); i++) {
+                    dataSource.putJsonObjectToLocalTable("CarolType", resultType.getJSONObject(i));
+
+                    if (i>percent*(currentPercent+1)&&mode.equals("start")){
+                        Log.i(TAG,"     "+ currentPercent);
+                        publishProgress(currentPercent);
+                        currentPercent++;
+                    }
+
+                }
+
+                for (int i = 0; i < resultCarol.length(); i++) {
+                    dataSource.putJsonObjectToLocalTable("Carol", resultCarol.getJSONObject(i));
+                    if ((i+resultType.length())>percent*(currentPercent+1)&&mode.equals("start")){
+                        Log.i(TAG,"     "+  currentPercent);
+                        publishProgress(currentPercent);
+                        currentPercent++;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            ((SplashScreenActivity)context).setProgressLoading(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            setProgramChange();
+        }
+
+
     }
 
 

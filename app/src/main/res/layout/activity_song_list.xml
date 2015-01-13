@@ -68,8 +68,8 @@
         android:layout_marginTop="50dp"
         android:id="@+id/lv_sort_types"
         android:divider="@android:color/transparent"
-        android:dividerHeight="2dp"
-        android:background="@drawable/background_for_songs"
+        android:dividerHeight="3dp"
+        android:background="@drawable/background_for_bg_for_sort_types"
         android:visibility="gone" />
 
 </RelativeLayout>

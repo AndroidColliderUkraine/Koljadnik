@@ -15,6 +15,7 @@ import android.view.ContextThemeWrapper;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.database.DBupdater;
@@ -32,6 +33,7 @@ public class SplashScreenActivity extends Activity {
     private Animation slideUpMain, slideDownHat, fadeInAC;
     private TextView tv_ac, tv_loading_status;
     private Context context;
+    private ProgressBar pb_loading_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class SplashScreenActivity extends Activity {
         context = this;
 
         tv_loading_status = (TextView) findViewById(R.id.tv_loading_status);
+
+        pb_loading_data = (ProgressBar)findViewById(R.id.pb_loading_new_data);
 
         slideUpMain = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_hat);
         slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
@@ -123,6 +127,18 @@ public class SplashScreenActivity extends Activity {
         });
 
         alertDialog.show();
+    }
+
+    public void setProgressLoading(int progress){
+        pb_loading_data.setProgress(progress);
+    }
+
+    public void setProgressMax(int max){
+        pb_loading_data.setMax(max);
+    }
+
+    public void setProgressVisible(int visible){
+        pb_loading_data.setVisibility(visible);
     }
 
 }

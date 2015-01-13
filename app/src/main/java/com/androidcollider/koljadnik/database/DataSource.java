@@ -96,7 +96,7 @@ public class DataSource {
             try {
                 int idSongServer = jsonObject.getInt("id");
                 updateTime = NumberConverter.dateToLongConverter(jsonObject.getString("Date"));
-                int showTo = jsonObject.getInt("ToShow");;
+                int showTo = jsonObject.getInt("ShowTo");
                 if (showTo==1){
                     //Add data to table Song
                     ContentValues cv = new ContentValues();
@@ -104,7 +104,7 @@ public class DataSource {
                     cv.put("name", jsonObject.getString("Name"));
                     cv.put("id_type", jsonObject.getInt("Type"));
                     cv.put("text", jsonObject.getString("Data"));
-                    cv.put("source", jsonObject.getInt("Source"));
+                    cv.put("source", jsonObject.getString("Source"));
                     cv.put("rating", jsonObject.getLong("Rating"));
                     cv.put("my_local_rating", 0);
                     int updateCount = dbLocal.update(tableName, cv, "id_song = ?", new String[]{String.valueOf(idSongServer)});
@@ -305,7 +305,7 @@ public class DataSource {
         //ArrayList<Song> songsList = new ArrayList<>();
         //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
         if (cursor.moveToFirst()) {
-            int dataColIndex = cursor.getColumnIndex("data");
+            int dataColIndex = cursor.getColumnIndex("text");
             //int remarksColIndex = cursor.getColumnIndex("remarks");
             int sourceColIndex = cursor.getColumnIndex("source");
             int idSongColumnIndex = cursor.getColumnIndex("id_song");
@@ -343,7 +343,7 @@ public class DataSource {
         //ArrayList<Song> songsList = new ArrayList<>();
         //Log.i(TAG, " кількість типу id=" + idType + "     " + cursor.getCount());
         if (cursor.moveToFirst()) {
-            int dataColIndex = cursor.getColumnIndex("data");
+            int dataColIndex = cursor.getColumnIndex("text");
             String data = cursor.getString(dataColIndex);
             data = data.toLowerCase();
             if (data.contains(text)) {

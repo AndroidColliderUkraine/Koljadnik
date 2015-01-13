@@ -3,6 +3,7 @@ package com.androidcollider.koljadnik;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -10,9 +11,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,6 +37,8 @@ public class SubmitActivity extends Activity {
     private EditText et_submit;
     private Button b_submit;
     private final static String[] MAILS = new String[]{"android.collider@gmail.com"};
+    private ListView lv_submit_types;
+    private TextView tv_submit_type;
 
    /* private TextView tv_song_title, tv_song_text, tv_song_remarks, tv_song_source, tv_song_comments;
     private DataSource dataSource;
@@ -53,11 +58,13 @@ public class SubmitActivity extends Activity {
 
         SortTypeAdapter adapter = new SortTypeAdapter(this, submitList);
         //ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,submitArray);
-        spinner_submit.setAdapter(adapter);
+        lv_submit_types.setAdapter(adapter);
+
+
     }
 
     private void initFields(){
-        spinner_submit = (Spinner)findViewById(R.id.spinner_submit);
+        //spinner_submit = (Spinner)findViewById(R.id.spinner_submit);
         et_submit = (EditText)findViewById(R.id.et_submit_field);
         b_submit = (Button)findViewById(R.id.b_submit);
         b_submit.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +73,30 @@ public class SubmitActivity extends Activity {
                 sendEmail();
             }
         });
+        lv_submit_types = (ListView)findViewById(R.id.lv_submit_types);
+        tv_submit_type = (TextView)findViewById(R.id.tv_submit_type);
+
+        tv_submit_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lv_submit_types.getVisibility()==View.GONE){
+                    lv_submit_types.setVisibility(View.VISIBLE);
+                }else{
+                    lv_submit_types.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        lv_submit_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Log.i(TAG, songList.toString());
+                tv_submit_type.setText(submitArray[position]);
+                lv_submit_types.setVisibility(View.GONE);
+                }
+            }
+        );
 
         /*tv_song_title = (TextView)findViewById(R.id.tv_song_title);
         tv_song_title.setText(song.getName());*/
@@ -88,8 +119,10 @@ public class SubmitActivity extends Activity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_song_types, menu);
         //getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.route_saver_actionbar_background));
-        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT>10){
+            getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         return true;
     }
 
