@@ -85,7 +85,7 @@ public class SongListActivity extends Activity {
                 addOnePointToListRating(idSong);
                 addOnePointToLocalDBRating(idSong);
 
-                songAdapter.updateData(songList);
+                songAdapter.halfUpdateData(songList);
 
                 Intent intent = new Intent(SongListActivity.this,TextActivity.class);
                 intent.putExtra("Song", songAdapter.getItem(position));
