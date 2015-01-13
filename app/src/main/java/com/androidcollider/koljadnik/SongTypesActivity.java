@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,8 +65,6 @@ public class SongTypesActivity  extends Activity {
 
         songTypeAdapter = new SongTypeAdapter(this,songTypesList);
         lv_category.setAdapter(songTypeAdapter);
-
-        registerReceiver(broadcastReceiver, new IntentFilter("update_types"));
     }
 
     private void initFields(){
@@ -97,11 +97,27 @@ public class SongTypesActivity  extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_song_types, menu);
-        if (Build.VERSION.SDK_INT>10) {
-            if (getActionBar() != null) {
+        if (Build.VERSION.SDK_INT>10){
+            if (getActionBar()!=null){
                 getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.action_bar_color));
+                getActionBar().setDisplayHomeAsUpEnabled(true);
             }
+        }
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_song_types, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId()==R.id.add_song){
+            Intent intent = new Intent(this, SubmitActivity.class);
+            startActivity(intent);
+        }
+        if(item.getItemId()==android.R.id.home){
+            finish();
         }
         return true;
     }
@@ -128,20 +144,10 @@ public class SongTypesActivity  extends Activity {
     @Override
     protected void onDestroy() {
         t.cancel();
-        unregisterReceiver(broadcastReceiver);
+
         super.onDestroy();
     }
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("update_types")){
-                Log.i(TAG + " будуємо типи","");
-                ArrayList<SongType> songTypesList = dataSource.getSongTypes();
-                songTypeAdapter.updateData(songTypesList);
-            }
-        }
-    };
 
     private void sendDataToAnalytics(){
         // Get tracker.

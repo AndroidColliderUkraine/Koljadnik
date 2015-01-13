@@ -1,5 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.androidcollider.koljadnik.SongTypesActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/add_song"
+        android:title="@string/action_settings"
+        android:showAsAction="always"
+        android:icon="@drawable/add_song"/>
+
 </menu>

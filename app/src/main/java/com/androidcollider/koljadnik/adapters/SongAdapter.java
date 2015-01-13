@@ -162,6 +162,17 @@ public class SongAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public void halfUpdateData(ArrayList<Song> songsList) {
+
+        ArrayList<Song> songs = new ArrayList<>();
+        songs.addAll(songsList);
+
+        this.songsList.clear();
+
+        this.songsList.addAll(songs);
+        this.notifyDataSetChanged();
+    }
+
    /* public void updateRouteLists(ArrayList<Route> list){
         this.routeArrayList.clear();
         this.routeArrayList.addAll(list);
