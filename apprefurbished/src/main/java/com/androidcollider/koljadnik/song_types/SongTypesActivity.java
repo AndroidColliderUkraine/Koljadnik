@@ -3,31 +3,43 @@ package com.androidcollider.koljadnik.song_types;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.androidcollider.koljadnik.R;
+import com.androidcollider.koljadnik.root.App;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class SongTypesActivity extends Activity implements SongTypesActivityMVP.View{
 
-    @BindView(R.id.rv_types)
-    RecyclerView rvTypes;
+    @BindView(R.id.rv_types) RecyclerView rvTypes;
+
+    @Inject
+    SongTypesActivityMVP.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_types);
+        ButterKnife.bind(this);
+
+        ((App)getApplication()).getComponent().inject(this);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        presenter.setView(this);
+        presenter.initData();
     }
 
     @Override
@@ -50,8 +62,8 @@ public class SongTypesActivity extends Activity implements SongTypesActivityMVP.
     }
 
     @Override
-    public void setListLayoutManager(RecyclerView.LayoutManager listLayoutManager) {
-        rvTypes.setLayoutManager(listLayoutManager);
+    public void setLinearLayoutManager() {
+        rvTypes.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

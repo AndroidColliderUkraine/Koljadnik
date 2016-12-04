@@ -6,18 +6,18 @@
     android:background="@drawable/background_for_songs">
 
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_song_type_name"
         android:textColor="@color/text_color"
-        android:textSize="21dp" />
+        android:textSize="@dimen/text_large" />
 
     <TextView
+        android:id="@+id/tv_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_song_type_quantity"
         android:textColor="@color/christmas_tree_color"
         android:layout_gravity="right"
         android:textStyle="bold"
-        android:textSize="17dp"/>
+        android:textSize="@dimen/text_medium"/>
 </LinearLayout>
