@@ -26,5 +26,6 @@
     <string name="title_activity_text">TextActivity</string>
 
     <string name="crash_toast_text">Oooops, crach!</string>
+    <string name="add">Add</string>
 
 </resources>

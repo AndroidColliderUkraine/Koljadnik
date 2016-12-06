@@ -30,14 +30,7 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
         model.getSongTypes(new OnReadListener<List<SongType>>(){
             @Override
             public void onSuccess(List<SongType> songTypes) {
-                if (songTypes != null && !songTypes.isEmpty()) {
-                    songTypeAdapter = new SongTypeAdapter(songTypes);
-
-                    if (view != null) {
-                        view.setAdapterToList(songTypeAdapter);
-                        view.setLinearLayoutManager();
-                    }
-                }
+                onSongsLoaded(songTypes);
             }
 
             @Override
@@ -45,5 +38,16 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
                 Log.i("SongTypes", error);
             }
         });
+    }
+
+    public void onSongsLoaded(List<SongType> songTypes){
+        if (songTypes != null && !songTypes.isEmpty()) {
+            songTypeAdapter = new SongTypeAdapter(songTypes);
+
+            if (view != null) {
+                view.setAdapterToList(songTypeAdapter);
+                view.setLinearLayoutManager();
+            }
+        }
     }
 }
