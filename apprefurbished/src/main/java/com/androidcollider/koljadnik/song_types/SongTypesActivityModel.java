@@ -1,17 +1,15 @@
 package com.androidcollider.koljadnik.song_types;
 
-import android.support.annotation.Nullable;
-
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
+import com.androidcollider.koljadnik.repository.SongTypesDataSource;
 
 import java.util.List;
 
 public class SongTypesActivityModel implements SongTypesActivityMVP.Model {
 
-    private SongTypesRepository songTypesRepository;
+    private SongTypesDataSource songTypesRepository;
 
-    public SongTypesActivityModel(SongTypesRepository songTypesRepository) {
+    public SongTypesActivityModel(SongTypesDataSource songTypesRepository) {
         this.songTypesRepository = songTypesRepository;
     }
 

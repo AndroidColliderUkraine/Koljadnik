@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.models.SongType;
 import com.androidcollider.koljadnik.utils.NumberConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +39,7 @@ public class SongTypeAdapter extends RecyclerView.Adapter<SongTypeAdapter.Holder
         SongType songType = songTypesList.get(position);
 
         holder.tvName.setText(songType.getName());
-        holder.tvQuantity.setText(String.valueOf(NumberConverter.convert(songType.getQuantity())));
+        //holder.tvQuantity.setText(String.valueOf(NumberConverter.convert(songType.getQuantity())));
     }
 
     @Override

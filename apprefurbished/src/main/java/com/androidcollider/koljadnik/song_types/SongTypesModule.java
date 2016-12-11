@@ -1,5 +1,8 @@
 package com.androidcollider.koljadnik.song_types;
 
+import com.androidcollider.koljadnik.repository.SongTypesDataSource;
+import com.androidcollider.koljadnik.repository.SongTypesFirebaseDataSource;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -12,12 +15,12 @@ public class SongTypesModule {
     }
 
     @Provides
-    public SongTypesActivityMVP.Model provideSongTypesActivityModel(SongTypesRepository repository){
+    public SongTypesActivityMVP.Model provideSongTypesActivityModel(SongTypesDataSource repository){
         return new SongTypesActivityModel(repository);
     }
 
     @Provides
-    public SongTypesRepository provideSongTypesRepository(){
-        return new SongTypesFirebaseRepository();
+    public SongTypesDataSource provideSongTypesRepository(){
+        return new SongTypesFirebaseDataSource();
     }
 }

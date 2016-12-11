@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
 
 import java.util.List;
 

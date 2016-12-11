@@ -1,7 +1,7 @@
-package com.androidcollider.koljadnik.song_types;
+package com.androidcollider.koljadnik.repository;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
+import com.androidcollider.koljadnik.song_types.SongType;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -11,11 +11,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongTypesFirebaseRepository implements SongTypesRepository{
+public class SongTypesFirebaseDataSource implements SongTypesDataSource {
 
     private DatabaseReference mDatabase;
 
-    public SongTypesFirebaseRepository() {
+    public SongTypesFirebaseDataSource() {
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -27,8 +27,7 @@ public class SongTypesFirebaseRepository implements SongTypesRepository{
                 List<SongType> list = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     list.add(new SongType(postSnapshot.child("id").getValue(Integer.class),
-                            postSnapshot.child("name").getValue(String.class),
-                            postSnapshot.child("quantity").getValue(Integer.class)));
+                            postSnapshot.child("name").getValue(String.class)));
                 }
                 onReadListener.onSuccess(list);
             }
