@@ -1,27 +1,25 @@
 package com.androidcollider.koljadnik.models;
 
-public class SongType {
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import io.realm.RealmObject;
+
+@IgnoreExtraProperties
+public class SongType extends RealmObject{
 
     private int id;
     private String name;
-    private int quantity;
+    private long updatedAt;
 
-    public SongType(int id, String name, int quantity) {
+    // Default constructor required for calls to
+    // DataSnapshot.getValue(SongType.class) and Realm
+    public SongType() {
+    }
+
+    public SongType(int id, String name, long updatedAt) {
         this.id = id;
         this.name = name;
-        this.quantity = quantity;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -32,7 +30,7 @@ public class SongType {
         return name;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public long getUpdatedAt() {
+        return updatedAt;
     }
 }

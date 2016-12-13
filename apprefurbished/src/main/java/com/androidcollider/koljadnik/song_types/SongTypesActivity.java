@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
@@ -70,6 +71,11 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     @Override
     public void setAdapterToList(RecyclerView.Adapter adapter) {
         rvTypes.setAdapter(adapter);
+    }
+
+    @Override
+    public void showErrorToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 
     @Override

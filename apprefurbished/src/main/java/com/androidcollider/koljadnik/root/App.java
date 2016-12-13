@@ -6,6 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Description of ${CLASS_NAME}
  *
@@ -22,6 +25,9 @@ public class App extends Application {
         super.onCreate();
 
        applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
+
+        Realm.init(this);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
     }
 
     public ApplicationComponent getComponent() {

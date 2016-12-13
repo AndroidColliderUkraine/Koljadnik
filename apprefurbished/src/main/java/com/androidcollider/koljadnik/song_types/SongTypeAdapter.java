@@ -18,9 +18,9 @@ import butterknife.ButterKnife;
 
 public class SongTypeAdapter extends RecyclerView.Adapter<SongTypeAdapter.Holder> {
 
-    public List<SongType> songTypesList;
+    public List<SongTypeViewModel> songTypesList;
 
-    public SongTypeAdapter(List<SongType> songTypesList) {
+    public SongTypeAdapter(List<SongTypeViewModel> songTypesList) {
         this.songTypesList = songTypesList;
     }
 
@@ -38,10 +38,10 @@ public class SongTypeAdapter extends RecyclerView.Adapter<SongTypeAdapter.Holder
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        SongType songType = songTypesList.get(position);
+        SongTypeViewModel songTypeViewModel = songTypesList.get(position);
 
-        holder.tvName.setText(songType.getName());
-        holder.tvQuantity.setText(String.valueOf(NumberConverter.convert(songType.getQuantity())));
+        holder.tvName.setText(songTypeViewModel.songType.getName());
+        holder.tvQuantity.setText(String.valueOf(NumberConverter.convert(songTypeViewModel.quantity)));
     }
 
     @Override

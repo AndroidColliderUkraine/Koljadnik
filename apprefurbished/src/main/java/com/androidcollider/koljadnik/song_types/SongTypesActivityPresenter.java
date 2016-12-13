@@ -27,20 +27,22 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
 
     @Override
     public void initData() {
-        model.getSongTypes(new OnReadListener<List<SongType>>(){
+        model.getSongTypes(new OnReadListener<List<SongTypeViewModel>>(){
             @Override
-            public void onSuccess(List<SongType> songTypes) {
+            public void onSuccess(List<SongTypeViewModel> songTypes) {
                 onSongsLoaded(songTypes);
             }
 
             @Override
             public void onError(String error) {
-                Log.i("SongTypes", error);
+                if (view != null) {
+                    view.showErrorToast(error);
+                }
             }
         });
     }
 
-    public void onSongsLoaded(List<SongType> songTypes){
+    public void onSongsLoaded(List<SongTypeViewModel> songTypes){
         if (songTypes != null && !songTypes.isEmpty()) {
             songTypeAdapter = new SongTypeAdapter(songTypes);
 

@@ -19,6 +19,7 @@ public interface SongTypesActivityMVP {
 
     interface View {
         void setAdapterToList(RecyclerView.Adapter adapter);
+        void showErrorToast(String text);
         void setLinearLayoutManager();
     }
 
@@ -28,6 +29,6 @@ public interface SongTypesActivityMVP {
     }
 
     interface Model {
-        void getSongTypes(OnReadListener<List<SongType>> listener);
+        void getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
     }
 }
