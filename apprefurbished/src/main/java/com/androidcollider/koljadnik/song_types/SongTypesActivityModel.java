@@ -23,9 +23,11 @@ public class SongTypesActivityModel implements SongTypesActivityMVP.Model {
         songsDataSource.getSongTypes(new OnReadListener<List<SongType>>() {
             @Override
             public void onSuccess(final List<SongType> resultSongType) {
+                Log.i("qqq", "1");
                 songsDataSource.getSongs(new OnReadListener<List<Song>>() {
                     @Override
                     public void onSuccess(List<Song> resultSong) {
+                        Log.i("qqq", "2");
                         List<SongTypeViewModel> songTypeViewModels = new ArrayList<>();
 
                         for (SongType songType: resultSongType){

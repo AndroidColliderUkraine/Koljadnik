@@ -1,75 +1,63 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-       android:background="@color/bg_color"
-    tools:context="com.androidcollider.koljadnik.SongListActivity"
+    android:background="@color/bg_color"
     android:orientation="vertical">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
+
+    <include layout="@layout/toolbar" />
+
+    <!--<LinearLayout
         android:id="@+id/song_list_layout_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
+        android:orientation="horizontal">
+
         <ImageView
-            android:background="@drawable/background_sort"
+            android:id="@+id/iv_search_sort"
             android:layout_width="40dp"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
-            android:id="@+id/iv_search_sort"
-            android:src="@drawable/search_sort"/>
-            <!--android:src="@drawable/route_saver_search_icon"-->
+            android:background="@drawable/background_sort"
+            android:src="@drawable/search_sort" />
+        &lt;!&ndash;android:src="@drawable/route_saver_search_icon"&ndash;&gt;
         <EditText
+            android:id="@+id/et_search_song"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="@drawable/background_search_field"
-            android:textColor="@color/text_color"
-            android:id="@+id/et_search_song"
             android:layout_marginTop="5dp"
-            android:textCursorDrawable="@drawable/cursor"
+            android:background="@drawable/background_search_field"
             android:maxLines="1"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
-    </LinearLayout>
+            android:paddingRight="10dp"
+            android:textColor="@color/text_color"
+            android:textCursorDrawable="@drawable/cursor" />
+    </LinearLayout>-->
 
-    <ListView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_songs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/song_list_layout_1"
-        android:id="@+id/lv_songs_list"
-        android:footerDividersEnabled="false"
+        android:layout_marginTop="@dimen/common_padding_small"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="30dp"
-        android:scrollbarStyle="insideInset"/>
-<!--
-    android:scrollbarThumbVertical="@drawable/scroll_bar"-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/text_color"
-        android:text="@string/android_collider_company"
-        android:background="@color/action_bar_color"
-        android:gravity="center"
-        android:padding="5dp"
-        android:textSize="15dp" />
-    <ListView
+        android:dividerHeight="@dimen/common_padding_small"
+        android:footerDividersEnabled="false"
+        android:paddingLeft="@dimen/common_padding_medium"
+        android:paddingRight="@dimen/common_padding_medium" />
+
+
+    <!--<ListView
+        android:id="@+id/lv_sort_types"
         android:layout_width="150dp"
         android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
-        android:id="@+id/lv_sort_types"
+        android:background="@drawable/background_for_bg_for_sort_types"
         android:divider="@android:color/transparent"
         android:dividerHeight="3dp"
-        android:background="@drawable/background_for_bg_for_sort_types"
-        android:visibility="gone" />
+        android:visibility="gone" />-->
 
-</RelativeLayout>
+</LinearLayout>

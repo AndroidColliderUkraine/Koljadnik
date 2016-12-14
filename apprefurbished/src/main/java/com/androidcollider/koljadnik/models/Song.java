@@ -7,10 +7,12 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 @IgnoreExtraProperties
 public class Song extends RealmObject {
 
+    @PrimaryKey
     private int id;
     private String name;
     private long rating;
@@ -90,5 +92,11 @@ public class Song extends RealmObject {
                 "remarks=" + remarks + "  " +
                 "source=" + source + "  " +
                 "comments=" + comm;
+    }
+
+
+    public int getRatingByMinMax(long min, long max){
+        long clearRating = rating - min;
+        return (int)((double)(max - min)/(double)clearRating + 1);
     }
 }

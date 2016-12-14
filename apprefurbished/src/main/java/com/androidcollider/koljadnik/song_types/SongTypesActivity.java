@@ -1,15 +1,18 @@
 package com.androidcollider.koljadnik.song_types;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.root.App;
+import com.androidcollider.koljadnik.songs.SongsActivity;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -39,11 +43,16 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
 
     @Inject
     SongTypesActivityMVP.Presenter presenter;
+    private SongTypeAdapter songTypeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getApplication()).getComponent().inject(this);
+
+        songTypeAdapter = new SongTypeAdapter(itemClickListener);
+        rvTypes.setLayoutManager(new LinearLayoutManager(this));
+        rvTypes.setAdapter(songTypeAdapter);
     }
 
     @Override
@@ -69,8 +78,8 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     }
 
     @Override
-    public void setAdapterToList(RecyclerView.Adapter adapter) {
-        rvTypes.setAdapter(adapter);
+    public void updateAdapter(List<SongTypeViewModel> songTypeViewModelList) {
+        songTypeAdapter.updateData(songTypeViewModelList);
     }
 
     @Override
@@ -78,10 +87,6 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void setLinearLayoutManager() {
-        rvTypes.setLayoutManager(new LinearLayoutManager(this));
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,6 +95,17 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
         }
         return true;
     }
+
+    @Override
+    public void showSongListUI(int typeId) {
+        Intent intent = new Intent(this, SongsActivity.class);
+        intent.putExtra(SongsActivity.EXTRA_SONG_TYPE_ID, typeId);
+        startActivity(intent);
+    }
+
+    private View.OnClickListener itemClickListener = view -> {
+        presenter.openSongListUI(view.getTag());
+    };
 
     private void encryptDecrypt(){
         try {

@@ -1,10 +1,8 @@
 package com.androidcollider.koljadnik.song_types;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
 
 import java.util.List;
 
@@ -14,7 +12,6 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
     private SongTypesActivityMVP.View view;
     private SongTypesActivityMVP.Model model;
 
-    private SongTypeAdapter songTypeAdapter;
 
     public SongTypesActivityPresenter(SongTypesActivityMVP.Model model) {
         this.model = model;
@@ -27,7 +24,7 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
 
     @Override
     public void initData() {
-        model.getSongTypes(new OnReadListener<List<SongTypeViewModel>>(){
+        model.getSongTypes(new OnReadListener<List<SongTypeViewModel>>() {
             @Override
             public void onSuccess(List<SongTypeViewModel> songTypes) {
                 onSongsLoaded(songTypes);
@@ -42,13 +39,18 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
         });
     }
 
-    public void onSongsLoaded(List<SongTypeViewModel> songTypes){
-        if (songTypes != null && !songTypes.isEmpty()) {
-            songTypeAdapter = new SongTypeAdapter(songTypes);
+    @Override
+    public void openSongListUI(Object tag) {
+        int typeId = (int) tag;
+        if (view != null) {
+            view.showSongListUI(typeId);
+        }
+    }
 
+    public void onSongsLoaded(List<SongTypeViewModel> songTypes) {
+        if (songTypes != null && !songTypes.isEmpty()) {
             if (view != null) {
-                view.setAdapterToList(songTypeAdapter);
-                view.setLinearLayoutManager();
+                view.updateAdapter(songTypes);
             }
         }
     }

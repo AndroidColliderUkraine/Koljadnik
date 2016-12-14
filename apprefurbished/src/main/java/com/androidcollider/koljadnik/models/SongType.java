@@ -3,10 +3,12 @@ package com.androidcollider.koljadnik.models;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 @IgnoreExtraProperties
 public class SongType extends RealmObject{
 
+    @PrimaryKey
     private int id;
     private String name;
     private long updatedAt;

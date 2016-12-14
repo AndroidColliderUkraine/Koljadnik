@@ -24,11 +24,5 @@ public class SongTypesModule {
         return new SongTypesActivityModel(repository);
     }
 
-    @Singleton
-    @Provides
-    public SongsDataSource provideSongRepository(SongsRealmDataSource songsRealmDataSource,
-                                                 SongsFirebaseDataSource songsFirebaseDataSource,
-                                                 SharedPreferencesManager sharedPreferencesManager) {
-        return new SongsRepository(songsRealmDataSource, songsFirebaseDataSource, sharedPreferencesManager);
-    }
+
 }

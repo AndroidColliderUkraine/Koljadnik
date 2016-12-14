@@ -1,6 +1,8 @@
 package com.androidcollider.koljadnik.storage;
 
 
+import android.util.Log;
+
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
@@ -22,11 +24,21 @@ public class SongsRealmDataSource implements SongsDataSource {
     @Override
     public void getSongTypes(OnReadListener<List<SongType>> onReadListener) {
         try {
+            Log.i("qqq", "0");
             RealmResults<SongType> realmResults = realm.where(SongType.class).
                     findAllAsync();
-            realmResults.addChangeListener(element -> onReadListener.onSuccess(realm.copyFromRealm(element)));
+            if (realmResults.isLoaded()) {
+                onReadListener.onSuccess(realm.copyFromRealm(realmResults));
+            } else {
+                realmResults.addChangeListener(element -> {
+                    Log.i("qqq", "02");
+                    onReadListener.onSuccess(realm.copyFromRealm(element));
+                    realmResults.removeChangeListeners();
+                });
+            }
 
         } catch (Exception e) {
+            e.printStackTrace();
             onReadListener.onError(e.getMessage());
         }
     }
@@ -36,11 +48,20 @@ public class SongsRealmDataSource implements SongsDataSource {
         try {
             RealmResults<Song> realmResults = realm.where(Song.class).
                     findAllAsync();
-            realmResults.addChangeListener(element -> onReadListener.onSuccess(realm.copyFromRealm(element)));
+            if (realmResults.isLoaded()) {
+                onReadListener.onSuccess(realm.copyFromRealm(realmResults));
+            } else {
+                realmResults.addChangeListener(element -> {
+                    onReadListener.onSuccess(realm.copyFromRealm(element));
+                    realmResults.removeChangeListeners();
 
+                });
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             onReadListener.onError(e.getMessage());
         }
+
     }
 
     @Override

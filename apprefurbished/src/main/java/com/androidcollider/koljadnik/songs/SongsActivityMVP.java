@@ -1,10 +1,10 @@
-package com.androidcollider.koljadnik.song_types;
+package com.androidcollider.koljadnik.songs;
 
 
 import android.support.v7.widget.RecyclerView;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
+import com.androidcollider.koljadnik.song_types.SongTypeViewModel;
 
 import java.util.List;
 
@@ -15,21 +15,21 @@ import java.util.List;
  * @copyright (c) Grossum. (http://www.grossum.com)
  * @package com.acollider.apprefurbished.song_types
  */
-public interface SongTypesActivityMVP {
+public interface SongsActivityMVP {
 
     interface View {
-        void updateAdapter(List<SongTypeViewModel> songTypeViewModelList);
+        void updateAdapter(List<SongItemViewModel> songItemViewModels);
         void showErrorToast(String text);
-        void showSongListUI(int typeId);
+        void showSongDetailsUI(int songId);
     }
 
     interface Presenter {
         void setView(View view);
-        void initData();
-        void openSongListUI(Object tag);
+        void initData(int typeId);
+        void openSongDetailsUI(Object object);
     }
 
     interface Model {
-        void getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
+        void getSongsByTypeId(int typeId, final OnReadListener<List<SongItemViewModel>> listener);
     }
 }
