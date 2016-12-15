@@ -95,8 +95,9 @@ public class Song extends RealmObject {
     }
 
 
-    public int getRatingByMinMax(long min, long max){
-        long clearRating = rating - min;
-        return (int)((double)(max - min)/(double)clearRating + 1);
+    public int getRatingByMinMax(long min, long max) {
+        double clearRating = rating - min;
+        double onePoint = (double) (max - min) / 5d;
+        return (int) ((clearRating - 1) / onePoint) + 1;
     }
 }

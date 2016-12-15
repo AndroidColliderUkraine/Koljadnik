@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/common_padding_medium"
+    android:layout_marginBottom="@dimen/common_padding_medium"
     android:background="@drawable/background_for_songs">
 
     <TextView
@@ -16,8 +19,10 @@
 
     <ImageView
         android:id="@+id/iv_item_song_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/finger_size_half"
+        android:layout_width="@dimen/rating_iv_width"
+        android:layout_height="@dimen/rating_iv_height"
+        android:layout_marginTop="@dimen/common_padding_medium"
         android:layout_gravity="right"
+        tools:src="@drawable/rating_1"
         android:textColor="@color/edit_text_white_color"/>
 </LinearLayout>

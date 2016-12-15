@@ -72,7 +72,7 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
 
     @Override
     protected boolean isDisplayHomeAsUpEnabled() {
-        return false;
+        return true;
     }
 
     @Override
@@ -103,6 +103,7 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.btn_add) {
 
         }

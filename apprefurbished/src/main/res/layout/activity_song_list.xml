@@ -6,58 +6,79 @@
 
     <include layout="@layout/toolbar" />
 
-    <!--<LinearLayout
+    <LinearLayout
         android:id="@+id/song_list_layout_1"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="@dimen/et_search_height"
+        android:paddingLeft="@dimen/common_padding_medium"
+        android:paddingRight="@dimen/common_padding_medium"
+        android:layout_marginTop="@dimen/common_padding_medium"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_search_sort"
-            android:layout_width="40dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/background_sort"
-            android:src="@drawable/search_sort" />
-        &lt;!&ndash;android:src="@drawable/route_saver_search_icon"&ndash;&gt;
+        <FrameLayout
+            android:layout_width="@dimen/finger_size"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_sort">
+            <ImageView
+                android:id="@+id/iv_sort"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/common_padding_medium"
+                android:alpha="0.7"
+                android:src="@drawable/ic_sort" />
+        </FrameLayout>
         <EditText
             android:id="@+id/et_search_song"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
             android:background="@drawable/background_search_field"
             android:maxLines="1"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/text_color"
+            android:hint="Пошук..."
             android:textCursorDrawable="@drawable/cursor" />
-    </LinearLayout>-->
+    </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_songs"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/common_padding_small"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/common_padding_small"
-        android:footerDividersEnabled="false"
-        android:paddingLeft="@dimen/common_padding_medium"
-        android:paddingRight="@dimen/common_padding_medium" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_songs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/common_padding_medium"
+            android:paddingLeft="@dimen/common_padding_medium"
+            android:paddingRight="@dimen/common_padding_medium" />
 
 
-    <!--<ListView
-        android:id="@+id/lv_sort_types"
-        android:layout_width="150dp"
-        android:layout_height="85dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/background_for_bg_for_sort_types"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="3dp"
-        android:visibility="gone" />-->
-
+        <LinearLayout
+            android:id="@+id/cnt_sort"
+            android:layout_width="@dimen/cnt_sort_width"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_medium"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:background="@drawable/background_for_bg_for_sort_types">
+            <TextView
+                android:id="@+id/btn_sort_by_alphabet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/et_search_height"
+                android:textColor="@color/text_color"
+                android:background="@drawable/background_for_sort_types"
+                android:layout_marginBottom="@dimen/common_padding_medium"
+                android:gravity="center"
+                android:text="За алфавітом"/>
+            <TextView
+                android:id="@+id/btn_sort_by_rating"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/et_search_height"
+                android:textColor="@color/text_color"
+                android:background="@drawable/background_for_sort_types"
+                android:gravity="center"
+                android:text="За рейтингом"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

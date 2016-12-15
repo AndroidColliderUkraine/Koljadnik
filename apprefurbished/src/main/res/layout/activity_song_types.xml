@@ -8,10 +8,8 @@
         android:id="@+id/rv_types"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/common_padding_small"
+        android:layout_marginTop="@dimen/common_padding_medium"
         android:paddingLeft="@dimen/common_padding_medium"
         android:paddingRight="@dimen/common_padding_medium"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/common_padding_small"
         android:footerDividersEnabled="false"/>
 </LinearLayout>

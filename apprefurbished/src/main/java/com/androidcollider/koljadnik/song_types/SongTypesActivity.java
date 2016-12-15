@@ -90,6 +90,7 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.btn_add) {
             encryptDecrypt();
         }
@@ -101,6 +102,7 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
         Intent intent = new Intent(this, SongsActivity.class);
         intent.putExtra(SongsActivity.EXTRA_SONG_TYPE_ID, typeId);
         startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
     private View.OnClickListener itemClickListener = view -> {
