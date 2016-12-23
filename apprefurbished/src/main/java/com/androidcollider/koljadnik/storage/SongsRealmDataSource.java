@@ -1,7 +1,7 @@
 package com.androidcollider.koljadnik.storage;
 
 
-import android.util.Log;
+import android.support.v4.util.Pair;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
@@ -24,14 +24,12 @@ public class SongsRealmDataSource implements SongsDataSource {
     @Override
     public void getSongTypes(OnReadListener<List<SongType>> onReadListener) {
         try {
-            Log.i("qqq", "0");
             RealmResults<SongType> realmResults = realm.where(SongType.class).
                     findAllAsync();
             if (realmResults.isLoaded()) {
                 onReadListener.onSuccess(realm.copyFromRealm(realmResults));
             } else {
                 realmResults.addChangeListener(element -> {
-                    Log.i("qqq", "02");
                     onReadListener.onSuccess(realm.copyFromRealm(element));
                     realmResults.removeChangeListeners();
                 });
@@ -76,5 +74,32 @@ public class SongsRealmDataSource implements SongsDataSource {
         realm.executeTransactionAsync(realm1 -> {
             realm1.copyToRealmOrUpdate(songs);
         }, onWriteListener::onSuccess);
+    }
+
+    @Override
+    public void getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
+
+    }
+
+    @Override
+    public void getSongById(int songId, OnReadListener<Song> onReadListener) {
+
+    }
+
+    @Override
+    public void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
+
+    }
+
+    @Override
+    public void increaseSongLocalRating(Song song) {
+        realm.executeTransactionAsync(realm1 -> {
+            realm1.copyToRealmOrUpdate(song);
+        });
+    }
+
+    @Override
+    public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
+
     }
 }

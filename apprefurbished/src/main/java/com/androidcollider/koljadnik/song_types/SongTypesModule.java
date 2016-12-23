@@ -1,12 +1,6 @@
 package com.androidcollider.koljadnik.song_types;
 
-import com.androidcollider.koljadnik.root.SharedPreferencesManager;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
-import com.androidcollider.koljadnik.storage.SongsFirebaseDataSource;
-import com.androidcollider.koljadnik.storage.SongsRealmDataSource;
-import com.androidcollider.koljadnik.storage.SongsRepository;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;

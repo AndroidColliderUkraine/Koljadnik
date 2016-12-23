@@ -1,8 +1,6 @@
 package com.androidcollider.koljadnik.storage;
 
 
-import com.androidcollider.koljadnik.root.SharedPreferencesManager;
-
 import javax.inject.Singleton;
 
 import dagger.Module;

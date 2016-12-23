@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.root;
+package com.androidcollider.koljadnik.storage;
 
 import android.content.SharedPreferences;
 

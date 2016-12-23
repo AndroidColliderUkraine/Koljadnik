@@ -1,9 +1,12 @@
 package com.androidcollider.koljadnik.models;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -16,6 +19,7 @@ public class Song extends RealmObject {
     private int id;
     private String name;
     private long rating;
+    private long localRating;
     private int idType;
     private String text;
     private String remarks;
@@ -38,7 +42,7 @@ public class Song extends RealmObject {
         this.remarks = remarks;
         this.source = source;
         this.comments = new RealmList<>();
-        comments.addAll(comments);
+        this.comments.addAll(comments);
         this.updatedAt = updatedAt;
     }
 
@@ -48,6 +52,10 @@ public class Song extends RealmObject {
 
     public String getName() {
         return name;
+    }
+
+    public long getTotalRating() {
+        return rating + localRating;
     }
 
     public long getRating() {
@@ -78,6 +86,29 @@ public class Song extends RealmObject {
         return updatedAt;
     }
 
+    public long getLocalRating() {
+        return localRating;
+    }
+
+    public void setLocalRating(long localRating) {
+        this.localRating = localRating;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("name", name);
+        result.put("rating", rating);
+        result.put("idType", idType);
+        result.put("text", text);
+        result.put("remarks", remarks);
+        result.put("source", source);
+        result.put("comments", comments);
+        result.put("updatedAt", updatedAt);
+        return result;
+    }
+
     @Override
     public String toString() {
         String comm = "";
@@ -96,8 +127,25 @@ public class Song extends RealmObject {
 
 
     public int getRatingByMinMax(long min, long max) {
-        double clearRating = rating - min;
+        double clearRating = getTotalRating() - min;
         double onePoint = (double) (max - min) / 5d;
         return (int) ((clearRating - 1) / onePoint) + 1;
+    }
+
+    public static Song findInListById(List<Song> songs, int id) {
+        for (Song song : songs) {
+            if (song.getId() == id) {
+                return song;
+            }
+        }
+        return null;
+    }
+
+    public void setRating(long rating) {
+        this.rating = rating;
+    }
+
+    public void increaseLocalRating() {
+        localRating++;
     }
 }

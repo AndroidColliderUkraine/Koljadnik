@@ -40,11 +40,9 @@ public abstract class CommonToolbarActivity extends AppCompatActivity {
         int menuRes =  getMenuRes();
 
         if (menuRes > 0) {
-            getMenuInflater().inflate(R.menu.main_menu, menu);
-            return true;
-        } else {
-            return false;
+            getMenuInflater().inflate(menuRes, menu);
         }
+        return true;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.androidcollider.koljadnik.storage;
 
+import android.support.v4.util.Pair;
+
 import com.androidcollider.koljadnik.contants.FirebaseTable;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
@@ -13,7 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SongsFirebaseDataSource implements SongsDataSource {
 
@@ -77,5 +81,34 @@ public class SongsFirebaseDataSource implements SongsDataSource {
     @Override
     public void saveSongs(List<Song> songs, OnWriteListener onWriteListener) {
 
+    }
+
+    @Override
+    public void getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
+
+    }
+
+    @Override
+    public void getSongById(int songId, OnReadListener<Song> onReadListener) {
+
+    }
+
+    @Override
+    public void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
+
+    }
+
+    @Override
+    public void increaseSongLocalRating(Song song) {
+
+    }
+
+    @Override
+    public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
+        for (Song song : songs) {
+            Map<String, Object> listToUpdate = new HashMap<>();
+            listToUpdate.put(String.valueOf(song.getId()), song.toMap());
+            mDatabase.child(FirebaseTable.SONGS.label).updateChildren(listToUpdate);
+        }
     }
 }

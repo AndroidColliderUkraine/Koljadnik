@@ -11,15 +11,13 @@ import android.widget.Toast;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
+import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.root.App;
-import com.androidcollider.koljadnik.songs.SongsActivity;
+import com.androidcollider.koljadnik.songs_list.SongsActivity;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -48,7 +46,7 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((App) getApplication()).getComponent().inject(this);
+        ((App) getApplication()).getAppComponent().inject(this);
 
         songTypeAdapter = new SongTypeAdapter(itemClickListener);
         rvTypes.setLayoutManager(new LinearLayoutManager(this));
@@ -92,7 +90,9 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.btn_add) {
-            encryptDecrypt();
+            Intent intent = new Intent(this, FeedbackActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
         return true;
     }
@@ -108,6 +108,12 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     private View.OnClickListener itemClickListener = view -> {
         presenter.openSongListUI(view.getTag());
     };
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
     private void encryptDecrypt(){
         try {

@@ -16,11 +16,11 @@
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/btn_sort"
             android:layout_width="@dimen/finger_size"
             android:layout_height="match_parent"
             android:background="@drawable/background_sort">
             <ImageView
-                android:id="@+id/iv_sort"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/common_padding_medium"
@@ -55,10 +55,10 @@
 
 
         <LinearLayout
-            android:id="@+id/cnt_sort"
+            android:id="@+id/cnt_order_menu"
             android:layout_width="@dimen/cnt_sort_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_padding_medium"
+            android:padding="@dimen/common_padding_medium"
             android:orientation="vertical"
             android:visibility="gone"
             android:background="@drawable/background_for_bg_for_sort_types">
@@ -70,7 +70,7 @@
                 android:background="@drawable/background_for_sort_types"
                 android:layout_marginBottom="@dimen/common_padding_medium"
                 android:gravity="center"
-                android:text="За алфавітом"/>
+                android:text="@string/by_alphabet"/>
             <TextView
                 android:id="@+id/btn_sort_by_rating"
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:textColor="@color/text_color"
                 android:background="@drawable/background_for_sort_types"
                 android:gravity="center"
-                android:text="За рейтингом"/>
+                android:text="@string/by_rating"/>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

@@ -1,14 +1,14 @@
 package com.androidcollider.koljadnik.storage;
 
-import android.util.Log;
+import android.support.v4.util.Pair;
 
 import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongType;
-import com.androidcollider.koljadnik.root.SharedPreferencesManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -19,8 +19,8 @@ public class SongsRepository implements SongsDataSource {
     private SongsDataSource songsRealmDataSource, songsFirebaseDataSource;
     private SharedPreferencesManager sharedPreferencesManager;
 
-    private List<Song> songs;
-    private List<SongType> songTypes;
+    private List<Song> cachedSongs;
+    private List<SongType> cachedSongTypes;
 
     public SongsRepository(@Local SongsDataSource songsRealmDataSource,
                            @Remote SongsDataSource songsFirebaseDataSource,
@@ -33,8 +33,8 @@ public class SongsRepository implements SongsDataSource {
     @Override
     public void getSongTypes(final OnReadListener<List<SongType>> onReadListener) {
         if (isNotExpired(sharedPreferencesManager.getLastUpdateForClass(SongType.class))) {
-            if (songTypes != null) {
-                onReadListener.onSuccess(songTypes);
+            if (cachedSongTypes != null) {
+                onReadListener.onSuccess(cachedSongTypes);
             } else {
                 getSongTypesFromLocal(onReadListener);
             }
@@ -61,9 +61,10 @@ public class SongsRepository implements SongsDataSource {
     private void getSongTypesFromRemote(final OnReadListener<List<SongType>> onReadListener) {
         songsFirebaseDataSource.getSongTypes(new OnReadListener<List<SongType>>() {
             @Override
-            public void onSuccess(List<SongType> result) {
+            public void onSuccess(List<SongType> firebaseList) {
                 sharedPreferencesManager.setLastUpdateForClass(SongType.class, System.currentTimeMillis());
-                songsRealmDataSource.saveSongTypes(result, new OnWriteListener() {
+
+                songsRealmDataSource.saveSongTypes(firebaseList, new OnWriteListener() {
                     @Override
                     public void onSuccess() {
                         getSongTypesFromLocal(onReadListener);
@@ -84,15 +85,15 @@ public class SongsRepository implements SongsDataSource {
     }
 
     private void cashSongTypes(List<SongType> result) {
-        songTypes = result;
+        cachedSongTypes = result;
     }
 
 
     @Override
     public void getSongs(OnReadListener<List<Song>> onReadListener) {
         if (isNotExpired(sharedPreferencesManager.getLastUpdateForClass(Song.class))) {
-            if (songs != null) {
-                onReadListener.onSuccess(songs);
+            if (cachedSongs != null) {
+                onReadListener.onSuccess(cachedSongs);
             } else {
                 getSongsFromLocal(onReadListener);
             }
@@ -119,17 +120,28 @@ public class SongsRepository implements SongsDataSource {
     private void getSongsFromRemote(final OnReadListener<List<Song>> onReadListener) {
         songsFirebaseDataSource.getSongs(new OnReadListener<List<Song>>() {
             @Override
-            public void onSuccess(List<Song> result) {
+            public void onSuccess(List<Song> firebaseList) {
                 sharedPreferencesManager.setLastUpdateForClass(Song.class, System.currentTimeMillis());
-                songsRealmDataSource.saveSongs(result, new OnWriteListener() {
+                songsRealmDataSource.getSongs(new OnReadListener<List<Song>>() {
                     @Override
-                    public void onSuccess() {
-                        getSongsFromLocal(onReadListener);
+                    public void onSuccess(List<Song> realmList) {
+                        mergeRatings(realmList, firebaseList);
+                        songsRealmDataSource.saveSongs(firebaseList, new OnWriteListener() {
+                            @Override
+                            public void onSuccess() {
+                                getSongsFromLocal(onReadListener);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                onReadListener.onError(error);
+                            }
+                        });
                     }
 
                     @Override
                     public void onError(String error) {
-                        onReadListener.onError(error);
+
                     }
                 });
             }
@@ -141,8 +153,22 @@ public class SongsRepository implements SongsDataSource {
         });
     }
 
+    private void mergeRatings(List<Song> realmList, List<Song> firebaseList){
+        List<Song> listToUpdate = new ArrayList<>();
+        for (Song realmSong: realmList){
+            if (realmSong.getLocalRating() > 0){
+                Song firebaseSong = Song.findInListById(firebaseList, realmSong.getId());
+                if (firebaseSong !=null) {
+                    firebaseSong.setRating(firebaseSong.getRating() + realmSong.getLocalRating());
+                    listToUpdate.add(firebaseSong);
+                }
+            }
+        }
+        songsFirebaseDataSource.updateSongs(listToUpdate, null);
+    }
+
     private void cashSongs(List<Song> result) {
-        songs = result;
+        cachedSongs = result;
     }
 
     private boolean isNotExpired(long lastUpdate) {
@@ -156,6 +182,93 @@ public class SongsRepository implements SongsDataSource {
 
     @Override
     public void saveSongs(List<Song> songs, OnWriteListener onWriteListener) {
+
+    }
+
+    @Override
+    public void getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
+        getSongs(new OnReadListener<List<Song>>() {
+            @Override
+            public void onSuccess(List<Song> result) {
+                List<Song> songsByType = new ArrayList<>();
+                for (Song song : result) {
+                    if (song.getIdType() == typeId) {
+                        songsByType.add(song);
+                    }
+                }
+                onReadListener.onSuccess(songsByType);
+            }
+
+            @Override
+            public void onError(String error) {
+                onReadListener.onError(error);
+            }
+        });
+    }
+
+    @Override
+    public void getSongById(int songId, OnReadListener<Song> onReadListener) {
+        getSongs(new OnReadListener<List<Song>>() {
+            @Override
+            public void onSuccess(List<Song> result) {
+                for (Song song : result) {
+                    if (song.getId() == songId) {
+                        onReadListener.onSuccess(song);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                onReadListener.onError(error);
+            }
+        });
+    }
+
+    @Override
+    public void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
+        getSongs(new OnReadListener<List<Song>>() {
+            @Override
+            public void onSuccess(List<Song> result) {
+
+                long minRating = 0;
+                long maxRating = 0;
+                if (result.size() > 0) {
+                    minRating = result.get(0).getTotalRating();
+                    maxRating = result.get(0).getTotalRating();
+                }
+                for (Song song : result) {
+                    if (song.getTotalRating() > maxRating) {
+                        maxRating = song.getTotalRating();
+                    }
+                    if (song.getTotalRating() < minRating) {
+                        minRating = song.getTotalRating();
+                    }
+                }
+                onReadListener.onSuccess(new Pair<>(minRating, maxRating));
+            }
+
+            @Override
+            public void onError(String error) {
+                onReadListener.onError(error);
+            }
+        });
+    }
+
+    @Override
+    public void increaseSongLocalRating(Song song) {
+        if (cachedSongs != null) {
+            for (Song cachedSong : cachedSongs) {
+                if (cachedSong.getId() == song.getId()) {
+                    cachedSong.increaseLocalRating();
+                    songsRealmDataSource.increaseSongLocalRating(song);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
 
     }
 }
