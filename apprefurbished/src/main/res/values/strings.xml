@@ -10,7 +10,7 @@
 
     <!-- labels -->
     <string name="splash_title">Колядник</string>
-    <string name="android_collider_company">Android Collider © 2015</string>
+    <string name="android_collider_company">Android Collider © 2016</string>
     <string name="dzerela">Джерела</string>
     <string name="nadislaty_rozrobniku">Надіслати Розробнику</string>
     <string name="pishit_sudi">Пишіть сюди...</string>
@@ -26,5 +26,12 @@
     <string name="title_activity_text">TextActivity</string>
 
     <string name="crash_toast_text">Oooops, crach!</string>
+    <string name="add">Add</string>
+    <string name="by_alphabet">За алфавітом</string>
+    <string name="by_rating">За рейтингом</string>
+    <string name="song_sending">Відправка пісні...</string>
+    <string name="letter_sending">Відправка листа...</string>
+    <string name="koljadka">"Колядка - "</string>
+    <string name="you_cannot_send">Ви не можете відправити лист без тексту</string>
 
 </resources>

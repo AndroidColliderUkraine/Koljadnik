@@ -1,0 +1,83 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.androidcollider.koljadnik.song_details.SongDetailsActivity"
+    android:orientation="vertical"
+    android:background="@color/bg_color">
+
+    <include layout="@layout/toolbar" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="insideInset">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/common_padding_large">
+                <TextView
+                    android:id="@+id/tv_text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/text_color"
+                    android:padding="@dimen/common_padding_medium"
+                    android:textIsSelectable="true"
+                    android:background="@drawable/background_for_songs" />
+
+                <LinearLayout
+                    android:id="@+id/cnt_source"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_padding_xlarge"
+                    android:orientation="vertical">
+                    <TextView
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text_color"
+                        android:padding="@dimen/common_padding_medium"
+                        android:textSize="@dimen/text_small"
+                        android:text="@string/dzerela"
+                        android:layout_marginBottom="@dimen/common_padding_large"
+                        android:background="@drawable/background_for_songs" />
+
+                    <TextView
+                        android:id="@+id/tv_song_source"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text_color"
+                        android:padding="@dimen/common_padding_medium"
+                        android:background="@drawable/background_for_songs" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/common_padding_xxlarge"
+            android:alpha="0.9">
+
+            <ImageView
+                android:id="@+id/btn_plus"
+                android:layout_width="@dimen/plus_minus_size"
+                android:layout_height="@dimen/plus_minus_size"
+                android:src="@drawable/plus"
+                android:layout_marginBottom="@dimen/common_padding_large"/>
+
+            <ImageView
+                android:id="@+id/btn_minus"
+                android:layout_width="@dimen/plus_minus_size"
+                android:layout_height="@dimen/plus_minus_size"
+                android:src="@drawable/minus"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

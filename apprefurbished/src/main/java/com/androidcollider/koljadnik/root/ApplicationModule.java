@@ -3,6 +3,8 @@ package com.androidcollider.koljadnik.root;
 import android.app.Application;
 import android.content.Context;
 
+import com.androidcollider.koljadnik.utils.SessionSettingsManager;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -19,7 +21,13 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public Context provideContext(){
+    public Context provideContext() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    public SessionSettingsManager provideLocalSettingsManager() {
+        return new SessionSettingsManager();
     }
 }

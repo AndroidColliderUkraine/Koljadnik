@@ -1,8 +1,7 @@
 package com.androidcollider.koljadnik.song_types;
 
-/**
- * Created by pseverin on 11.12.16.
- */
+
+import com.androidcollider.koljadnik.models.SongType;
 
 public class SongTypeViewModel {
 

@@ -1,12 +1,20 @@
 package com.androidcollider.koljadnik.root;
 
 import android.app.Application;
+import android.os.Environment;
 
-import com.androidcollider.koljadnik.song_types.SongType;
-import com.androidcollider.koljadnik.songs.Song;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Description of ${CLASS_NAME}
@@ -17,118 +25,177 @@ import java.util.List;
  */
 public class App extends Application {
 
-    private ApplicationComponent applicationComponent;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        List<SongType> songTypes = new ArrayList<>();
-        songTypes.add(new SongType(1, "Українські"));
-        songTypes.add(new SongType(2, "Іноземні"));
-
-        List<Song> songs = new ArrayList<>();
-        songs.add(new Song(1, "Коляд, коляд, колядниця", 15, 1, "Коляд, коляд, колядниця,\n" +
-                "Добра з маком паляниця,\n" +
-                "А без маку не така,\n" +
-                "Дайте, дядьку, п’ятака,\n" +
-                "Як не дасте п’ятака,\n" +
-                "Возьму вола за рога.\n" +
-                "Сюди ріг, туди ріг,\n" +
-                "Послав батько по пиріг.\n" +
-                "Казав: \"Не барися,\n" +
-                "Пирогом ділися\".\n", null, "(\"Добрий вечір!\" – промовляючи)", null));
-
-        songs.add(new Song(2, "Ірод цар за Христом ганявся", 3, 1, "\n" +
-                "Удвох:\n" +
-                "Він за ним дуже побивався.\n" +
-                "\n" +
-                "Всі швиденько:\n" +
-                "На сідельці не вдержався,\n" +
-                "З кобильчини він зірвався.\n" +
-                "\n" +
-                "маленька пауза, повільно:\n" +
-                "Та й упав на діл.\n" +
-                "\n" +
-                "(Повторити три останні рядки)\n" +
-                "Іродиха, як теє зачула,\n" +
-                "Що зірвалась у царя підпруга,\n" +
-                "Схопилася з ліжка боса\n" +
-                "І як є простоволоса\n" +
-                "Йому навздогін.\n" +
-                "Він лежить, ледве дух одводить,\n" +
-                "Кобильчиха\n" +
-                "Кругом нього ходить,\n" +
-                "Йому в очі заглядає,\n" +
-                "Хвостом мухи одганяє.\n" +
-                "Ще й приска на вид!\n" +
-                "\n", null, "", null));
-
-        songs.add(new Song(3, "А в горі, горі", 29, 1, "А в горі, в горі, в глибокім зворі.\n" +
-                "\n" +
-                "Приспів:\n" +
-                "Славен єс, Славен єс, Боже.\n" +
-                "\n" +
-                "Росте деревце, тонке, високе.\n" +
-                "Тонке, високе, а вшир широке.\n" +
-                "А вшир широке, а ввись кудряве.\n" +
-                "А на тім кудрі сам сокіл сидить.\n" +
-                "Сам сокіл сидить, далеко й видить.\n" +
-                "Видить в Николи... тисові столи.\n" +
-                "Як вконець стола сидить Никола.\n" +
-                "Ой сидить, сидить, слізоньку ронить.\n" +
-                "А з тої слізки сталося й море.\n" +
-                "А по тім морю пливе й корабель.\n" +
-                "А в тім кораблі тисові столи.\n" +
-                "Позастелені, чом скатерками.\n" +
-                "Чом скатерками, чом дорогими.\n" +
-                "А на тих столах дороге й пиття.\n" +
-                "Медок-солодок й солодка кутя.\n" +
-                "Та за цим столом будь же нам здоров!\n" +
-                "Віншуєм тебе щастям, здоров’ям.\n" +
-                "Щастям, здоров’ям та з цими святми.\n" +
-                "Та з цими святми, чом Різдвяними.\n" +
-                "Чом Різдвяними, чом роковими.\n" +
-                "Ой здоров, здоров та будь сам з собов.\n" +
-                "З свойов газдинев та з діточками.\n" +
-                "Та з діточками, та з сусідками.*\n" +
-                "Та з усім родом – близьким й далеким.\n" +
-                "Близьким й далеким, великим й малим.\n" +
-                "Ой дай ти, Боже, з поля доволі.\n" +
-                "З поля доволі, а в дім здоров’я.\n" +
-                "На челядочку, на худібочку.\n" +
-                "Ой що ж ми тобі колядували.\n" +
-                "Колядували, красно співали.\n" +
-                "Як перепілка в ярій пшениці.\n" +
-                "Як ластівонька в новенькій стрісі.\n" +
-                "Як соловейко та в лузі, лузі.\n" +
-                "Честь Богу, хвала! Навіки слава!\n" +
-                "Навіки слава! Навіки слава!", null, "1. Пісні з Галичини / Упорядники Р.П. Береза, М.О. Дацко. – Львів: Світ, 1997. – 192 с.\n" +
-                "2. Золотий Дунай. Символіка української пісні / Упорядник Марія Чумарна. – Тернопіль: Навчальна книга – Богдан, 2007. – 264 с.", null));
-
-        songs.add(new Song(4, "Jingle Bells", 3, 1, "Dashing through the snow\n" +
-                "In a one-horse open sleigh\n" +
-                "O'er the fields we go\n" +
-                "Laughing all the way\n" +
-                "\n" +
-                "Bells on bob tail ring\n" +
-                "Making spirits bright\n" +
-                "What fun it is to ride and sing\n" +
-                "A sleighing song tonight!\n" +
-                "\n" +
-                "Jingle bells, jingle bells,\n" +
-                "Jingle all the way.\n" +
-                "Oh! what fun it is to ride\n" +
-                "In a one-horse open sleigh.\n" +
-                "\n" +
-                "Jingle bells, jingle bells,\n" +
-                "Jingle all the way;\n" +
-                "Oh! what fun it is to ride\n" +
-                "In a one-horse open sleigh.", null, "James Lord Pierpont", null));
-        applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        appComponent = DaggerAppComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        try {
+            readTxt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Realm.init(this);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
     }
 
-    public ApplicationComponent getComponent() {
-        return applicationComponent;
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
+
+
+    private void readTxt() throws IOException {
+        JSONObject jsonData = new JSONObject();
+
+        Integer i = 0;
+        i = parseSms(jsonData, i, 5);
+        i = parseVinsh(jsonData, i, 3);
+
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File(sdCard.getAbsolutePath() + "/MyFiles");
+        directory.mkdirs();
+
+        File file = new File(directory, "songs.txt");
+        FileOutputStream fOut = new FileOutputStream(file);
+        OutputStreamWriter osw = new OutputStreamWriter(fOut);
+        osw.write(jsonData.toString());
+        osw.flush();
+        osw.close();
+
+        jsonData = new JSONObject();
+        try {
+            jsonData.put(String.valueOf(0), createSonTypesJson(0, "Колядки"));
+            jsonData.put(String.valueOf(1), createSonTypesJson(1, "Щедрівки"));
+            jsonData.put(String.valueOf(2), createSonTypesJson(2, "Засівання"));
+            jsonData.put(String.valueOf(3), createSonTypesJson(3, "Віншування"));
+            jsonData.put(String.valueOf(4), createSonTypesJson(4, "Сучасні"));
+            jsonData.put(String.valueOf(5), createSonTypesJson(5, "СМС"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        file = new File(directory, "songTypes.txt");
+        fOut = new FileOutputStream(file);
+        osw = new OutputStreamWriter(fOut);
+        osw.write(jsonData.toString());
+        osw.flush();
+        osw.close();
+    }
+
+    public int parseVinsh(JSONObject jsonData, Integer i, int typeId) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("vinsh.txt")));
+        // do reading, usually loop until end of file reading
+        StringBuilder text = new StringBuilder();
+        String title = "";
+        while (true) {
+            String mLine = reader.readLine();
+            if (mLine != null) {
+                if (mLine.contains("****")) {
+                    if (text.length() > 0) {
+                        try {
+                            jsonData.put(String.valueOf(i), createSongJson(i, typeId, title, text.toString(), ""));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                        text = new StringBuilder();
+                    }
+                } else {
+                    if (text.length() == 0) {
+                        title = mLine;
+
+                        StringBuilder b = new StringBuilder(title);
+                        if (b.substring(title.length() - 1).equals(":") ||
+                                b.substring(title.length() - 1).equals(";") ||
+                                b.substring(title.length() - 1).equals(",") ||
+                                b.substring(title.length() - 1).equals(".")) {
+                            b.deleteCharAt(title.length() - 1);
+                            title = b.toString();
+                        }
+                    }
+                    text.append(mLine + "\n");
+                }
+            } else {
+                break;
+            }
+        }
+        reader.close();
+        return i;
+    }
+
+    public int parseSms(JSONObject jsonData, Integer i, int typeId) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("sms.txt")));
+        // do reading, usually loop until end of file reading
+        StringBuilder text = new StringBuilder();
+        String title = "";
+        while (true) {
+            String mLine = reader.readLine();
+            if (mLine != null) {
+                if (mLine.contains("-----")) {
+                    if (text.length() > 0) {
+                        try {
+                            jsonData.put(String.valueOf(i), createSongJson(i, typeId, title, text.toString(), ""));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                        text = new StringBuilder();
+                    }
+                } else if (!mLine.isEmpty()) {
+                    if (text.length() == 0) {
+                        title = mLine;
+
+                        StringBuilder b = new StringBuilder(title);
+                        if (b.substring(title.length() - 1).equals(":") ||
+                                b.substring(title.length() - 1).equals(";") ||
+                                b.substring(title.length() - 1).equals(",") ||
+                                b.substring(title.length() - 1).equals(".")) {
+                            b.deleteCharAt(title.length() - 1);
+                            title = b.toString();
+                        }
+                    }
+                    text.append(mLine + "\n");
+                }
+            } else {
+                break;
+            }
+        }
+        reader.close();
+        return i;
+    }
+
+    private JSONObject createSonTypesJson(int id,  String title) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("name", title);
+            jsonObject.put("updatedAt", 0);
+            return jsonObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    private JSONObject createSongJson(int id, int idType, String title, String text, String source) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("name", title);
+            jsonObject.put("rating", 0);
+            jsonObject.put("idType", idType);
+            jsonObject.put("text", text);
+            jsonObject.put("remarks", "");
+            jsonObject.put("source", source);
+            jsonObject.put("comments", "");
+            jsonObject.put("updatedAt", 0);
+            return jsonObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

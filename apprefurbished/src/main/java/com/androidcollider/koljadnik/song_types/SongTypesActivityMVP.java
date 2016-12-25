@@ -17,16 +17,18 @@ import java.util.List;
 public interface SongTypesActivityMVP {
 
     interface View {
-        void setAdapterToList(RecyclerView.Adapter adapter);
-        void setLinearLayoutManager();
+        void updateAdapter(List<SongTypeViewModel> songTypeViewModelList);
+        void showErrorToast(String text);
+        void showSongListUI(int typeId);
     }
 
     interface Presenter {
         void setView(View view);
         void initData();
+        void openSongListUI(Object tag);
     }
 
     interface Model {
-        void getSongTypes(OnReadListener<List<SongType>> listener);
+        void getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
     }
 }
