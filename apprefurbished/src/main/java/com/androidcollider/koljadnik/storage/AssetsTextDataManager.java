@@ -8,8 +8,7 @@ import java.io.InputStreamReader;
 
 public class AssetsTextDataManager {
 
-    private final static String SONGS_DATA_FILE = "songs.txt";
-    private final static String SONG_TYPES_DATA_FILE = "songTypes.txt";
+    private final static String DATA_FILE = "data.txt";
 
     private Context context;
 
@@ -17,12 +16,8 @@ public class AssetsTextDataManager {
         this.context = context;
     }
 
-    public String getSongsFileData(){
-        return getTextFromAssetFile(SONGS_DATA_FILE);
-    }
-
-    public String getSongTypesFileData(){
-        return getTextFromAssetFile(SONG_TYPES_DATA_FILE);
+    public String getLocalData(){
+        return getTextFromAssetFile(DATA_FILE);
     }
 
     private String getTextFromAssetFile(String filename){

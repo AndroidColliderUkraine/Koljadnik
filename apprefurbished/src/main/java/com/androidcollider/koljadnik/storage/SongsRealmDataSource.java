@@ -102,4 +102,9 @@ public class SongsRealmDataSource implements SongsDataSource {
     public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
 
     }
+
+    @Override
+    public void tryToLoadDataFromLocalFile() {
+
+    }
 }

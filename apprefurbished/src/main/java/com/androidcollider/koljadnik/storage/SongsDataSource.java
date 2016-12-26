@@ -31,4 +31,6 @@ public interface SongsDataSource {
     void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener);
 
     void increaseSongLocalRating(Song song);
+
+    void tryToLoadDataFromLocalFile();
 }

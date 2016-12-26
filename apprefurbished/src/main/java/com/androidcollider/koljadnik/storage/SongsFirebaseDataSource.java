@@ -28,7 +28,7 @@ public class SongsFirebaseDataSource implements SongsDataSource {
     }
 
     @Override
-    public void getSongTypes(final OnReadListener<List<SongType>> onReadListener) {
+    public void getSongTypes(final OnReadListener<List<SongType>> onReadListener, long lastUpdate) {
         mDatabase.child(FirebaseTable.SONG_TYPES.label).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -110,5 +110,10 @@ public class SongsFirebaseDataSource implements SongsDataSource {
             listToUpdate.put(String.valueOf(song.getId()), song.toMap());
             mDatabase.child(FirebaseTable.SONGS.label).updateChildren(listToUpdate);
         }
+    }
+
+    @Override
+    public void tryToLoadDataFromLocalFile() {
+
     }
 }

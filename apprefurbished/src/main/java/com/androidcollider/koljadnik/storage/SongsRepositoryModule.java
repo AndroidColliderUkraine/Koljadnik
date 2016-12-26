@@ -1,6 +1,8 @@
 package com.androidcollider.koljadnik.storage;
 
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -31,7 +33,8 @@ public class SongsRepositoryModule {
     @Provides
     public SongsDataSource provideSongRepository(SongsRealmDataSource songsRealmDataSource,
                                                  SongsFirebaseDataSource songsFirebaseDataSource,
-                                                 SharedPreferencesManager sharedPreferencesManager) {
-        return new SongsRepository(songsRealmDataSource, songsFirebaseDataSource, sharedPreferencesManager);
+                                                 SharedPreferencesManager sharedPreferencesManager,
+                                                 Context context) {
+        return new SongsRepository(songsRealmDataSource, songsFirebaseDataSource, sharedPreferencesManager, new AssetsTextDataManager(context));
     }
 }

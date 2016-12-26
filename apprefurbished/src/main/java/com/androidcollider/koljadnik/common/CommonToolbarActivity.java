@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public abstract class CommonToolbarActivity extends AppCompatActivity {
+public abstract class CommonToolbarActivity extends CommonActivity {
 
     @BindView(R.id.my_toolbar)
     Toolbar toolbar;
@@ -21,9 +21,6 @@ public abstract class CommonToolbarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewRes());
-        ButterKnife.bind(this);
-
         setupToolbar();
     }
 
@@ -60,8 +57,6 @@ public abstract class CommonToolbarActivity extends AppCompatActivity {
     }
 
     protected abstract int getMenuRes();
-
-    protected abstract int getContentViewRes();
 
     protected abstract boolean isDisplayHomeAsUpEnabled();
 }

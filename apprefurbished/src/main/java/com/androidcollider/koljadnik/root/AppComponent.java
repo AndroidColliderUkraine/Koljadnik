@@ -6,6 +6,8 @@ import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.feedback.FeedbackModule;
 import com.androidcollider.koljadnik.song_types.SongTypesActivity;
 import com.androidcollider.koljadnik.song_types.SongTypesModule;
+import com.androidcollider.koljadnik.splash.SplashModule;
+import com.androidcollider.koljadnik.splash.SplashScreenActivity;
 import com.androidcollider.koljadnik.storage.SharedPreferencesModule;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
 import com.androidcollider.koljadnik.storage.SongsRepositoryModule;
@@ -22,7 +24,8 @@ import dagger.Component;
         SongsRepositoryModule.class,
 
         SongTypesModule.class,
-        FeedbackModule.class})
+        FeedbackModule.class,
+        SplashModule.class})
 
 public interface AppComponent {
 
@@ -35,4 +38,6 @@ public interface AppComponent {
     void inject(SongTypesActivity songTypesActivity);
 
     void inject(FeedbackActivity feedbackActivity);
+
+    void inject(SplashScreenActivity splashScreenActivity);
 }

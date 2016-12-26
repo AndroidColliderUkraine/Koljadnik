@@ -3,8 +3,12 @@ package com.androidcollider.koljadnik.models;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -139,6 +143,29 @@ public class Song extends RealmObject {
             }
         }
         return null;
+    }
+
+    public static List<Song> generateSongList(JSONObject jsonObject) throws JSONException {
+        List<Song> songList = new ArrayList<>();
+        Iterator<String> keys = jsonObject.keys();
+
+        while (keys.hasNext()) {
+            String key = keys.next();
+            songList.add(Song.fromJson(jsonObject.getJSONObject(key)));
+        }
+        return songList;
+    }
+
+    public static Song fromJson(JSONObject jsonObject) throws JSONException {
+        return new Song(jsonObject.getInt("id"),
+                jsonObject.getString("name"),
+                jsonObject.getLong("rating"),
+                jsonObject.getInt("idType"),
+                jsonObject.getString("text"),
+                jsonObject.getString("remarks"),
+                jsonObject.getString("source"),
+                new ArrayList<>(),
+                jsonObject.getLong("updatedAt"));
     }
 
     public void setRating(long rating) {

@@ -8,6 +8,9 @@ import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongType;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +21,19 @@ public class SongsRepository implements SongsDataSource {
 
     private SongsDataSource songsRealmDataSource, songsFirebaseDataSource;
     private SharedPreferencesManager sharedPreferencesManager;
+    private AssetsTextDataManager assetsTextDataManager;
 
     private List<Song> cachedSongs;
     private List<SongType> cachedSongTypes;
 
     public SongsRepository(@Local SongsDataSource songsRealmDataSource,
                            @Remote SongsDataSource songsFirebaseDataSource,
-                           SharedPreferencesManager sharedPreferencesManager) {
+                           SharedPreferencesManager sharedPreferencesManager,
+                           AssetsTextDataManager assetsTextDataManager) {
         this.songsRealmDataSource = songsRealmDataSource;
         this.songsFirebaseDataSource = songsFirebaseDataSource;
         this.sharedPreferencesManager = sharedPreferencesManager;
+        this.assetsTextDataManager = assetsTextDataManager;
     }
 
     @Override
@@ -270,5 +276,22 @@ public class SongsRepository implements SongsDataSource {
     @Override
     public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
 
+    }
+
+    @Override
+    public void tryToLoadDataFromLocalFile() {
+        if (!sharedPreferencesManager.getAlreadyParsedDataFromLocal()){
+            String jsonString = assetsTextDataManager.getLocalData();
+            try {
+                List<Song> songsData = Song.generateSongList(new JSONObject(jsonString).getJSONObject("songs"));
+                List<SongType> songsTypesData = SongType.generateSongTypesList(new JSONObject(jsonString).getJSONObject("songTypes"));
+
+                songsRealmDataSource.saveSongs(songsData, null);
+                songsRealmDataSource.saveSongTypes(songsTypesData, null);
+                sharedPreferencesManager.setAlreadyParsedDataFromLocal(true);
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
     }
 }

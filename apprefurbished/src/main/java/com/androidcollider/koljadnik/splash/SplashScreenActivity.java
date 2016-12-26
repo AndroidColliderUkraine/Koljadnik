@@ -10,33 +10,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
+import com.androidcollider.koljadnik.common.CommonActivity;
+import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.song_types.SongTypesActivity;
+import com.androidcollider.koljadnik.song_types.SongTypesActivityMVP;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends CommonActivity implements SplashActivityMVP.View{
 
+    @BindView(R.id.iv_splash_title_main)
     ImageView iv_splash_title_main;
+
+    @BindView(R.id.iv_splash_title_hat)
     ImageView iv_splash_title_hat;
+
+    @BindView(R.id.tv_ac)
     TextView tv_ac;
 
+    @Inject
+    SplashActivityMVP.Presenter presenter;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+    protected int getContentViewRes() {
+        return R.layout.activity_splash_screen;
+    }
 
-        iv_splash_title_main = (ImageView) findViewById(R.id.iv_splash_title_main);
-        iv_splash_title_hat = (ImageView) findViewById(R.id.iv_splash_title_hat);
-        tv_ac = (TextView) findViewById(R.id.tv_ac);
-
-
+    @Override
+    public void startAnimationAndShowSongTypesUI() {
         Animation slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
         Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
 
         iv_splash_title_main.setAnimation(fadeIn);
         iv_splash_title_hat.setAnimation(slideDownHat);
         tv_ac.setAnimation(fadeIn);
-
-
         slideDownHat.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -61,5 +72,18 @@ public class SplashScreenActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((App) getApplication()).getAppComponent().inject(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.setView(this);
+        presenter.init();
     }
 }
