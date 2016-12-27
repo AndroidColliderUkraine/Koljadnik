@@ -51,7 +51,7 @@ public class SongsRepository implements SongsDataSource {
                 onReadListener.onSuccess(cachedSongTypes);
                 return UiAction.DONT_BLOCK_UI;
             } else {
-                getSongTypesFromLocal(onReadListener);
+                onReadListener.onSuccess(getSongTypesFromLocal());
                 return UiAction.DONT_BLOCK_UI;
             }
         } else {
@@ -63,26 +63,17 @@ public class SongsRepository implements SongsDataSource {
 
                 @Override
                 public void onError(String error) {
-                    getSongTypesFromLocal(onReadListener);
+                    onReadListener.onSuccess(getSongTypesFromLocal());
                 }
             });
             return UiAction.BLOCK_UI;
         }
     }
 
-    private void getSongTypesFromLocal(final OnReadListener<List<SongType>> onReadListener) {
-        songsRealmDataSource.getSongTypes(new OnReadListener<List<SongType>>() {
-            @Override
-            public void onSuccess(List<SongType> result) {
-                cashSongTypes(result);
-                onReadListener.onSuccess(result);
-            }
-
-            @Override
-            public void onError(String error) {
-                onReadListener.onError(error);
-            }
-        });
+    private List<SongType> getSongTypesFromLocal() {
+        List<SongType> songTypes = songsRealmDataSource.getSongTypes();
+        cashSongTypes(songTypes);
+        return songTypes;
     }
 
     private void getSongTypesFromRemote(final OnReadListener<List<SongType>> onReadListener) {
@@ -93,7 +84,7 @@ public class SongsRepository implements SongsDataSource {
                 songsRealmDataSource.saveSongTypes(firebaseList, new OnWriteListener() {
                     @Override
                     public void onSuccess() {
-                        getSongTypesFromLocal(onReadListener);
+                        onReadListener.onSuccess(getSongTypesFromLocal());
                     }
 
                     @Override
@@ -123,7 +114,7 @@ public class SongsRepository implements SongsDataSource {
                 onReadListener.onSuccess(cachedSongs);
                 return UiAction.DONT_BLOCK_UI;
             } else {
-                getSongsFromLocal(onReadListener);
+                onReadListener.onSuccess(getSongsFromLocal());
                 return UiAction.DONT_BLOCK_UI;
             }
         } else {
@@ -135,27 +126,17 @@ public class SongsRepository implements SongsDataSource {
 
                 @Override
                 public void onError(String error) {
-                    Log.e("error", "error");
-                    getSongsFromLocal(onReadListener);
+                    onReadListener.onSuccess(getSongsFromLocal());
                 }
             });
             return UiAction.BLOCK_UI;
         }
     }
 
-    private void getSongsFromLocal(final OnReadListener<List<Song>> onReadListener) {
-        songsRealmDataSource.getSongs(new OnReadListener<List<Song>>() {
-            @Override
-            public void onSuccess(List<Song> result) {
-                cashSongs(result);
-                onReadListener.onSuccess(result);
-            }
-
-            @Override
-            public void onError(String error) {
-                onReadListener.onError(error);
-            }
-        });
+    private List<Song> getSongsFromLocal() {
+        List<Song> songs = songsRealmDataSource.getSongs();
+        cashSongs(songs);
+        return songs;
     }
 
     private void getSongsFromRemote(final OnReadListener<List<Song>> onReadListener) {
@@ -163,39 +144,16 @@ public class SongsRepository implements SongsDataSource {
         songsFirebaseDataSource.getSongs(sharedPreferencesManager.getLastUpdateForClass(Song.class), new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> firebaseList) {
-                Log.i("getSongs", "getSongsFirebase");
-                songsRealmDataSource.getSongs(new OnReadListener<List<Song>>() {
-                    @Override
-                    public void onSuccess(List<Song> realmList) {
-                        Log.i("getSongs", "getSongsRealm");
-                        List<Song> listToUpdate = mergeRatings(realmList, firebaseList);
-                        songsFirebaseDataSource.updateSongs(listToUpdate, null);
-                        Log.i("updateSongs", "updateSongs");
-                        songsRealmDataSource.saveSongs(listToUpdate, new OnWriteListener() {
-                            @Override
-                            public void onSuccess() {
-                                Log.i("saveSongs", "onSuccess");
-                                getSongsFromLocal(onReadListener);
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                Log.i("saveSongs", "onError" + error);
-                                onReadListener.onError(error);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                });
+                List<Song> realmList = songsRealmDataSource.getSongs();
+                List<Song> listToUpdate = mergeRatings(realmList, firebaseList);
+                onReadListener.onSuccess(realmList);
+                songsFirebaseDataSource.updateSongs(listToUpdate, null);
+                songsRealmDataSource.saveSongs(listToUpdate, null);
             }
 
             @Override
             public void onError(String error) {
-
+                onReadListener.onError(error);
             }
         });
     }
@@ -210,6 +168,8 @@ public class SongsRepository implements SongsDataSource {
                     songToUpdate = firebaseSong;
                 }
                 songToUpdate.setRating(songToUpdate.getRating() + realmSong.getLocalRating());
+                songToUpdate.setUpdatedAt(System.currentTimeMillis());
+                realmList.set(realmList.indexOf(realmSong), songToUpdate);
                 listToUpdate.add(songToUpdate);
             }
         }
@@ -235,7 +195,6 @@ public class SongsRepository implements SongsDataSource {
                         songsByType.add(song);
                     }
                 }
-                Log.i("getSongsByType", "getSongsByType");
                 onReadListener.onSuccess(songsByType);
             }
 

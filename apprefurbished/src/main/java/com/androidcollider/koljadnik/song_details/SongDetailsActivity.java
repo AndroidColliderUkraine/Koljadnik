@@ -99,6 +99,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
     @Override
     public void updateView(SongDetailsViewModel songDetailsViewModel) {
         tvText.setText(songDetailsViewModel.text);
+        setToolbarTitle(songDetailsViewModel.name);
 
         if (songDetailsViewModel.source != null && !songDetailsViewModel.source.isEmpty()) {
             tvSource.setText(songDetailsViewModel.source);

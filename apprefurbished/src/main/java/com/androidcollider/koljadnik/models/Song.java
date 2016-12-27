@@ -91,6 +91,10 @@ public class Song extends RealmObject {
         return updatedAt;
     }
 
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public long getLocalRating() {
         return localRating;
     }

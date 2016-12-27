@@ -4,6 +4,9 @@ import android.app.Application;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,8 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.StreamCorruptedException;
-import java.io.StringReader;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -40,6 +41,7 @@ public class App extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        FirebaseDatabase.getInstance().setLogLevel(Logger.Level.INFO);
         Realm.init(this);
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
     }
@@ -54,11 +56,11 @@ public class App extends Application {
 
         Integer i = 0;
 
-        i = parseMain("koljadki.txt",jsonData, i, 0);
-        i = parseMain("schedrivki.txt",jsonData, i, 1);
-        i = parseMain("zasivannia.txt",jsonData, i, 2);
+        i = parseMain("koljadki.txt", jsonData, i, 0);
+        i = parseMain("schedrivki.txt", jsonData, i, 1);
+        i = parseMain("zasivannia.txt", jsonData, i, 2);
         i = parseVinsh(jsonData, i, 3);
-        i = parseMain("suchasni.txt",jsonData, i, 4);
+        i = parseMain("suchasni.txt", jsonData, i, 4);
         i = parseSms(jsonData, i, 5);
 
 
@@ -82,23 +84,23 @@ public class App extends Application {
             e.printStackTrace();
         }
 
-        for (int k = 0; k < jsonData.length(); k++){
+        for (int k = 0; k < jsonData.length(); k++) {
             try {
-                Log.i("KOLJ",k + " -  " + jsonData.getJSONObject(String.valueOf(k)).getString("name"));
+                Log.i("KOLJ", k + " -  " + jsonData.getJSONObject(String.valueOf(k)).getString("name"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        for (int k = 0; k < jsonData.length(); k++){
+        for (int k = 0; k < jsonData.length(); k++) {
             try {
-                Log.i("KOLJ", k + " -  " +jsonData.getJSONObject(String.valueOf(k)).getString("text"));
+                Log.i("KOLJ", k + " -  " + jsonData.getJSONObject(String.valueOf(k)).getString("text"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        for (int k = 0; k < jsonData.length(); k++){
+        for (int k = 0; k < jsonData.length(); k++) {
             try {
-                Log.i("KOLJ", k + " -  " +jsonData.getJSONObject(String.valueOf(k)).getString("source"));
+                Log.i("KOLJ", k + " -  " + jsonData.getJSONObject(String.valueOf(k)).getString("source"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -223,10 +225,10 @@ public class App extends Application {
                     }
                 } else if (title.isEmpty()) {
                     title = mLine;
-                    title = title.replace("SONG NAME: ","");
-                } else if (mLine.contains("-----")){
-                   continue;
-                } else if (mLine.contains("****")){
+                    title = title.replace("SONG NAME: ", "");
+                } else if (mLine.contains("-----")) {
+                    continue;
+                } else if (mLine.contains("****")) {
                     mLine = reader.readLine();
                     source = mLine;
                 } else {
@@ -241,7 +243,7 @@ public class App extends Application {
     }
 
 
-    private JSONObject createSonTypesJson(int id,  String title) {
+    private JSONObject createSonTypesJson(int id, String title) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);

@@ -32,6 +32,13 @@ public abstract class CommonToolbarActivity extends CommonActivity {
         }
     }
 
+    protected void setToolbarTitle(String title){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         int menuRes =  getMenuRes();

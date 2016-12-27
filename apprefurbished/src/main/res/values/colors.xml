@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#66581d</color>
     <color name="colorAccent">@color/christmas_tree_color</color>
 
-    <color name="bg_color">#ff27250a</color>
+    <color name="bg_color">#2c1609</color>
+    <color name="splash_color">#2c1609</color>
     <color name="element_color">#fffdfdcc</color>
     <color name="text_color">#ff000000</color>
     <color name="action_bar_color">#ff867429</color>

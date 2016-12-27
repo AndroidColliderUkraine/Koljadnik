@@ -25,7 +25,7 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
         return songsDataSource.getSongById(songId, new OnReadListener<Song>() {
             @Override
             public void onSuccess(Song song) {
-                listener.onSuccess(new SongDetailsViewModel(song.getText(), song.getSource()));
+                listener.onSuccess(new SongDetailsViewModel(song.getName(), song.getText(), song.getSource()));
             }
 
             @Override

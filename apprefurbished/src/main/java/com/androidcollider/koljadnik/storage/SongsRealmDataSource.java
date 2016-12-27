@@ -40,6 +40,16 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
     }
 
     @Override
+    public List<SongType> getSongTypes() {
+        realm.beginTransaction();
+        List<SongType> songTypes = realm.copyFromRealm(realm.where(SongType.class).
+                findAll());
+
+        realm.commitTransaction();
+        return songTypes;
+    }
+
+    @Override
     public void getSongs(OnReadListener<List<Song>> onReadListener) {
         try {
             RealmResults<Song> realmResults = realm.where(Song.class).
@@ -58,6 +68,16 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
             onReadListener.onError(e.getMessage());
         }
 
+    }
+
+    @Override
+    public List<Song> getSongs() {
+        realm.beginTransaction();
+        List<Song> songs = realm.copyFromRealm(realm.where(Song.class).
+                findAll());
+
+        realm.commitTransaction();
+        return songs;
     }
 
     @Override

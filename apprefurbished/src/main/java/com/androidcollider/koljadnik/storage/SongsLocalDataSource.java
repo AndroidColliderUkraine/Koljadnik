@@ -10,7 +10,11 @@ import java.util.List;
 public interface SongsLocalDataSource {
     void getSongTypes(OnReadListener<List<SongType>> onReadListener);
 
+    List<SongType> getSongTypes();
+
     void getSongs(OnReadListener<List<Song>> onReadListener);
+
+    List<Song> getSongs();
 
     void saveSongTypes(List<SongType> songTypes, OnWriteListener onWriteListener);
 
