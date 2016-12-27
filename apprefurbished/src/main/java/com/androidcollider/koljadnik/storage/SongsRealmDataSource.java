@@ -1,8 +1,6 @@
 package com.androidcollider.koljadnik.storage;
 
 
-import android.support.v4.util.Pair;
-
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
@@ -13,7 +11,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class SongsRealmDataSource implements SongsDataSource {
+public class SongsRealmDataSource implements SongsLocalDataSource {
 
     private Realm realm;
 
@@ -64,31 +62,28 @@ public class SongsRealmDataSource implements SongsDataSource {
 
     @Override
     public void saveSongTypes(List<SongType> songTypes, OnWriteListener onWriteListener) {
-        realm.executeTransactionAsync(realm1 -> {
-            realm1.copyToRealmOrUpdate(songTypes);
-        }, onWriteListener::onSuccess);
+        if (onWriteListener != null) {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songTypes);
+            }, onWriteListener::onSuccess);
+        } else {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songTypes);
+            });
+        }
     }
 
     @Override
     public void saveSongs(List<Song> songs, OnWriteListener onWriteListener) {
-        realm.executeTransactionAsync(realm1 -> {
-            realm1.copyToRealmOrUpdate(songs);
-        }, onWriteListener::onSuccess);
-    }
-
-    @Override
-    public void getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
-
-    }
-
-    @Override
-    public void getSongById(int songId, OnReadListener<Song> onReadListener) {
-
-    }
-
-    @Override
-    public void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
-
+        if (onWriteListener != null) {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songs);
+            }, onWriteListener::onSuccess);
+        } else {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songs);
+            });
+        }
     }
 
     @Override
@@ -96,15 +91,5 @@ public class SongsRealmDataSource implements SongsDataSource {
         realm.executeTransactionAsync(realm1 -> {
             realm1.copyToRealmOrUpdate(song);
         });
-    }
-
-    @Override
-    public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
-
-    }
-
-    @Override
-    public void tryToLoadDataFromLocalFile() {
-
     }
 }

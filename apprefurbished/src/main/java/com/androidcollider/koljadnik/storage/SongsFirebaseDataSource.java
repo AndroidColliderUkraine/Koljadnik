@@ -1,6 +1,6 @@
 package com.androidcollider.koljadnik.storage;
 
-import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.androidcollider.koljadnik.contants.FirebaseTable;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SongsFirebaseDataSource implements SongsDataSource {
+public class SongsFirebaseDataSource implements SongsRemoteDataSource {
 
     private DatabaseReference mDatabase;
 
@@ -28,8 +28,9 @@ public class SongsFirebaseDataSource implements SongsDataSource {
     }
 
     @Override
-    public void getSongTypes(final OnReadListener<List<SongType>> onReadListener, long lastUpdate) {
-        mDatabase.child(FirebaseTable.SONG_TYPES.label).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getSongTypes(long lastUpdate, final OnReadListener<List<SongType>> onReadListener) {
+        mDatabase.child(FirebaseTable.SONG_TYPES.label).orderByChild("updatedAt").startAt(lastUpdate).
+                addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<SongType> list = new ArrayList<>();
@@ -40,6 +41,7 @@ public class SongsFirebaseDataSource implements SongsDataSource {
                         e.printStackTrace();
                     }
                 }
+                Log.i("getSongTypesFIREBASE", list + " " + list.size());
                 onReadListener.onSuccess(list);
             }
 
@@ -51,8 +53,9 @@ public class SongsFirebaseDataSource implements SongsDataSource {
     }
 
     @Override
-    public void getSongs(final OnReadListener<List<Song>> onReadListener) {
-        mDatabase.child(FirebaseTable.SONGS.label).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getSongs(long lastUpdate, final OnReadListener<List<Song>> onReadListener) {
+        mDatabase.child(FirebaseTable.SONGS.label).orderByChild("updatedAt").startAt(lastUpdate).
+                addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Song> list = new ArrayList<>();
@@ -63,6 +66,7 @@ public class SongsFirebaseDataSource implements SongsDataSource {
                         e.printStackTrace();
                     }
                 }
+                Log.i("getSongsFIREBASE", list + " " + list.size());
                 onReadListener.onSuccess(list);
             }
 
@@ -74,46 +78,11 @@ public class SongsFirebaseDataSource implements SongsDataSource {
     }
 
     @Override
-    public void saveSongTypes(List<SongType> songTypes, OnWriteListener onWriteListener) {
-
-    }
-
-    @Override
-    public void saveSongs(List<Song> songs, OnWriteListener onWriteListener) {
-
-    }
-
-    @Override
-    public void getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
-
-    }
-
-    @Override
-    public void getSongById(int songId, OnReadListener<Song> onReadListener) {
-
-    }
-
-    @Override
-    public void getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
-
-    }
-
-    @Override
-    public void increaseSongLocalRating(Song song) {
-
-    }
-
-    @Override
     public void updateSongs(List<Song> songs, OnWriteListener onWriteListener) {
         for (Song song : songs) {
             Map<String, Object> listToUpdate = new HashMap<>();
             listToUpdate.put(String.valueOf(song.getId()), song.toMap());
             mDatabase.child(FirebaseTable.SONGS.label).updateChildren(listToUpdate);
         }
-    }
-
-    @Override
-    public void tryToLoadDataFromLocalFile() {
-
     }
 }

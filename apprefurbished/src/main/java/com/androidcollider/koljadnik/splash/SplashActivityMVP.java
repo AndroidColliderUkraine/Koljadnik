@@ -1,9 +1,11 @@
 package com.androidcollider.koljadnik.splash;
 
 
+import com.androidcollider.koljadnik.common.CoomonView;
+
 public interface SplashActivityMVP {
 
-    interface View {
+    interface View extends CoomonView {
         void startAnimationAndShowSongTypesUI();
     }
 
@@ -12,7 +14,7 @@ public interface SplashActivityMVP {
         void init();
     }
 
-    interface Model {
+    interface Model{
         void tryToLoadDataFromLocalFile();
     }
 }

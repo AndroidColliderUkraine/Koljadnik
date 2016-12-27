@@ -35,11 +35,11 @@ public class App extends Application {
         super.onCreate();
 
         appComponent = DaggerAppComponent.builder().applicationModule(new ApplicationModule(this)).build();
-        try {
+        /*try {
             readTxt();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         Realm.init(this);
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
     }
@@ -109,7 +109,7 @@ public class App extends Application {
         File directory = new File(sdCard.getAbsolutePath() + "/MyFiles");
         directory.mkdirs();
 
-        File file = new File(directory, "koljandnik_data4.txt");
+        File file = new File(directory, "koljandnik_data5.txt");
         FileOutputStream fOut = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fOut);
         osw.write(finalJson.toString());
@@ -230,7 +230,7 @@ public class App extends Application {
                     mLine = reader.readLine();
                     source = mLine;
                 } else {
-                    text.append(mLine);
+                    text.append(mLine + "\n");
                 }
             } else {
                 break;

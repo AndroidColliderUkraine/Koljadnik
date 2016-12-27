@@ -25,7 +25,7 @@ public class SharedPreferencesManager {
         sharedPreferences.edit().putBoolean(ALREADY_PARSED_DATA_FROM_LOCAL, isParsed).apply();
     }
 
-    public boolean getAlreadyParsedDataFromLocal(){
+    public boolean isAlreadyParsedDataFromLocal(){
         return sharedPreferences.getBoolean(ALREADY_PARSED_DATA_FROM_LOCAL, false);
     }
 }

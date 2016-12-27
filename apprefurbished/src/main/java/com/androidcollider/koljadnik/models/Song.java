@@ -1,14 +1,15 @@
 package com.androidcollider.koljadnik.models;
 
+import com.androidcollider.koljadnik.contants.Settings;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -131,9 +132,13 @@ public class Song extends RealmObject {
 
 
     public int getRatingByMinMax(long min, long max) {
-        double clearRating = getTotalRating() - min;
-        double onePoint = (double) (max - min) / 5d;
-        return (int) ((clearRating - 1) / onePoint) + 1;
+        if (getTotalRating() > Settings.RATING_DEFAULT_LIMIT) {
+            double clearRating = getTotalRating() - min;
+            double onePoint = (double) (max - min) / 5d;
+            return (int) ((clearRating - 1) / onePoint) + 1;
+        } else {
+            return Settings.DEFAULT_RATING;
+        }
     }
 
     public static Song findInListById(List<Song> songs, int id) {
@@ -145,13 +150,10 @@ public class Song extends RealmObject {
         return null;
     }
 
-    public static List<Song> generateSongList(JSONObject jsonObject) throws JSONException {
+    public static List<Song> generateSongList(JSONArray jsonArray) throws JSONException {
         List<Song> songList = new ArrayList<>();
-        Iterator<String> keys = jsonObject.keys();
-
-        while (keys.hasNext()) {
-            String key = keys.next();
-            songList.add(Song.fromJson(jsonObject.getJSONObject(key)));
+        for (int i = 0; i < jsonArray.length(); i++) {
+            songList.add(Song.fromJson(jsonArray.getJSONObject(i)));
         }
         return songList;
     }

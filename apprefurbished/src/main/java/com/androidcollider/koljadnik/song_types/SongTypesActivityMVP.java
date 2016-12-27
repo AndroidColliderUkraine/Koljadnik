@@ -3,6 +3,8 @@ package com.androidcollider.koljadnik.song_types;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.androidcollider.koljadnik.common.CoomonView;
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public interface SongTypesActivityMVP {
 
-    interface View {
+    interface View extends CoomonView{
         void updateAdapter(List<SongTypeViewModel> songTypeViewModelList);
         void showErrorToast(String text);
         void showSongListUI(int typeId);
@@ -29,6 +31,6 @@ public interface SongTypesActivityMVP {
     }
 
     interface Model {
-        void getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
+        UiAction getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
     }
 }

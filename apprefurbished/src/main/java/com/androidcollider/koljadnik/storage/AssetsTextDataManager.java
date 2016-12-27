@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 public class AssetsTextDataManager {
 
-    private final static String DATA_FILE = "data.txt";
+    private final static String DATA_FILE = "data.json";
 
     private Context context;
 

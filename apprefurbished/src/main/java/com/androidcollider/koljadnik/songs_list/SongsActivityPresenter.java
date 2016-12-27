@@ -1,8 +1,10 @@
 package com.androidcollider.koljadnik.songs_list;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.androidcollider.koljadnik.contants.Settings;
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 import java.util.List;
@@ -27,7 +29,10 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void initData() {
-        model.getSongsByTypeId(updateAdapterListener);
+        UiAction uiAction = model.getSongsByTypeId(updateAdapterListener);
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
     }
 
     @Override
@@ -48,10 +53,11 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void clickOnOrderBtn(OrderType orderType) {
-        model.getSongsOrdered(orderType, new OnReadListener<List<SongItemViewModel>>() {
+        UiAction uiAction = model.getSongsOrdered(orderType, new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> songTypes) {
                 if (view != null) {
+                    view.unblockUi();
                     view.updateAdapter(songTypes);
                     view.switchOrderMenuVisibility();
                 }
@@ -60,20 +66,30 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
             @Override
             public void onError(String error) {
                 if (view != null) {
+                    view.unblockUi();
                     view.showErrorToast(error);
                 }
             }
         });
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
     }
 
     @Override
     public void proceedSearch(String searchStr) {
         if (searchStr.length() >= Settings.SEARCH_LIMIT){
-            model.getSongsBySearch(searchStr, updateAdapterListener);
+            UiAction uiAction = model.getSongsBySearch(searchStr, updateAdapterListener);
+            if (uiAction == UiAction.BLOCK_UI && view != null){
+                view.blockUi();
+            }
             isSearching = true;
         } else {
             if (isSearching){
-                model.getSongsByTypeId(updateAdapterListener);
+                UiAction uiAction =  model.getSongsByTypeId(updateAdapterListener);
+                if (uiAction == UiAction.BLOCK_UI && view != null){
+                    view.blockUi();
+                }
             }
             isSearching = false;
         }
@@ -83,6 +99,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
         @Override
         public void onSuccess(List<SongItemViewModel> songTypes) {
             if (view != null) {
+                view.unblockUi();
                 view.updateAdapter(songTypes);
             }
         }
@@ -90,6 +107,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
         @Override
         public void onError(String error) {
             if (view != null) {
+                view.unblockUi();
                 view.showErrorToast(error);
             }
         }

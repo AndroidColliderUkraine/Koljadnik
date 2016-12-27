@@ -15,6 +15,6 @@ public class SplashActivityModel implements SplashActivityMVP.Model {
 
     @Override
     public void tryToLoadDataFromLocalFile() {
-
+        songsDataSource.tryToLoadDataFromLocalFile();
     }
 }

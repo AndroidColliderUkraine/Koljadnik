@@ -3,6 +3,8 @@ package com.androidcollider.koljadnik.storage;
 
 import android.content.Context;
 
+import com.androidcollider.koljadnik.utils.ConnectionInternetManager;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -17,24 +19,27 @@ public class SongsRepositoryModule {
 
     @Singleton
     @Provides
-    //@Local
-    SongsRealmDataSource provideSongsRealmDataSource() {
+    SongsLocalDataSource provideSongsRealmDataSource() {
         return new SongsRealmDataSource(Realm.getDefaultInstance());
     }
 
     @Singleton
     @Provides
-    //@Remote
-    SongsFirebaseDataSource provideSongsFirebaseDataSource() {
+    SongsRemoteDataSource provideSongsFirebaseDataSource() {
         return new SongsFirebaseDataSource();
     }
 
     @Singleton
     @Provides
-    public SongsDataSource provideSongRepository(SongsRealmDataSource songsRealmDataSource,
-                                                 SongsFirebaseDataSource songsFirebaseDataSource,
+    public SongsDataSource provideSongRepository(SongsLocalDataSource songsRealmDataSource,
+                                                 SongsRemoteDataSource songsFirebaseDataSource,
                                                  SharedPreferencesManager sharedPreferencesManager,
                                                  Context context) {
-        return new SongsRepository(songsRealmDataSource, songsFirebaseDataSource, sharedPreferencesManager, new AssetsTextDataManager(context));
+        return new SongsRepository(
+                songsRealmDataSource,
+                songsFirebaseDataSource,
+                sharedPreferencesManager,
+                new ConnectionInternetManager(context),
+                new AssetsTextDataManager(context));
     }
 }

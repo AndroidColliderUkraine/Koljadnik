@@ -3,6 +3,7 @@ package com.androidcollider.koljadnik.song_details;
 import android.content.Context;
 
 import com.androidcollider.koljadnik.R;
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
@@ -20,8 +21,8 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
     }
 
     @Override
-    public void getSong(OnReadListener<SongDetailsViewModel> listener) {
-        songsDataSource.getSongById(songId, new OnReadListener<Song>() {
+    public UiAction getSong(OnReadListener<SongDetailsViewModel> listener) {
+        return songsDataSource.getSongById(songId, new OnReadListener<Song>() {
             @Override
             public void onSuccess(Song song) {
                 listener.onSuccess(new SongDetailsViewModel(song.getText(), song.getSource()));
@@ -36,8 +37,8 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
     }
 
     @Override
-    public void getSongText(OnReadListener<String> listener) {
-        songsDataSource.getSongById(songId, new OnReadListener<Song>() {
+    public UiAction getSongText(OnReadListener<String> listener) {
+        return songsDataSource.getSongById(songId, new OnReadListener<Song>() {
             @Override
             public void onSuccess(Song song) {
                 listener.onSuccess(song.getText() + context.getString(R.string.slava_ukraini));
@@ -51,8 +52,8 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
     }
 
     @Override
-    public void getShareData(OnReadListener<ShareModel> listener) {
-        songsDataSource.getSongById(songId, new OnReadListener<Song>() {
+    public UiAction getShareData(OnReadListener<ShareModel> listener) {
+        return songsDataSource.getSongById(songId, new OnReadListener<Song>() {
             @Override
             public void onSuccess(Song song) {
                 listener.onSuccess(new ShareModel(context.getString(R.string.song_sending),

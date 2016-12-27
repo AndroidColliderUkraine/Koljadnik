@@ -1,11 +1,13 @@
 package com.androidcollider.koljadnik.song_details;
 
 
+import com.androidcollider.koljadnik.common.CoomonView;
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 public interface SongDetailsActivityMVP {
 
-    interface View {
+    interface View extends CoomonView{
         void updateView(SongDetailsViewModel songDetailsViewModel);
 
         void changeTextSize(int size, boolean showPlus, boolean showMinus);
@@ -32,13 +34,10 @@ public interface SongDetailsActivityMVP {
     }
 
     interface Model {
-        void getSong(final OnReadListener<SongDetailsViewModel> listener);
+        UiAction getSong(final OnReadListener<SongDetailsViewModel> listener);
 
-        void getSongText(final OnReadListener<String> listener);
+        UiAction getSongText(final OnReadListener<String> listener);
 
-        void getShareData(final OnReadListener<ShareModel> listener);
-       /* void getSongWithIncreasedTextSize(int songId, OnReadListener<SongDetailsViewModel> listener);
-        void getSongWithReducedTextSize(int songId, OnReadListener<SongDetailsViewModel> listener);
-        void getSongText(int songId, OnReadListener<SongDetailsViewModel> listener);*/
+        UiAction getShareData(final OnReadListener<ShareModel> listener);
     }
 }

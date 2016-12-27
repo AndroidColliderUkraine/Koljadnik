@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,13 +45,10 @@ public class SongType extends RealmObject{
     }
 
 
-    public static List<SongType> generateSongTypesList(JSONObject jsonObject) throws JSONException {
+    public static List<SongType> generateSongTypesList(JSONArray jsonArray) throws JSONException {
         List<SongType> songTypes = new ArrayList<>();
-        Iterator<String> keys = jsonObject.keys();
-
-        while (keys.hasNext()) {
-            String key = keys.next();
-            songTypes.add(SongType.fromJson(jsonObject.getJSONObject(key)));
+        for (int i = 0; i < jsonArray.length(); i++) {
+            songTypes.add(SongType.fromJson(jsonArray.getJSONObject(i)));
         }
         return songTypes;
     }

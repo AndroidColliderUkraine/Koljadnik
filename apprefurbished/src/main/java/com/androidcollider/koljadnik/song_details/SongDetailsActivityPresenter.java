@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.song_details;
 
 import android.support.annotation.Nullable;
 
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
 
@@ -29,7 +30,10 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
 
     @Override
     public void initData() {
-        model.getSong(updateViewListener);
+        UiAction uiAction = model.getSong(updateViewListener);
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
         updateTextSize();
     }
 
@@ -55,10 +59,11 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
 
     @Override
     public void clickOnShareBtn() {
-        model.getShareData(new OnReadListener<ShareModel>() {
+        UiAction uiAction = model.getShareData(new OnReadListener<ShareModel>() {
             @Override
             public void onSuccess(ShareModel result) {
                 if (view != null) {
+                    view.unblockUi();
                     view.startShareActivity(result.shareActivtyTitle, result.shareTitle, result.shareText);
                 }
             }
@@ -66,18 +71,23 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
             @Override
             public void onError(String error) {
                 if (view != null) {
+                    view.unblockUi();
                     view.showErrorToast(error);
                 }
             }
         });
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
     }
 
     @Override
     public void clickOnSmsBtn() {
-        model.getSongText(new OnReadListener<String>() {
+        UiAction uiAction = model.getSongText(new OnReadListener<String>() {
             @Override
             public void onSuccess(String result) {
                 if (view != null) {
+                    view.unblockUi();
                     view.startSmsActivity(result);
                 }
             }
@@ -85,16 +95,21 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
             @Override
             public void onError(String error) {
                 if (view != null) {
+                    view.unblockUi();
                     view.showErrorToast(error);
                 }
             }
         });
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
     }
 
     private OnReadListener<SongDetailsViewModel> updateViewListener = new OnReadListener<SongDetailsViewModel>() {
         @Override
         public void onSuccess(SongDetailsViewModel songDetailsViewModel) {
             if (view != null) {
+                view.unblockUi();
                 view.updateView(songDetailsViewModel);
             }
         }
@@ -102,6 +117,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
         @Override
         public void onError(String error) {
             if (view != null) {
+                view.unblockUi();
                 view.showErrorToast(error);
             }
         }

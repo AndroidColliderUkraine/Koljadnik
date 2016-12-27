@@ -1,7 +1,9 @@
 package com.androidcollider.koljadnik.songs_list;
 
 import android.support.v4.util.Pair;
+import android.util.Log;
 
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
@@ -22,8 +24,8 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
     }
 
     @Override
-    public void getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener) {
-        songsDataSource.getSongsByType(typeId, new OnReadListener<List<Song>>() {
+    public UiAction getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener) {
+        return songsDataSource.getSongsByType(typeId, new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> resultSong) {
                 songsDataSource.getMinMaxRating(new OnReadListener<Pair<Long, Long>>() {
@@ -52,8 +54,8 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
     }
 
     @Override
-    public void getSongsOrdered(OrderType orderType, OnReadListener<List<SongItemViewModel>> listener) {
-        getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
+    public UiAction getSongsOrdered(OrderType orderType, OnReadListener<List<SongItemViewModel>> listener) {
+        return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> result) {
                 getSongsOrdered(result, orderType, listener);
@@ -67,8 +69,8 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
     }
 
     @Override
-    public void getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener) {
-        getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
+    public UiAction getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener) {
+        return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> result) {
                 new SearchSongsAsyncTask(result) {

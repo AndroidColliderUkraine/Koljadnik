@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.root;
 
 import android.content.Context;
 
+import com.androidcollider.koljadnik.common.CommonActivity;
 import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.feedback.FeedbackModule;
 import com.androidcollider.koljadnik.song_types.SongTypesActivity;
@@ -40,4 +41,6 @@ public interface AppComponent {
     void inject(FeedbackActivity feedbackActivity);
 
     void inject(SplashScreenActivity splashScreenActivity);
+
+    void inject(CommonActivity commonActivity);
 }

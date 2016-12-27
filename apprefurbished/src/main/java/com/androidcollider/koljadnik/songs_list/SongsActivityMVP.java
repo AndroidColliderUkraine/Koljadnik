@@ -1,6 +1,8 @@
 package com.androidcollider.koljadnik.songs_list;
 
 
+import com.androidcollider.koljadnik.common.CoomonView;
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 public interface SongsActivityMVP {
 
-    interface View {
+    interface View extends CoomonView{
         void updateAdapter(List<SongItemViewModel> songItemViewModels);
         void showErrorToast(String text);
         void showSongDetailsUI(int songId);
@@ -25,9 +27,9 @@ public interface SongsActivityMVP {
     }
 
     interface Model {
-        void getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener);
-        void getSongsOrdered( OrderType orderType, final OnReadListener<List<SongItemViewModel>> listener);
-        void getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener);
+        UiAction getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener);
+        UiAction getSongsOrdered(OrderType orderType, final OnReadListener<List<SongItemViewModel>> listener);
+        UiAction getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener);
         void increaseRating(int songId);
     }
 }

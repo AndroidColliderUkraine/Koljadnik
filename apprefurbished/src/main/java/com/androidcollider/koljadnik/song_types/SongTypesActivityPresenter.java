@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.song_types;
 
 import android.support.annotation.Nullable;
 
+import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 import java.util.List;
@@ -24,19 +25,28 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
 
     @Override
     public void initData() {
-        model.getSongTypes(new OnReadListener<List<SongTypeViewModel>>() {
+        UiAction uiAction = model.getSongTypes(new OnReadListener<List<SongTypeViewModel>>() {
             @Override
             public void onSuccess(List<SongTypeViewModel> songTypes) {
-                onSongsLoaded(songTypes);
+                if (songTypes != null && !songTypes.isEmpty()) {
+                    if (view != null) {
+                        view.unblockUi();
+                        view.updateAdapter(songTypes);
+                    }
+                }
             }
 
             @Override
             public void onError(String error) {
                 if (view != null) {
+                    view.unblockUi();
                     view.showErrorToast(error);
                 }
             }
         });
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
+        }
     }
 
     @Override
@@ -44,14 +54,6 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
         int typeId = (int) tag;
         if (view != null) {
             view.showSongListUI(typeId);
-        }
-    }
-
-    public void onSongsLoaded(List<SongTypeViewModel> songTypes) {
-        if (songTypes != null && !songTypes.isEmpty()) {
-            if (view != null) {
-                view.updateAdapter(songTypes);
-            }
         }
     }
 }
