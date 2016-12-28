@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/common_padding_medium"
+        android:scrollbars="vertical"
         android:paddingLeft="@dimen/common_padding_medium"
         android:paddingRight="@dimen/common_padding_medium"
         android:footerDividersEnabled="false"/>

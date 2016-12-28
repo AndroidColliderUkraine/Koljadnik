@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Settings {
 
+    public static final String GOOGLE_ANALYTICS_TRACKING_ID = "UA-58437769-1";
     public final static String SPREF = "koljadnik_pref";
     public final static long DELTA_TIME_FOR_UPDATE = (BuildConfig.DEBUG) ? TimeUnit.MINUTES.toMillis(3) : TimeUnit.DAYS.toMillis(1);
     public final static int SEARCH_LIMIT = 3;

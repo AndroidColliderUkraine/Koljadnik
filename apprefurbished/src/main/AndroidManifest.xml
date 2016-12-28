@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.androidcollider.koljadnik">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -29,6 +30,8 @@
         <activity
             android:name=".feedback.FeedbackActivity"
             android:windowSoftInputMode="stateHidden" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fcb6c657fc3e6a28ab46de7eec61fb4fab9c2253" />
     </application>
-
 </manifest>

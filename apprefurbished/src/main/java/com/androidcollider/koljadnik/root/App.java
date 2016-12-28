@@ -2,11 +2,17 @@ package com.androidcollider.koljadnik.root;
 
 import android.app.Application;
 import android.os.Environment;
+import android.support.v4.BuildConfig;
 import android.util.Log;
 
+import com.androidcollider.koljadnik.contants.Settings;
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,18 +35,26 @@ import io.realm.RealmConfiguration;
  */
 public class App extends Application {
 
+    private Tracker tracker;
+
     private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         appComponent = DaggerAppComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        //Fabric.with(this, new Crashlytics(), new Answers());
+
         /*try {
             readTxt();
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        if (!BuildConfig.DEBUG) {
+            getDefaultTracker();
+        }
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.INFO);
         Realm.init(this);
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
@@ -50,6 +64,25 @@ public class App extends Application {
         return appComponent;
     }
 
+    synchronized public Tracker getDefaultTracker() {
+        if (tracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            tracker = analytics.newTracker(Settings.GOOGLE_ANALYTICS_TRACKING_ID);
+
+            // Provide unhandled exceptions reports. Do that first after creating the tracker
+            tracker.enableExceptionReporting(true);
+
+            // Enable Remarketing, Demographics & Interests reports
+            // https://developers.google.com/analytics/devguides/collection/android/display-features
+            tracker.enableAdvertisingIdCollection(true);
+
+            // Enable automatic activity tracking for your app
+            tracker.enableAutoActivityTracking(true);
+        }
+        return tracker;
+    }
 
     private void readTxt() throws IOException {
         JSONObject jsonData = new JSONObject();
