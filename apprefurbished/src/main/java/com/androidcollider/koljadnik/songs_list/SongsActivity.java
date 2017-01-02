@@ -59,6 +59,11 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
         rvSongs.setAdapter(songsAdapter);
 
         etSearchSong.addTextChangedListener(searchListener);
+
+        presenter.setView(this);
+        if (savedInstanceState == null) {
+            presenter.initData();
+        }
     }
 
     private void buildAndInjectComponent() {
@@ -82,13 +87,6 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
     @Override
     protected boolean isDisplayHomeAsUpEnabled() {
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.setView(this);
-        presenter.initData();
     }
 
     @Override

@@ -13,6 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
 import io.fabric.sdk.android.Fabric;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,9 +49,9 @@ public class App extends Application {
         appComponent = DaggerAppComponent.builder().applicationModule(new ApplicationModule(this)).build();
         //Fabric.with(this, new Crashlytics(), new Answers());
 
-        /*try {
+       /* try {
             readTxt();
-        } catch (IOException e) {
+        } catch (IOException|JSONException e) {
             e.printStackTrace();
         }*/
         if (!BuildConfig.DEBUG) {
@@ -84,7 +86,7 @@ public class App extends Application {
         return tracker;
     }
 
-    private void readTxt() throws IOException {
+    private void readTxt() throws IOException, JSONException {
         JSONObject jsonData = new JSONObject();
 
         Integer i = 0;
@@ -95,27 +97,23 @@ public class App extends Application {
         i = parseVinsh(jsonData, i, 3);
         i = parseMain("suchasni.txt", jsonData, i, 4);
         i = parseSms(jsonData, i, 5);
+        i = parseInshomovni(jsonData, i, 6);
 
 
         JSONObject jsonDatatypes = new JSONObject();
-        try {
             jsonDatatypes.put(String.valueOf(0), createSonTypesJson(0, "Колядки"));
             jsonDatatypes.put(String.valueOf(1), createSonTypesJson(1, "Щедрівки"));
             jsonDatatypes.put(String.valueOf(2), createSonTypesJson(2, "Засівання"));
             jsonDatatypes.put(String.valueOf(3), createSonTypesJson(3, "Віншування"));
             jsonDatatypes.put(String.valueOf(4), createSonTypesJson(4, "Сучасні"));
             jsonDatatypes.put(String.valueOf(5), createSonTypesJson(5, "СМС"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            jsonDatatypes.put(String.valueOf(6), createSonTypesJson(6, "Іншомовні"));
+
         JSONObject finalJson = new JSONObject();
-        try {
 
             finalJson.put("songs", jsonData);
             finalJson.put("songTypes", jsonDatatypes);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
         for (int k = 0; k < jsonData.length(); k++) {
             try {
@@ -144,7 +142,7 @@ public class App extends Application {
         File directory = new File(sdCard.getAbsolutePath() + "/MyFiles");
         directory.mkdirs();
 
-        File file = new File(directory, "koljandnik_data5.txt");
+        File file = new File(directory, "koljandnik_data6.txt");
         FileOutputStream fOut = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fOut);
         osw.write(finalJson.toString());
@@ -272,6 +270,36 @@ public class App extends Application {
             }
         }
         reader.close();
+        return i;
+    }
+
+    public int parseInshomovni(JSONObject jsonData, Integer i, int typeId) throws IOException, JSONException {
+        StringBuilder text = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("inshomovni.txt")));
+            while (true) {
+                String mLine = reader.readLine();
+                if (mLine != null) {
+                    text.append(mLine);
+                } else {
+                    break;
+                }
+            }
+            reader.close();
+        } catch (IOException e){
+
+        }
+        JSONObject jsonObject = new JSONObject(text.toString());
+        JSONArray carols = jsonObject.getJSONArray("carols");
+
+        for (int k = 0; k < carols.length(); k++){
+            JSONObject carol = carols.getJSONObject(k);
+            String title = carol.getString("text");
+            String name = carol.getString("name");
+            name = name.replace("\r", "").replace("\n","").trim();
+            jsonData.put(String.valueOf(i), createSongJson(i, typeId, name, title, ""));
+            i++;
+        }
         return i;
     }
 

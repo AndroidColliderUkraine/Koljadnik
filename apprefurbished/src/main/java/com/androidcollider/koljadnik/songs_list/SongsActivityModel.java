@@ -3,6 +3,7 @@ package com.androidcollider.koljadnik.songs_list;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
+import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
@@ -54,31 +55,20 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
     }
 
     @Override
-    public UiAction getSongsOrdered(OrderType orderType, OnReadListener<List<SongItemViewModel>> listener) {
+    public UiAction getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener) {
         return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> result) {
-                getSongsOrdered(result, orderType, listener);
-            }
-
-            @Override
-            public void onError(String error) {
-                listener.onError(error);
-            }
-        });
-    }
-
-    @Override
-    public UiAction getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener) {
-        return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
-            @Override
-            public void onSuccess(List<SongItemViewModel> result) {
-                new SearchSongsAsyncTask(result) {
-                    @Override
-                    public void onSuccess(List<SongItemViewModel> songItemViewModels) {
-                        listener.onSuccess(songItemViewModels);
-                    }
-                }.execute(searchStr);
+                if (searchStr.length() >= Settings.SEARCH_LIMIT){
+                    new SearchSongsAsyncTask(result) {
+                        @Override
+                        public void onSuccess(List<SongItemViewModel> songItemViewModels) {
+                            getSongsOrdered(songItemViewModels, orderType, listener);
+                        }
+                    }.execute(searchStr);
+                } else {
+                    getSongsOrdered(result, orderType, listener);
+                }
             }
 
             @Override
