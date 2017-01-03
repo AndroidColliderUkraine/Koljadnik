@@ -1,7 +1,6 @@
 package com.androidcollider.koljadnik.songs_list;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.contants.UiAction;
@@ -16,6 +15,8 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
     private SongsActivityMVP.Model model;
 
     private boolean isSearching;
+    private String searchStr = "";
+    private OrderType orderType = OrderType.BY_ALPHABET;
 
 
     public SongsActivityPresenter(SongsActivityMVP.Model model) {
@@ -29,7 +30,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void initData() {
-        UiAction uiAction = model.getSongsByTypeId(updateAdapterListener);
+        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener);
         if (uiAction == UiAction.BLOCK_UI && view != null){
             view.blockUi();
         }
@@ -53,7 +54,8 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void clickOnOrderBtn(OrderType orderType) {
-        UiAction uiAction = model.getSongsOrdered(orderType, new OnReadListener<List<SongItemViewModel>>() {
+        this.orderType = orderType;
+        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> songTypes) {
                 if (view != null) {
@@ -78,20 +80,10 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void proceedSearch(String searchStr) {
-        if (searchStr.length() >= Settings.SEARCH_LIMIT){
-            UiAction uiAction = model.getSongsBySearch(searchStr, updateAdapterListener);
-            if (uiAction == UiAction.BLOCK_UI && view != null){
-                view.blockUi();
-            }
-            isSearching = true;
-        } else {
-            if (isSearching){
-                UiAction uiAction =  model.getSongsByTypeId(updateAdapterListener);
-                if (uiAction == UiAction.BLOCK_UI && view != null){
-                    view.blockUi();
-                }
-            }
-            isSearching = false;
+        this.searchStr = searchStr;
+        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener);
+        if (uiAction == UiAction.BLOCK_UI && view != null){
+            view.blockUi();
         }
     }
 

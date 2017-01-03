@@ -28,8 +28,7 @@ public interface SongsActivityMVP {
 
     interface Model {
         UiAction getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener);
-        UiAction getSongsOrdered(OrderType orderType, final OnReadListener<List<SongItemViewModel>> listener);
-        UiAction getSongsBySearch(String searchStr, OnReadListener<List<SongItemViewModel>> listener);
+        UiAction getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener);
         void increaseRating(int songId);
     }
 }
