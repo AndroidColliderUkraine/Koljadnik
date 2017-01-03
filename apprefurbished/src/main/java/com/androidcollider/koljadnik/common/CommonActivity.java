@@ -1,23 +1,18 @@
 package com.androidcollider.koljadnik.common;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.utils.DialogManager;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public abstract class CommonActivity extends AppCompatActivity implements CoomonView{
+public abstract class CommonActivity extends AppCompatActivity implements CoomonView {
 
     @Inject
     DialogManager dialogManager;
@@ -34,11 +29,29 @@ public abstract class CommonActivity extends AppCompatActivity implements Coomon
 
     @Override
     public void blockUi() {
-        dialogManager.showProgressProcessingDialog(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (!isDestroyed()) {
+                dialogManager.showProgressProcessingDialog(this);
+            }
+        } else {
+            dialogManager.showProgressProcessingDialog(this);
+        }
     }
 
     @Override
     public void unblockUi() {
-        dialogManager.dismissProgressDialog();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (!isDestroyed()) {
+                dialogManager.dismissProgressDialog();
+            }
+        } else {
+            dialogManager.dismissProgressDialog();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unblockUi();
+        super.onDestroy();
     }
 }
