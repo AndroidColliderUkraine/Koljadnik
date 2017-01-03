@@ -34,5 +34,6 @@
     <string name="koljadka">"Колядка - "</string>
     <string name="you_cannot_send">Ви не можете відправити лист без тексту</string>
     <string name="wait_please">Зачекайте будь ласка...</string>
+    <string name="unable_to_make_current_operation">Неможливо виконати дану операцію</string>
 
 </resources>

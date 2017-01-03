@@ -1,5 +1,6 @@
 package com.androidcollider.koljadnik.song_details;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,11 +13,13 @@ import android.widget.Toast;
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.root.App;
+import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.fabric.sdk.android.Fabric;
 
 
 public class SongDetailsActivity extends CommonToolbarActivity implements SongDetailsActivityMVP.View {
@@ -171,7 +174,13 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
     public void startSmsActivity(String smsText) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
         intent.putExtra(SMS_EXTRA, smsText);
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            showErrorToast(getString(R.string.unable_to_make_current_operation));
+            e.printStackTrace();
+            Crashlytics.log(e.getMessage());
+        }
     }
 
     @Override
@@ -182,7 +191,14 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
                 shareTitle);
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
                 shareText);
-        startActivity(Intent.createChooser(emailIntent,
-                shareActivityTitle));
+
+        try {
+            startActivity(Intent.createChooser(emailIntent,
+                    shareActivityTitle));
+        } catch (Exception e) {
+            showErrorToast(getString(R.string.unable_to_make_current_operation));
+            e.printStackTrace();
+            Crashlytics.log(e.getMessage());
+        }
     }
 }

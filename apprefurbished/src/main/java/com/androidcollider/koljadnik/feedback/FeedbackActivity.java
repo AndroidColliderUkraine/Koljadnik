@@ -1,6 +1,8 @@
 package com.androidcollider.koljadnik.feedback;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.root.App;
+import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;
 
@@ -87,17 +90,20 @@ public class FeedbackActivity extends CommonToolbarActivity implements FeedbackA
 
     @Override
     public void showSendFeedbackActivity(String[] mails, String activityTitle, String theme, String text) {
-        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        emailIntent.setType("plain/text");
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-                mails);
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                (String) spActions.getSelectedItem());
-        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-                text);
-        startActivity(Intent.createChooser(emailIntent,
-                text));
+        String mailto = "mailto:" + mails[0] +
+                "?cc=" + mails[1] +
+                "&subject=" + Uri.encode(theme) +
+                "&body=" + Uri.encode(text);
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse(mailto));
+
+        try {
+            startActivity(emailIntent);
+        } catch (Exception e) {
+            showErrorToast(getString(R.string.unable_to_make_current_operation));
+            e.printStackTrace();
+            Crashlytics.log(e.getMessage());
+        }
     }
-
-
 }
