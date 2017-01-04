@@ -1,9 +1,7 @@
 package com.androidcollider.koljadnik.root;
 
-import android.app.Application;
-import android.os.Environment;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.BuildConfig;
-import android.util.Log;
 
 import com.androidcollider.koljadnik.contants.Settings;
 import com.crashlytics.android.Crashlytics;
@@ -14,18 +12,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
 import io.fabric.sdk.android.Fabric;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -36,7 +22,7 @@ import io.realm.RealmConfiguration;
  * @copyright (c) Grossum. (http://www.grossum.com)
  * @package com.androidcollider.koljadnik
  */
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private Tracker tracker;
 

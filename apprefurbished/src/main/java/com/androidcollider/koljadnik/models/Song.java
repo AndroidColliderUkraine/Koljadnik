@@ -38,6 +38,17 @@ public class Song extends RealmObject {
 
     }
 
+    public Song(int id, String name, long rating, int idType, String text, String remarks, String source, long updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.idType = idType;
+        this.text = text;
+        this.remarks = remarks;
+        this.source = source;
+        this.updatedAt = updatedAt;
+    }
+
     public Song(int id, String name, long rating, int idType, String text, String remarks, String source, List<Comment> comments, long updatedAt) {
         this.id = id;
         this.name = name;

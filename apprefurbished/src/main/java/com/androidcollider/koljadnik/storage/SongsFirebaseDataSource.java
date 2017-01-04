@@ -61,7 +61,21 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                 List<Song> list = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     try {
-                        list.add(postSnapshot.getValue(Song.class));
+                        int id = postSnapshot.child("id").getValue(Integer.class);
+                        int idType = postSnapshot.child("idType").getValue(Integer.class);
+                        String name = postSnapshot.child("name").getValue(String.class);
+                        long rating = postSnapshot.child("rating").getValue(Long.class);
+                        String text = postSnapshot.child("text").getValue(String.class);
+                        Long updatedAt = postSnapshot.child("updatedAt").getValue(Long.class);
+                        String remarks = "";
+                        if (postSnapshot.hasChild("remarks")) {
+                            remarks = postSnapshot.child("remarks").getValue(String.class);
+                        }
+                        String source = "";
+                        if (postSnapshot.hasChild("source")) {
+                            source = postSnapshot.child("source").getValue(String.class);
+                        }
+                        list.add(new Song(id, name, rating, idType, text, remarks, source, updatedAt));
                     } catch (DatabaseException e) {
                         e.printStackTrace();
                     }

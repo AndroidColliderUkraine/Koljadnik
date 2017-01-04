@@ -77,8 +77,9 @@ public class SongsRepository implements SongsDataSource {
     }
 
     private void getSongTypesFromRemote(final OnReadListener<List<SongType>> onReadListener) {
+        long lastUpdate = sharedPreferencesManager.getLastUpdateForClass(SongType.class);
         sharedPreferencesManager.setLastUpdateForClass(SongType.class, System.currentTimeMillis());
-        songsFirebaseDataSource.getSongTypes(sharedPreferencesManager.getLastUpdateForClass(SongType.class), new OnReadListener<List<SongType>>() {
+        songsFirebaseDataSource.getSongTypes(lastUpdate, new OnReadListener<List<SongType>>() {
             @Override
             public void onSuccess(List<SongType> firebaseList) {
                 songsRealmDataSource.saveSongTypes(firebaseList, new OnWriteListener() {
@@ -99,6 +100,7 @@ public class SongsRepository implements SongsDataSource {
 
             }
         });
+
     }
 
     private void cashSongTypes(List<SongType> result) {
@@ -140,8 +142,9 @@ public class SongsRepository implements SongsDataSource {
     }
 
     private void getSongsFromRemote(final OnReadListener<List<Song>> onReadListener) {
+        long lastUpdate = sharedPreferencesManager.getLastUpdateForClass(Song.class);
         sharedPreferencesManager.setLastUpdateForClass(Song.class, System.currentTimeMillis());
-        songsFirebaseDataSource.getSongs(sharedPreferencesManager.getLastUpdateForClass(Song.class), new OnReadListener<List<Song>>() {
+        songsFirebaseDataSource.getSongs(lastUpdate, new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> firebaseList) {
                 List<Song> realmList = songsRealmDataSource.getSongs();
