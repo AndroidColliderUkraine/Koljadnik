@@ -17,7 +17,8 @@ public class KoljadnikRealmMigration implements RealmMigration {
                     .addField("idSong", Integer.class)
                     .addField("rating", Long.class)
                     .addField("localRating", Long.class)
-                    .addField("updatedAt", Long.class);
+                    .addField("updatedAt", Long.class)
+                    .addPrimaryKey("idSong");
 
             schema.get("Song").removeField("rating").removeField("localRating");
         }
