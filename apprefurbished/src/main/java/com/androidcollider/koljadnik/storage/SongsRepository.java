@@ -148,10 +148,13 @@ public class SongsRepository implements SongsDataSource {
             @Override
             public void onSuccess(List<Song> firebaseList) {
                 List<Song> realmList = songsRealmDataSource.getSongs();
-                List<Song> listToUpdate = mergeRatings(realmList, firebaseList);
+                ArrayList<Song> listToUpdateOnServer = new ArrayList<>();
+                ArrayList<Song> listToUpdateLocal = new ArrayList<>();
+                mergeRatings(realmList, firebaseList, listToUpdateOnServer, listToUpdateLocal);
                 onReadListener.onSuccess(realmList);
-                songsFirebaseDataSource.updateSongs(listToUpdate, null);
-                songsRealmDataSource.saveSongs(listToUpdate, null);
+
+                //songsFirebaseDataSource.updateSongs(listToUpdateOnServer, null); //TODO temp
+                songsRealmDataSource.saveSongs(listToUpdateLocal, null);
             }
 
             @Override
@@ -161,8 +164,7 @@ public class SongsRepository implements SongsDataSource {
         });
     }
 
-    private List<Song> mergeRatings(List<Song> realmList, List<Song> firebaseList) {
-        List<Song> listToUpdate = new ArrayList<>();
+    private void mergeRatings(List<Song> realmList, List<Song> firebaseList, ArrayList<Song> listToUpdateOnServer, ArrayList<Song> listToUpdateLocal) {
         for (Song realmSong : realmList) {
             if (realmSong.getLocalRating() > 0) {
                 Song songToUpdate = realmSong;
@@ -173,10 +175,16 @@ public class SongsRepository implements SongsDataSource {
                 songToUpdate.setRating(songToUpdate.getRating() + realmSong.getLocalRating());
                 songToUpdate.setUpdatedAt(System.currentTimeMillis());
                 realmList.set(realmList.indexOf(realmSong), songToUpdate);
-                listToUpdate.add(songToUpdate);
+                listToUpdateOnServer.add(songToUpdate);
+                listToUpdateLocal.add(songToUpdate);
             }
         }
-        return listToUpdate;
+        for (Song firebaseSong : firebaseList){
+            if (Song.findInListById(realmList, firebaseSong.getId()) == null){
+                listToUpdateLocal.add(firebaseSong);
+                realmList.add(firebaseSong);
+            }
+        }
     }
 
     private void cashSongs(List<Song> result) {

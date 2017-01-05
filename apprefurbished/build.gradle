@@ -26,9 +26,9 @@ android {
         applicationId "com.androidcollider.koljadnik"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.4.1"
-        multiDexEnabled true
+        versionCode 7
+        versionName "1.4.2"/*
+        multiDexEnabled true*/
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -40,9 +40,9 @@ android {
         }
     }
 
-    dexOptions {
+   /* dexOptions {
         javaMaxHeapSize "4g"
-    }
+    }*/
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -58,7 +58,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.10.19"
 
     //multidex
-    compile 'com.android.support:multidex:1.0.1'
+   // compile 'com.android.support:multidex:1.0.1'
     
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'

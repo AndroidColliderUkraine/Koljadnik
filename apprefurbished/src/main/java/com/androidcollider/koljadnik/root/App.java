@@ -1,6 +1,6 @@
 package com.androidcollider.koljadnik.root;
 
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
 import android.support.v4.BuildConfig;
 
 import com.androidcollider.koljadnik.contants.Settings;
@@ -22,7 +22,7 @@ import io.realm.RealmConfiguration;
  * @copyright (c) Grossum. (http://www.grossum.com)
  * @package com.androidcollider.koljadnik
  */
-public class App extends MultiDexApplication {
+public class App extends Application/*MultiDexApplication*/ {
 
     private Tracker tracker;
 

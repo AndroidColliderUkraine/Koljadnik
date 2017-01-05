@@ -54,7 +54,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
 
     @Override
     public void getSongs(long lastUpdate, final OnReadListener<List<Song>> onReadListener) {
-        mDatabase.child(FirebaseTable.SONGS.label).orderByChild("updatedAt").startAt(lastUpdate).
+        mDatabase.child(FirebaseTable.SONGS.label).orderByChild("updatedAt").startAt(1483557837000L). //TODO temp
                 addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
