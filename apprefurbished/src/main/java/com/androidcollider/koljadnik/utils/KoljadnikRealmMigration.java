@@ -14,10 +14,10 @@ public class KoljadnikRealmMigration implements RealmMigration {
 
         if (oldVersion < 2) {
             schema.create("SongRating")
-                    .addField("idSong", Integer.class)
-                    .addField("rating", Long.class)
-                    .addField("localRating", Long.class)
-                    .addField("updatedAt", Long.class)
+                    .addField("idSong", int.class)
+                    .addField("rating", long.class)
+                    .addField("localRating", long.class)
+                    .addField("updatedAt", long.class)
                     .addPrimaryKey("idSong");
 
             schema.get("Song").removeField("rating").removeField("localRating");
