@@ -18,12 +18,13 @@ public abstract class SearchSongsAsyncTask extends AsyncTask<String, Void, List<
     @Override
     protected List<SongItemViewModel> doInBackground(String... strings) {
         String searchStr = strings[0];
-
         List<SongItemViewModel> searchResult = new ArrayList<>();
-        for (SongItemViewModel songItemViewModel: songItemViewModels){
-            if (songItemViewModel.name.toLowerCase().contains(searchStr.toLowerCase()) ||
-                    songItemViewModel.text.toLowerCase().contains(searchStr.toLowerCase())){
-                searchResult.add(songItemViewModel);
+        if (searchStr != null) {
+            for (SongItemViewModel songItemViewModel : songItemViewModels) {
+                if ((songItemViewModel.name != null && songItemViewModel.name.toLowerCase().contains(searchStr.toLowerCase())) ||
+                        (songItemViewModel.text != null && songItemViewModel.text.toLowerCase().contains(searchStr.toLowerCase()))) {
+                    searchResult.add(songItemViewModel);
+                }
             }
         }
         return searchResult;

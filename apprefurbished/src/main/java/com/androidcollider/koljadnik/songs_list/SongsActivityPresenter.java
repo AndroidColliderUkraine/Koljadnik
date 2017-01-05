@@ -2,8 +2,7 @@ package com.androidcollider.koljadnik.songs_list;
 
 import android.support.annotation.Nullable;
 
-import com.androidcollider.koljadnik.contants.Settings;
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
     private SongsActivityMVP.View view;
     private SongsActivityMVP.Model model;
 
-    private boolean isSearching;
     private String searchStr = "";
     private OrderType orderType = OrderType.BY_ALPHABET;
 
@@ -30,10 +28,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     @Override
     public void initData() {
-        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener);
-        if (uiAction == UiAction.BLOCK_UI && view != null){
-            view.blockUi();
-        }
+        model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener, callDialogCallback);
     }
 
     @Override
@@ -55,7 +50,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
     @Override
     public void clickOnOrderBtn(OrderType orderType) {
         this.orderType = orderType;
-        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, new OnReadListener<List<SongItemViewModel>>() {
+        model.getSongsBySearchAndOrdered(searchStr, orderType, new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> songTypes) {
                 if (view != null) {
@@ -72,19 +67,13 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
                     view.showErrorToast(error);
                 }
             }
-        });
-        if (uiAction == UiAction.BLOCK_UI && view != null){
-            view.blockUi();
-        }
+        }, callDialogCallback);
     }
 
     @Override
     public void proceedSearch(String searchStr) {
         this.searchStr = searchStr;
-        UiAction uiAction = model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener);
-        if (uiAction == UiAction.BLOCK_UI && view != null){
-            view.blockUi();
-        }
+        model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener, callDialogCallback);
     }
 
     private OnReadListener<List<SongItemViewModel>> updateAdapterListener = new OnReadListener<List<SongItemViewModel>>() {
@@ -101,6 +90,15 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
             if (view != null) {
                 view.unblockUi();
                 view.showErrorToast(error);
+            }
+        }
+    };
+
+    private CallStartProgressDialog callDialogCallback = new CallStartProgressDialog() {
+        @Override
+        public void onCall() {
+            if (view != null){
+                view.blockUi();
             }
         }
     };

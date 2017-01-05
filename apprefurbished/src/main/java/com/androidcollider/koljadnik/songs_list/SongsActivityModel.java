@@ -4,6 +4,7 @@ import android.support.v4.util.Pair;
 
 import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
@@ -25,11 +26,12 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
     }
 
     @Override
-    public UiAction getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener) {
-        return songsDataSource.getSongsByType(typeId, new OnReadListener<List<Song>>() {
+    public void getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener,
+                                     final CallStartProgressDialog dialogCall) {
+        UiAction uiAction = songsDataSource.getSongsByType(typeId, new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> resultSong) {
-                songsDataSource.getRatings(new OnReadListener<List<SongRating>>() {
+                UiAction uiAction = songsDataSource.getRatings(new OnReadListener<List<SongRating>>() {
                     @Override
                     public void onSuccess(List<SongRating> result) {
                         Pair<Long, Long> minMaxRatings = SongRating.findMinMax(result);
@@ -52,6 +54,9 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
                         listener.onError(error);
                     }
                 });
+                if (uiAction == UiAction.BLOCK_UI){
+                    dialogCall.onCall();
+                }
             }
 
             @Override
@@ -59,11 +64,15 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
                 listener.onError(error);
             }
         });
+        if (uiAction == UiAction.BLOCK_UI){
+            dialogCall.onCall();
+        }
     }
 
     @Override
-    public UiAction getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener) {
-        return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
+    public void getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener,
+                                               final CallStartProgressDialog dialogCall) {
+        getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> result) {
                 if (searchStr.length() >= Settings.SEARCH_LIMIT) {
@@ -82,7 +91,7 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
             public void onError(String error) {
                 listener.onError(error);
             }
-        });
+        }, dialogCall);
     }
 
     @Override

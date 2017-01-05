@@ -2,9 +2,8 @@ package com.androidcollider.koljadnik.songs_list;
 
 
 import com.androidcollider.koljadnik.common.CoomonView;
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.Song;
 
 import java.util.List;
 
@@ -27,8 +26,8 @@ public interface SongsActivityMVP {
     }
 
     interface Model {
-        UiAction getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener);
-        UiAction getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener);
+        void getSongsByTypeId(final OnReadListener<List<SongItemViewModel>> listener, final CallStartProgressDialog dialogCall);
+        void getSongsBySearchAndOrdered(String searchStr, OrderType orderType, OnReadListener<List<SongItemViewModel>> listener, final CallStartProgressDialog dialogCall);
         void increaseRating(int songId);
     }
 }
