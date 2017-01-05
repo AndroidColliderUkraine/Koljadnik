@@ -43,7 +43,6 @@ public class SongsRepository implements SongsDataSource {
     }
 
 
-
     @Override
     public UiAction getSongTypes(final OnReadListener<List<SongType>> onReadListener) {
         if (!connectionInternetManager.isNetworkConnected() ||
@@ -249,7 +248,6 @@ public class SongsRepository implements SongsDataSource {
     }
 
 
-
     private List<SongRating> getSongRatingsFromLocal() {
         List<SongRating> songRatings = songsRealmDataSource.getSongRatings();
         cashSongRatings(songRatings);
@@ -298,7 +296,7 @@ public class SongsRepository implements SongsDataSource {
             if (realmSongRating.getLocalRating() > 0) {
                 SongRating firebaseSongRating = SongRating.findInListById(firebaseList, realmSongRating.getIdSong());
                 long countingRating = 0;
-                if (firebaseSongRating != null){
+                if (firebaseSongRating != null) {
                     countingRating = firebaseSongRating.getTotalRating() + realmSongRating.getLocalRating();
                 }
                 SongRating mergedSongRating = new SongRating(realmSongRating.getIdSong(), countingRating, timestamp);
@@ -306,8 +304,8 @@ public class SongsRepository implements SongsDataSource {
                 listToUpdateLocal.add(mergedSongRating);
             }
         }
-        for (SongRating firebaseSongRating : firebaseList){
-            if (SongRating.findInListById(realmList, firebaseSongRating.getIdSong()) == null){
+        for (SongRating firebaseSongRating : firebaseList) {
+            if (SongRating.findInListById(realmList, firebaseSongRating.getIdSong()) == null) {
                 listToUpdateLocal.add(firebaseSongRating);
             }
         }
@@ -334,17 +332,29 @@ public class SongsRepository implements SongsDataSource {
 
     @Override
     public void tryToLoadDataFromLocalFile() {
+        String jsonString = null;
         if (!sharedPreferencesManager.isAlreadyParsedDataFromLocal()) {
-            String jsonString = assetsTextDataManager.getLocalData();
+            jsonString = assetsTextDataManager.getLocalData();
             try {
                 List<Song> songsData = Song.generateSongList(new JSONObject(jsonString).getJSONArray("songs"));
                 List<SongType> songsTypesData = SongType.generateSongTypesList(new JSONObject(jsonString).getJSONArray("songTypes"));
-                List<SongRating> songRatingData = SongRating.generateSongRatingsList(new JSONObject(jsonString).getJSONArray("songRatings"));
 
                 songsRealmDataSource.saveSongs(songsData, null);
                 songsRealmDataSource.saveSongTypes(songsTypesData, null);
-                songsRealmDataSource.saveSongRatings(songRatingData, null);
                 sharedPreferencesManager.setAlreadyParsedDataFromLocal(true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!sharedPreferencesManager.isAlreadyParsedSongsRatingsFromLocal()) {
+            if (jsonString == null) {
+                jsonString = assetsTextDataManager.getLocalData();
+            }
+            try {
+                List<SongRating> songRatingData = SongRating.generateSongRatingsList(new JSONObject(jsonString).getJSONArray("songRatings"));
+                songsRealmDataSource.saveSongRatings(songRatingData, null);
+                sharedPreferencesManager.setAlreadyParsedSongsRatingsFromLocal(true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
