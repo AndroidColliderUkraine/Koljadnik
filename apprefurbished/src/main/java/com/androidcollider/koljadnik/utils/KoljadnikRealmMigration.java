@@ -13,12 +13,12 @@ public class KoljadnikRealmMigration implements RealmMigration {
         RealmSchema schema = realm.getSchema();
 
         if (oldVersion < 2) {
-            //schema.create("SongRating");
-                    /*.addField("idSong", Integer.class)
+            schema.create("SongRating")
+                    .addField("idSong", Integer.class)
                     .addField("rating", Long.class)
                     .addField("localRating", Long.class)
                     .addField("updatedAt", Long.class);
-*/
+
             schema.get("Song").removeField("rating").removeField("localRating");
         }
     }
