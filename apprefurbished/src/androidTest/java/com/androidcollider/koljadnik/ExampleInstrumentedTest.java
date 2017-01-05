@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.acollider.apprefurbished", appContext.getPackageName());
+        assertEquals("com.androidcollider.koljadnik", appContext.getPackageName());
     }
 }

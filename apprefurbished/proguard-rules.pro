@@ -34,8 +34,6 @@
 -dontwarn java.lang.invoke.*
 -dontwarn okio.**
 -dontwarn java.lang.invoke**
--dontwarn retrofit2.Platform$Java8
--dontwarn com.viewpagerindicator.**
 -dontwarn org.apache.**
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -43,21 +41,4 @@
 -keepattributes Signature
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
-# Application classes that will be serialized/deserialized over Gson
-# -keep class mypersonalclass.data.model.** { *; }
 -keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
-# Only required if you use AsyncExecutor
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
--keep class com.defietser.models.responses.errors.** { *; }
--dontwarn android.net.http.SslError
--keep public class android.net.http.SslError
--keep public class android.webkit.WebViewClient
--dontwarn android.webkit.WebView
--dontwarn android.webkit.WebViewClient

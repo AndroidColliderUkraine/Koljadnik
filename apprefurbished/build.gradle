@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.22.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -20,7 +20,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.androidcollider.koljadnik"
@@ -46,12 +46,19 @@ android {
 }
 
 dependencies {
+
+    //ui testing
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    //unit testing
     testCompile "junit:junit:4.12"
+
+    //mock framework
     testCompile "org.mockito:mockito-core:1.10.19"
 
+    //android support
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:design:25.0.1'
@@ -65,8 +72,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
+    //serialization
     compile 'com.google.code.gson:gson:2.6.2'
 
+    //Google Firebase services (realtime db)
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-database:10.0.1'
 
@@ -76,6 +85,7 @@ dependencies {
     //Google Play Services
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
 
+    //Fabric Crashlytics (crash analytics)
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
