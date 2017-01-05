@@ -21,13 +21,13 @@ public interface SongTypesActivityMVP {
     interface View extends CoomonView{
         void updateAdapter(List<SongTypeViewModel> songTypeViewModelList);
         void showErrorToast(String text);
-        void showSongListUI(int typeId);
+        void showSongListUI(int typeId, String typeName);
     }
 
     interface Presenter {
         void setView(View view);
         void initData();
-        void openSongListUI(Object tag);
+        void openSongListUI(Object tag1, Object tag2);
     }
 
     interface Model {

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.models.SongType;
+import com.androidcollider.koljadnik.contants.Tags;
 import com.androidcollider.koljadnik.utils.NumberConverter;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SongTypeAdapter extends RecyclerView.Adapter<SongTypeAdapter.Holder
         return new Holder(v);
     }
 
-    public void updateData(List<SongTypeViewModel> songTypesList){
+    public void updateData(List<SongTypeViewModel> songTypesList) {
         this.songTypesList.clear();
         this.songTypesList.addAll(songTypesList);
         notifyDataSetChanged();
@@ -51,6 +51,7 @@ public class SongTypeAdapter extends RecyclerView.Adapter<SongTypeAdapter.Holder
         holder.tvQuantity.setText(String.valueOf(NumberConverter.convert(songTypeViewModel.quantity)));
 
         holder.itemView.setTag(songTypeViewModel.songType.getId());
+        holder.itemView.setTag(Tags.SONG_TYPE_NAME_TAG, songTypeViewModel.songType.getName());
         holder.itemView.setOnClickListener(onClickListener);
     }
 

@@ -1,10 +1,12 @@
 package com.androidcollider.koljadnik.storage;
 
+import android.media.Rating;
 import android.support.v4.util.Pair;
 
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
+import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface SongsDataSource {
 
     UiAction getSongById(int songId,OnReadListener<Song> onReadListener);
 
-    UiAction getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener);
+    UiAction getRatings(OnReadListener<List<SongRating>> onReadListener);
 
     void increaseSongLocalRating(Song song);
 

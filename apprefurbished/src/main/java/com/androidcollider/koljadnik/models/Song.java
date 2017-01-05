@@ -23,8 +23,6 @@ public class Song extends RealmObject {
     @PrimaryKey
     private int id;
     private String name;
-    private long rating;
-    private long localRating;
     private int idType;
     private String text;
     private String remarks;
@@ -38,10 +36,9 @@ public class Song extends RealmObject {
 
     }
 
-    public Song(int id, String name, long rating, int idType, String text, String remarks, String source, long updatedAt) {
+    public Song(int id, String name, int idType, String text, String remarks, String source, long updatedAt) {
         this.id = id;
         this.name = name;
-        this.rating = rating;
         this.idType = idType;
         this.text = text;
         this.remarks = remarks;
@@ -49,10 +46,9 @@ public class Song extends RealmObject {
         this.updatedAt = updatedAt;
     }
 
-    public Song(int id, String name, long rating, int idType, String text, String remarks, String source, List<Comment> comments, long updatedAt) {
+    public Song(int id, String name, int idType, String text, String remarks, String source, List<Comment> comments, long updatedAt) {
         this.id = id;
         this.name = name;
-        this.rating = rating;
         this.idType = idType;
         this.text = text;
         this.remarks = remarks;
@@ -68,14 +64,6 @@ public class Song extends RealmObject {
 
     public String getName() {
         return name;
-    }
-
-    public long getTotalRating() {
-        return rating + localRating;
-    }
-
-    public long getRating() {
-        return rating;
     }
 
     public int getIdType() {
@@ -106,20 +94,11 @@ public class Song extends RealmObject {
         this.updatedAt = updatedAt;
     }
 
-    public long getLocalRating() {
-        return localRating;
-    }
-
-    public void setLocalRating(long localRating) {
-        this.localRating = localRating;
-    }
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("name", name);
-        result.put("rating", rating);
         result.put("idType", idType);
         result.put("text", text);
         result.put("remarks", remarks);
@@ -137,23 +116,11 @@ public class Song extends RealmObject {
         }
         return "id=" + id + "  " +
                 "name=" + name + "  " +
-                "rating=" + rating + "  " +
                 "idType=" + idType + "  " +
                 "text=" + text + "  " +
                 "remarks=" + remarks + "  " +
                 "source=" + source + "  " +
                 "comments=" + comm;
-    }
-
-
-    public int getRatingByMinMax(long min, long max) {
-        if (getTotalRating() > Settings.RATING_DEFAULT_LIMIT) {
-            double clearRating = getTotalRating() - min;
-            double onePoint = (double) (max - min) / 5d;
-            return (int) ((clearRating - 1) / onePoint) + 1;
-        } else {
-            return Settings.DEFAULT_RATING;
-        }
     }
 
     public static Song findInListById(List<Song> songs, int id) {
@@ -176,20 +143,11 @@ public class Song extends RealmObject {
     public static Song fromJson(JSONObject jsonObject) throws JSONException {
         return new Song(jsonObject.getInt("id"),
                 jsonObject.getString("name"),
-                jsonObject.getLong("rating"),
                 jsonObject.getInt("idType"),
                 jsonObject.getString("text"),
                 jsonObject.getString("remarks"),
                 jsonObject.getString("source"),
                 new ArrayList<>(),
                 jsonObject.getLong("updatedAt"));
-    }
-
-    public void setRating(long rating) {
-        this.rating = rating;
-    }
-
-    public void increaseLocalRating() {
-        localRating++;
     }
 }

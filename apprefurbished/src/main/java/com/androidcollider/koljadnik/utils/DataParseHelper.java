@@ -21,7 +21,7 @@ import java.io.OutputStreamWriter;
 
 public class DataParseHelper {
 
-    private void readTxt(Context context) throws IOException, JSONException {
+    public static void readTxt(Context context, String filename) throws IOException, JSONException {
         JSONObject jsonData = new JSONObject();
 
         Integer i = 0;
@@ -44,10 +44,17 @@ public class DataParseHelper {
         jsonDatatypes.put(String.valueOf(5), createSonTypesJson(5, "СМС"));
         jsonDatatypes.put(String.valueOf(6), createSonTypesJson(6, "Іншомовні"));
 
+
+        JSONObject jsonDataRatings = new JSONObject();
+        for (int k = 0; k < i; k++){
+            jsonDataRatings.put(String.valueOf(k), createSongratingJson(k));
+        }
+
         JSONObject finalJson = new JSONObject();
 
         finalJson.put("songs", jsonData);
         finalJson.put("songTypes", jsonDatatypes);
+        finalJson.put("songRatings", jsonDataRatings);
 
 
         for (int k = 0; k < jsonData.length(); k++) {
@@ -77,7 +84,7 @@ public class DataParseHelper {
         File directory = new File(sdCard.getAbsolutePath() + "/MyFiles");
         directory.mkdirs();
 
-        File file = new File(directory, "koljandnik_data6.txt");
+        File file = new File(directory, filename);
         FileOutputStream fOut = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fOut);
         osw.write(finalJson.toString());
@@ -86,7 +93,7 @@ public class DataParseHelper {
 
     }
 
-    public int parseVinsh(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
+    public static int parseVinsh(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("vinsh.txt")));
         // do reading, usually loop until end of file reading
         StringBuilder text = new StringBuilder();
@@ -127,7 +134,7 @@ public class DataParseHelper {
         return i;
     }
 
-    public int parseSms(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
+    public static int parseSms(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("sms.txt")));
         // do reading, usually loop until end of file reading
         StringBuilder text = new StringBuilder();
@@ -168,7 +175,7 @@ public class DataParseHelper {
         return i;
     }
 
-    public int parseMain(Context context, String filename, JSONObject jsonData, Integer i, int typeId) throws IOException {
+    public static int parseMain(Context context, String filename, JSONObject jsonData, Integer i, int typeId) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open(filename)));
         // do reading, usually loop until end of file reading
         StringBuilder text = new StringBuilder();
@@ -208,7 +215,7 @@ public class DataParseHelper {
         return i;
     }
 
-    public int parseInshomovni(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException, JSONException {
+    public static int parseInshomovni(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException, JSONException {
         StringBuilder text = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("inshomovni.txt")));
@@ -239,7 +246,7 @@ public class DataParseHelper {
     }
 
 
-    private JSONObject createSonTypesJson(int id, String title) {
+    private static JSONObject createSonTypesJson(int id, String title) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
@@ -252,17 +259,29 @@ public class DataParseHelper {
         return jsonObject;
     }
 
-    private JSONObject createSongJson(int id, int idType, String title, String text, String source) {
+    private static JSONObject createSongratingJson(int songId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("songId", songId);
+            jsonObject.put("rating", 0);
+            jsonObject.put("updatedAt", 0);
+            return jsonObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    private static JSONObject createSongJson(int id, int idType, String title, String text, String source) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
             jsonObject.put("name", title);
-            jsonObject.put("rating", 0);
+            //jsonObject.put("rating", 0);
             jsonObject.put("idType", idType);
             jsonObject.put("text", text);
             jsonObject.put("remarks", "");
             jsonObject.put("source", source);
-            jsonObject.put("comments", null);
             jsonObject.put("updatedAt", 0);
             return jsonObject;
         } catch (JSONException e) {

@@ -1,13 +1,11 @@
 package com.androidcollider.koljadnik.storage;
 
-import android.support.v4.util.Pair;
-import android.util.Log;
-
 import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
+import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
 import com.androidcollider.koljadnik.utils.ConnectionInternetManager;
 
@@ -30,6 +28,7 @@ public class SongsRepository implements SongsDataSource {
 
     private List<Song> cachedSongs;
     private List<SongType> cachedSongTypes;
+    private List<SongRating> cachedSongRatings;
 
     public SongsRepository(SongsLocalDataSource songsRealmDataSource,
                            SongsRemoteDataSource songsFirebaseDataSource,
@@ -42,6 +41,8 @@ public class SongsRepository implements SongsDataSource {
         this.assetsTextDataManager = assetsTextDataManager;
         this.connectionInternetManager = connectionInternetManager;
     }
+
+
 
     @Override
     public UiAction getSongTypes(final OnReadListener<List<SongType>> onReadListener) {
@@ -147,14 +148,17 @@ public class SongsRepository implements SongsDataSource {
         songsFirebaseDataSource.getSongs(lastUpdate, new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> firebaseList) {
-                List<Song> realmList = songsRealmDataSource.getSongs();
-                ArrayList<Song> listToUpdateOnServer = new ArrayList<>();
-                ArrayList<Song> listToUpdateLocal = new ArrayList<>();
-                mergeRatings(realmList, firebaseList, listToUpdateOnServer, listToUpdateLocal);
-                onReadListener.onSuccess(realmList);
+                songsRealmDataSource.saveSongs(firebaseList, new OnWriteListener() {
+                    @Override
+                    public void onSuccess() {
+                        onReadListener.onSuccess(getSongsFromLocal());
+                    }
 
-                //songsFirebaseDataSource.updateSongs(listToUpdateOnServer, null); //TODO temp
-                songsRealmDataSource.saveSongs(listToUpdateLocal, null);
+                    @Override
+                    public void onError(String error) {
+                        onReadListener.onError(error);
+                    }
+                });
             }
 
             @Override
@@ -164,29 +168,6 @@ public class SongsRepository implements SongsDataSource {
         });
     }
 
-    private void mergeRatings(List<Song> realmList, List<Song> firebaseList, ArrayList<Song> listToUpdateOnServer, ArrayList<Song> listToUpdateLocal) {
-        for (Song realmSong : realmList) {
-            if (realmSong.getLocalRating() > 0) {
-                Song songToUpdate = realmSong;
-                Song firebaseSong = Song.findInListById(firebaseList, realmSong.getId());
-                if (firebaseSong != null) {
-                    songToUpdate = firebaseSong;
-                }
-                songToUpdate.setRating(songToUpdate.getRating() + realmSong.getLocalRating());
-                songToUpdate.setUpdatedAt(System.currentTimeMillis());
-                realmList.set(realmList.indexOf(realmSong), songToUpdate);
-                listToUpdateOnServer.add(songToUpdate);
-                listToUpdateLocal.add(songToUpdate);
-            }
-        }
-        for (Song firebaseSong : firebaseList){
-            if (Song.findInListById(realmList, firebaseSong.getId()) == null){
-                listToUpdateLocal.add(firebaseSong);
-                realmList.add(firebaseSong);
-            }
-        }
-    }
-
     private void cashSongs(List<Song> result) {
         cachedSongs = result;
     }
@@ -194,6 +175,11 @@ public class SongsRepository implements SongsDataSource {
     private boolean isNotExpired(long lastUpdate) {
         return System.currentTimeMillis() - lastUpdate < Settings.DELTA_TIME_FOR_UPDATE;
     }
+
+    private boolean isNotExpiredRating(long lastUpdate) {
+        return System.currentTimeMillis() - lastUpdate < Settings.DELTA_TIME_FOR_UPDATE_RATING;
+    }
+
 
     @Override
     public UiAction getSongsByType(int typeId, OnReadListener<List<Song>> onReadListener) {
@@ -236,42 +222,111 @@ public class SongsRepository implements SongsDataSource {
     }
 
     @Override
-    public UiAction getMinMaxRating(OnReadListener<Pair<Long, Long>> onReadListener) {
-        return getSongs(new OnReadListener<List<Song>>() {
-            @Override
-            public void onSuccess(List<Song> result) {
+    public UiAction getRatings(OnReadListener<List<SongRating>> onReadListener) {
+        if (!connectionInternetManager.isNetworkConnected() ||
+                isNotExpiredRating(sharedPreferencesManager.getLastUpdateForClass(SongRating.class))) {
+            if (cachedSongRatings != null) {
+                onReadListener.onSuccess(cachedSongRatings);
+                return UiAction.DONT_BLOCK_UI;
+            } else {
+                onReadListener.onSuccess(getSongRatingsFromLocal());
+                return UiAction.DONT_BLOCK_UI;
+            }
+        } else {
+            getSongRatingsFromRemote(new OnReadListener<List<SongRating>>() {
+                @Override
+                public void onSuccess(List<SongRating> result) {
+                    onReadListener.onSuccess(result);
+                }
 
-                long minRating = 0;
-                long maxRating = 0;
-                if (result.size() > 0) {
-                    minRating = result.get(0).getTotalRating();
-                    maxRating = result.get(0).getTotalRating();
+                @Override
+                public void onError(String error) {
+                    onReadListener.onSuccess(getSongRatingsFromLocal());
                 }
-                for (Song song : result) {
-                    if (song.getTotalRating() > maxRating) {
-                        maxRating = song.getTotalRating();
+            });
+            return UiAction.BLOCK_UI;
+        }
+    }
+
+
+
+    private List<SongRating> getSongRatingsFromLocal() {
+        List<SongRating> songRatings = songsRealmDataSource.getSongRatings();
+        cashSongRatings(songRatings);
+        return songRatings;
+    }
+
+    private void getSongRatingsFromRemote(final OnReadListener<List<SongRating>> onReadListener) {
+        long lastUpdate = sharedPreferencesManager.getLastUpdateForClass(SongRating.class);
+        sharedPreferencesManager.setLastUpdateForClass(SongRating.class, System.currentTimeMillis());
+        songsFirebaseDataSource.getSongRatings(lastUpdate, new OnReadListener<List<SongRating>>() {
+            @Override
+            public void onSuccess(List<SongRating> firebaseList) {
+                List<SongRating> localSongRatings = songsRealmDataSource.getSongRatings();
+
+                List<SongRating> listToUpdateOnServer = new ArrayList<>();
+                List<SongRating> listToUpdateLocal = new ArrayList<>();
+
+                mergeRatings(localSongRatings, firebaseList, listToUpdateOnServer, listToUpdateLocal);
+
+                songsFirebaseDataSource.updateSongRatings(listToUpdateOnServer, null);
+                songsRealmDataSource.saveSongRatings(listToUpdateLocal, new OnWriteListener() {
+                    @Override
+                    public void onSuccess() {
+                        onReadListener.onSuccess(getSongRatingsFromLocal());
                     }
-                    if (song.getTotalRating() < minRating) {
-                        minRating = song.getTotalRating();
+
+                    @Override
+                    public void onError(String error) {
+                        onReadListener.onError(error);
                     }
-                }
-                onReadListener.onSuccess(new Pair<>(minRating, maxRating));
+                });
             }
 
             @Override
             public void onError(String error) {
-                onReadListener.onError(error);
+
             }
         });
+
+    }
+
+    private void mergeRatings(List<SongRating> realmList, List<SongRating> firebaseList,
+                              List<SongRating> listToUpdateOnServer, List<SongRating> listToUpdateLocal) {
+        long timestamp = System.currentTimeMillis();
+        for (SongRating realmSongRating : realmList) {
+            if (realmSongRating.getLocalRating() > 0) {
+                SongRating firebaseSongRating = SongRating.findInListById(firebaseList, realmSongRating.getIdSong());
+                long countingRating = 0;
+                if (firebaseSongRating != null){
+                    countingRating = firebaseSongRating.getTotalRating() + realmSongRating.getLocalRating();
+                }
+                SongRating mergedSongRating = new SongRating(realmSongRating.getIdSong(), countingRating, timestamp);
+                listToUpdateOnServer.add(mergedSongRating);
+                listToUpdateLocal.add(mergedSongRating);
+            }
+        }
+        for (SongRating firebaseSongRating : firebaseList){
+            if (SongRating.findInListById(realmList, firebaseSongRating.getIdSong()) == null){
+                listToUpdateLocal.add(firebaseSongRating);
+            }
+        }
+    }
+
+    private void cashSongRatings(List<SongRating> result) {
+        cachedSongRatings = result;
     }
 
     @Override
     public void increaseSongLocalRating(Song song) {
-        if (cachedSongs != null) {
-            for (Song cachedSong : cachedSongs) {
-                if (cachedSong.getId() == song.getId()) {
-                    cachedSong.increaseLocalRating();
-                    songsRealmDataSource.increaseSongLocalRating(song);
+        if (cachedSongRatings != null) {
+            getSongRatingsFromLocal();
+        }
+        if (cachedSongRatings != null) {
+            for (SongRating cachedSongRating : cachedSongRatings) {
+                if (cachedSongRating.getIdSong() == song.getId()) {
+                    cachedSongRating.increaseLocalRating();
+                    songsRealmDataSource.increaseSongLocalRating(cachedSongRating);
                 }
             }
         }
@@ -284,9 +339,11 @@ public class SongsRepository implements SongsDataSource {
             try {
                 List<Song> songsData = Song.generateSongList(new JSONObject(jsonString).getJSONArray("songs"));
                 List<SongType> songsTypesData = SongType.generateSongTypesList(new JSONObject(jsonString).getJSONArray("songTypes"));
+                List<SongRating> songRatingData = SongRating.generateSongRatingsList(new JSONObject(jsonString).getJSONArray("songRatings"));
 
                 songsRealmDataSource.saveSongs(songsData, null);
                 songsRealmDataSource.saveSongTypes(songsTypesData, null);
+                songsRealmDataSource.saveSongRatings(songRatingData, null);
                 sharedPreferencesManager.setAlreadyParsedDataFromLocal(true);
             } catch (JSONException e) {
                 e.printStackTrace();

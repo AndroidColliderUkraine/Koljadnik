@@ -4,6 +4,7 @@ package com.androidcollider.koljadnik.storage;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
+import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
 
 import java.util.List;
@@ -80,6 +81,17 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
         return songs;
     }
 
+
+    @Override
+    public List<SongRating> getSongRatings() {
+        realm.beginTransaction();
+        List<SongRating> songRatings = realm.copyFromRealm(realm.where(SongRating.class).
+                findAll());
+
+        realm.commitTransaction();
+        return songRatings;
+    }
+
     @Override
     public void saveSongTypes(List<SongType> songTypes, OnWriteListener onWriteListener) {
         if (onWriteListener != null) {
@@ -107,9 +119,22 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
     }
 
     @Override
-    public void increaseSongLocalRating(Song song) {
+    public void saveSongRatings(List<SongRating> songRatings, OnWriteListener onWriteListener) {
+        if (onWriteListener != null) {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songRatings);
+            }, onWriteListener::onSuccess);
+        } else {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(songRatings);
+            });
+        }
+    }
+
+    @Override
+    public void increaseSongLocalRating(SongRating songRating) {
         realm.executeTransactionAsync(realm1 -> {
-            realm1.copyToRealmOrUpdate(song);
+            realm1.copyToRealmOrUpdate(songRating);
         });
     }
 }

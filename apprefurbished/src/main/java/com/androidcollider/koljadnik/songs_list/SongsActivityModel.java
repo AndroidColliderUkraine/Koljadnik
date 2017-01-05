@@ -1,12 +1,12 @@
 package com.androidcollider.koljadnik.songs_list;
 
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.androidcollider.koljadnik.contants.Settings;
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;
+import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
 import com.androidcollider.koljadnik.utils.SearchSongsAsyncTask;
 
@@ -29,13 +29,20 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
         return songsDataSource.getSongsByType(typeId, new OnReadListener<List<Song>>() {
             @Override
             public void onSuccess(List<Song> resultSong) {
-                songsDataSource.getMinMaxRating(new OnReadListener<Pair<Long, Long>>() {
+                songsDataSource.getRatings(new OnReadListener<List<SongRating>>() {
                     @Override
-                    public void onSuccess(Pair<Long, Long> result) {
+                    public void onSuccess(List<SongRating> result) {
+                        Pair<Long, Long> minMaxRatings = SongRating.findMinMax(result);
+
                         List<SongItemViewModel> songItemViewModels = new ArrayList<>();
                         for (Song song : resultSong) {
-                            songItemViewModels.add(new SongItemViewModel(song.getId(), song.getName(), song.getText(),
-                                    song.getRatingByMinMax(result.first, result.second)));
+                            int rating = Settings.DEFAULT_RATING;
+                            SongRating ratingObj = SongRating.findInListById(result, song.getId());
+                            if (ratingObj != null) {
+                                rating = ratingObj.getRatingByMinMax(minMaxRatings.first, minMaxRatings.second);
+                            }
+
+                            songItemViewModels.add(new SongItemViewModel(song.getId(), song.getName(), song.getText(), rating));
                         }
                         listener.onSuccess(songItemViewModels);
                     }
@@ -59,7 +66,7 @@ public class SongsActivityModel implements SongsActivityMVP.Model {
         return getSongsByTypeId(new OnReadListener<List<SongItemViewModel>>() {
             @Override
             public void onSuccess(List<SongItemViewModel> result) {
-                if (searchStr.length() >= Settings.SEARCH_LIMIT){
+                if (searchStr.length() >= Settings.SEARCH_LIMIT) {
                     new SearchSongsAsyncTask(result) {
                         @Override
                         public void onSuccess(List<SongItemViewModel> songItemViewModels) {

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.v4.BuildConfig;
 
 import com.androidcollider.koljadnik.contants.Settings;
+import com.androidcollider.koljadnik.utils.KoljadnikRealmMigration;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -41,7 +42,9 @@ public class App extends Application/*MultiDexApplication*/ {
         }
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.INFO);
         Realm.init(this);
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().
+                schemaVersion(Settings.REALM_SCHEMA_VERSION).
+                migration(new KoljadnikRealmMigration()).build());
     }
 
     public AppComponent getAppComponent() {

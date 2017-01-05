@@ -50,10 +50,11 @@ public class SongTypesActivityPresenter implements SongTypesActivityMVP.Presente
     }
 
     @Override
-    public void openSongListUI(Object tag) {
-        int typeId = (int) tag;
+    public void openSongListUI(Object tag1, Object tag2) {
+        int typeId = (int) tag1;
+        String typeName = (String) tag2;
         if (view != null) {
-            view.showSongListUI(typeId);
+            view.showSongListUI(typeId, typeName);
         }
     }
 }

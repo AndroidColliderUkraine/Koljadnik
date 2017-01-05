@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
+import com.androidcollider.koljadnik.contants.Tags;
 import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.songs_list.SongsActivity;
@@ -98,15 +99,16 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
     }
 
     @Override
-    public void showSongListUI(int typeId) {
+    public void showSongListUI(int typeId, String typeName) {
         Intent intent = new Intent(this, SongsActivity.class);
         intent.putExtra(SongsActivity.EXTRA_SONG_TYPE_ID, typeId);
+        intent.putExtra(SongsActivity.EXTRA_SONG_TYPE_NAME, typeName);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
     private View.OnClickListener itemClickListener = view -> {
-        presenter.openSongListUI(view.getTag());
+        presenter.openSongListUI(view.getTag(), view.getTag(Tags.SONG_TYPE_NAME_TAG));
     };
 
 

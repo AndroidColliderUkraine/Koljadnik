@@ -28,6 +28,7 @@ import butterknife.OnClick;
 public class SongsActivity extends CommonToolbarActivity implements SongsActivityMVP.View {
 
     public final static String EXTRA_SONG_TYPE_ID = "song_type_id";
+    public final static String EXTRA_SONG_TYPE_NAME = "song_type_name";
 
     @BindView(R.id.rv_songs)
     RecyclerView rvSongs;
@@ -51,6 +52,10 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
 
         if (getIntent().hasExtra(EXTRA_SONG_TYPE_ID)){
             typeId = getIntent().getIntExtra(EXTRA_SONG_TYPE_ID, 0);
+        }
+        if (getIntent().hasExtra(EXTRA_SONG_TYPE_NAME)){
+            String typeName = getIntent().getStringExtra(EXTRA_SONG_TYPE_NAME);
+            setToolbarTitle(typeName);
         }
         buildAndInjectComponent();
 
