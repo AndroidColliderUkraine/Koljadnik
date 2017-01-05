@@ -7,7 +7,6 @@
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:id="@+id/song_list_layout_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/et_search_height"
         android:paddingLeft="@dimen/common_padding_medium"

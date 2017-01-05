@@ -11,6 +11,4 @@
     <color name="action_bar_color">#ff867429</color>
     <color name="edit_text_white_color">#ffffffff</color>
     <color name="christmas_tree_color">#ff158705</color>
-    <color name="splash_screen_bg_color">#ff000000</color>
-    <color name="splash_screen_site_color">#ff0e008e</color>
 </resources>

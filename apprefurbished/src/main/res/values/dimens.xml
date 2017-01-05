@@ -11,7 +11,6 @@
 
     <dimen name="finger_size_half">24dp</dimen>
     <dimen name="finger_size">48dp</dimen>
-    <dimen name="item_filter_height">74dp</dimen>
     <dimen name="finger_size_and_half">72dp</dimen>
 
     <dimen name="text_xxxsmall">10sp</dimen>
