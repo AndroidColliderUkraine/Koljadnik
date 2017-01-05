@@ -256,7 +256,8 @@ public class SongsRepository implements SongsDataSource {
 
     private void getSongRatingsFromRemote(final OnReadListener<List<SongRating>> onReadListener) {
         long lastUpdate = sharedPreferencesManager.getLastUpdateForClass(SongRating.class);
-        sharedPreferencesManager.setLastUpdateForClass(SongRating.class, System.currentTimeMillis());
+        final long updateTimestamp = System.currentTimeMillis();
+        sharedPreferencesManager.setLastUpdateForClass(SongRating.class, updateTimestamp + 1);
         songsFirebaseDataSource.getSongRatings(lastUpdate, new OnReadListener<List<SongRating>>() {
             @Override
             public void onSuccess(List<SongRating> firebaseList) {
@@ -265,7 +266,7 @@ public class SongsRepository implements SongsDataSource {
                 List<SongRating> listToUpdateOnServer = new ArrayList<>();
                 List<SongRating> listToUpdateLocal = new ArrayList<>();
 
-                mergeRatings(localSongRatings, firebaseList, listToUpdateOnServer, listToUpdateLocal);
+                mergeRatings(updateTimestamp, localSongRatings, firebaseList, listToUpdateOnServer, listToUpdateLocal);
 
                 songsFirebaseDataSource.updateSongRatings(listToUpdateOnServer, null);
                 songsRealmDataSource.saveSongRatings(listToUpdateLocal, new OnWriteListener() {
@@ -289,23 +290,24 @@ public class SongsRepository implements SongsDataSource {
 
     }
 
-    private void mergeRatings(List<SongRating> realmList, List<SongRating> firebaseList,
+    private void mergeRatings(long updateTimestamp, List<SongRating> realmList, List<SongRating> firebaseList,
                               List<SongRating> listToUpdateOnServer, List<SongRating> listToUpdateLocal) {
-        long timestamp = System.currentTimeMillis();
         for (SongRating realmSongRating : realmList) {
             if (realmSongRating.getLocalRating() > 0) {
                 SongRating firebaseSongRating = SongRating.findInListById(firebaseList, realmSongRating.getIdSong());
-                long countingRating = 0;
+                long countingRating;
                 if (firebaseSongRating != null) {
-                    countingRating = firebaseSongRating.getTotalRating() + realmSongRating.getLocalRating();
+                    countingRating = firebaseSongRating.getRating() + realmSongRating.getLocalRating();
+                } else {
+                    countingRating = realmSongRating.getRating() + realmSongRating.getLocalRating();
                 }
-                SongRating mergedSongRating = new SongRating(realmSongRating.getIdSong(), countingRating, timestamp);
+                SongRating mergedSongRating = new SongRating(realmSongRating.getIdSong(), countingRating, updateTimestamp);
                 listToUpdateOnServer.add(mergedSongRating);
                 listToUpdateLocal.add(mergedSongRating);
             }
         }
         for (SongRating firebaseSongRating : firebaseList) {
-            if (SongRating.findInListById(realmList, firebaseSongRating.getIdSong()) == null) {
+            if (SongRating.findInListById(listToUpdateLocal, firebaseSongRating.getIdSong()) == null) {
                 listToUpdateLocal.add(firebaseSongRating);
             }
         }

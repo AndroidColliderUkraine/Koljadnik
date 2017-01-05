@@ -35,20 +35,21 @@ public final class DialogManager {
     }
 
 
-    public Dialog showProgressProcessingDialog(Context context) {
-        return showProgressDialog(mContext.getString(R.string.wait_please), context);
+    public void showProgressProcessingDialog(Context context) {
+        showProgressDialog(mContext.getString(R.string.wait_please), context);
     }
 
-    public Dialog showProgressDialog(String message, Context context) {
-        mDialogBuilder = new MaterialDialog.Builder(context)
-                .content(message)
-                .progress(true, 0)
-                .contentGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .backgroundColor(ContextCompat.getColor(mContext, android.R.color.white));
-        progressDialog = mDialogBuilder.show();
-        Log.i("DialogManager", "UI BLOCKED");
-        return progressDialog;
+    public void showProgressDialog(String message, Context context) {
+        if (progressDialog == null) {
+            mDialogBuilder = new MaterialDialog.Builder(context)
+                    .content(message)
+                    .progress(true, 0)
+                    .contentGravity(GravityEnum.CENTER)
+                    .cancelable(false)
+                    .backgroundColor(ContextCompat.getColor(mContext, android.R.color.white));
+            progressDialog = mDialogBuilder.show();
+            Log.i("DialogManager", "UI BLOCKED");
+        }
     }
 
     public void dismissProgressDialog() {
