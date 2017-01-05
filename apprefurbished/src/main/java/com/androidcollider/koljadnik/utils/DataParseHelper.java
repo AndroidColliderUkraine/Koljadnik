@@ -26,11 +26,11 @@ public class DataParseHelper {
 
         Integer i = 0;
 
-        i = parseMain(context, "koljadki.txt", jsonData, i, 0);
-        i = parseMain(context, "schedrivki.txt", jsonData, i, 1);
-        i = parseMain(context, "zasivannia.txt", jsonData, i, 2);
+        i = parseMain(context, "songsData/koljadki.txt", jsonData, i, 0);
+        i = parseMain(context, "songsData/schedrivki.txt", jsonData, i, 1);
+        i = parseMain(context, "songsData/zasivannia.txt", jsonData, i, 2);
         i = parseVinsh(context, jsonData, i, 3);
-        i = parseMain(context, "suchasni.txt", jsonData, i, 4);
+        i = parseMain(context, "songsData/suchasni.txt", jsonData, i, 4);
         i = parseSms(context, jsonData, i, 5);
         i = parseInshomovni(context, jsonData, i, 6);
 
@@ -94,7 +94,7 @@ public class DataParseHelper {
     }
 
     public static int parseVinsh(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("vinsh.txt")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("songsData/vinsh.txt")));
         // do reading, usually loop until end of file reading
         StringBuilder text = new StringBuilder();
         String title = "";
@@ -135,7 +135,7 @@ public class DataParseHelper {
     }
 
     public static int parseSms(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("sms.txt")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("songsData/sms.txt")));
         // do reading, usually loop until end of file reading
         StringBuilder text = new StringBuilder();
         String title = "";
@@ -218,7 +218,7 @@ public class DataParseHelper {
     public static int parseInshomovni(Context context, JSONObject jsonData, Integer i, int typeId) throws IOException, JSONException {
         StringBuilder text = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("inshomovni.txt")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open("songsData/inshomovni.txt")));
             while (true) {
                 String mLine = reader.readLine();
                 if (mLine != null) {
