@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.storage;
+package com.androidcollider.koljadnik.storage.remote;
 
 import android.util.Log;
 

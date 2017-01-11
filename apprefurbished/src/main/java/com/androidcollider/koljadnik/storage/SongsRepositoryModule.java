@@ -3,6 +3,12 @@ package com.androidcollider.koljadnik.storage;
 
 import android.content.Context;
 
+import com.androidcollider.koljadnik.storage.files.AssetsTextDataManager;
+import com.androidcollider.koljadnik.storage.local.SongsLocalDataSource;
+import com.androidcollider.koljadnik.storage.local.SongsRealmDataSource;
+import com.androidcollider.koljadnik.storage.remote.SongsFirebaseDataSource;
+import com.androidcollider.koljadnik.storage.remote.SongsRemoteDataSource;
+import com.androidcollider.koljadnik.storage.shared_prefs.SharedPreferencesManager;
 import com.androidcollider.koljadnik.utils.ConnectionInternetManager;
 
 import javax.inject.Singleton;

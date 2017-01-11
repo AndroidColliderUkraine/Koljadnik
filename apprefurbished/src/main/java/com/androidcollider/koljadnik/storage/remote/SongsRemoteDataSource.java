@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.storage;
+package com.androidcollider.koljadnik.storage.remote;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;

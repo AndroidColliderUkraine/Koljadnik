@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.storage;
+package com.androidcollider.koljadnik.storage.shared_prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
