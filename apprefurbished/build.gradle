@@ -1,19 +1,5 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.22.0'
-    }
-}
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'realm-android'
 apply plugin: 'me.tatarka.retrolambda'
@@ -33,6 +19,9 @@ android {
 
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -45,50 +34,64 @@ android {
     }
 }
 
+ext {
+    supportLibraryVersion = '25.0.1'
+    mockitoVersion = '2.5.5'
+    jUnitVersion = '4.12'
+    espressoVersion = '2.2.2'
+    daggerVersion = '2.5'
+    daggerAnnotationVersion = '1.0'
+    butterknifeVersion = '8.4.0'
+    gsonVersion = '2.6.2'
+    playServicesVersion = '10.0.1'
+    afollestadMaterialDialogVersion = '0.9.0.1'
+    crashlyticsVersion = '2.6.5'
+}
+
 dependencies {
 
     //ui testing
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //unit testing
-    testCompile "junit:junit:4.12"
+    testCompile "junit:junit:$jUnitVersion"
 
     //mock framework
-    testCompile "org.mockito:mockito-core:1.10.19"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
 
     //android support
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:design:25.0.1'
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:support-v4:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
 
     //dagger2
-    apt 'com.google.dagger:dagger-compiler:2.5'
-    compile 'com.google.dagger:dagger:2.5'
-    provided 'javax.annotation:jsr250-api:1.0'
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    provided "javax.annotation:jsr250-api:$daggerAnnotationVersion"
 
     //field and method binding
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     //serialization
-    compile 'com.google.code.gson:gson:2.6.2'
-
-    //Google Firebase services (realtime db)
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-database:10.0.1'
-
-    //material dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+    compile "com.google.code.gson:gson:$gsonVersion"
 
     //Google Play Services
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
+
+    //Google Firebase services (realtime db)
+    compile "com.google.firebase:firebase-core:$playServicesVersion"
+    compile "com.google.firebase:firebase-database:$playServicesVersion"
+
+    //material dialogs
+    compile "com.afollestad.material-dialogs:core:$afollestadMaterialDialogVersion"
 
     //Fabric Crashlytics (crash analytics)
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    compile("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion@aar") {
         transitive = true;
     }
 
+    apply plugin: 'com.google.gms.google-services'
 }
-apply plugin: 'com.google.gms.google-services'

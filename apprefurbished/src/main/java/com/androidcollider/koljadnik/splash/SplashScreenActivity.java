@@ -1,6 +1,5 @@
 package com.androidcollider.koljadnik.splash;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,14 +12,13 @@ import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.song_types.SongTypesActivity;
-import com.androidcollider.koljadnik.song_types.SongTypesActivityMVP;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 
 
-public class SplashScreenActivity extends CommonActivity implements SplashActivityMVP.View{
+public class SplashScreenActivity extends CommonActivity implements SplashActivityMVP.View {
 
     @BindView(R.id.iv_splash_title_main)
     ImageView iv_splash_title_main;

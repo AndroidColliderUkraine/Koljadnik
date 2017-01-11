@@ -3,6 +3,7 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
@@ -10,12 +11,14 @@ buildscript {
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "io.realm:realm-gradle-plugin:2.0.1"
         classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+        classpath 'io.fabric.tools:gradle:1.22.0'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
     }
 }

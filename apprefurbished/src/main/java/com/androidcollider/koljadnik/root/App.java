@@ -35,12 +35,14 @@ public class App extends Application/*MultiDexApplication*/ {
         Fabric.with(this, new Crashlytics());
 
         appComponent = DaggerAppComponent.builder().applicationModule(new ApplicationModule(this)).build();
-        Fabric.with(this, new Crashlytics(), new Answers());
 
         if (!BuildConfig.DEBUG) {
             getDefaultTracker();
         }
+
+        Fabric.with(this, new Crashlytics(), new Answers());
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.INFO);
+
         Realm.init(this);
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder().
                 schemaVersion(Settings.REALM_SCHEMA_VERSION).
