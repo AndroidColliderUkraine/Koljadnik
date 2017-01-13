@@ -14,7 +14,7 @@ import android.telephony.TelephonyManager;
  * @package com.defietser.managers
  */
 
-public final class ConnectionInternetManager {
+public class ConnectionInternetManager {
 
     private Context mContext;
 
