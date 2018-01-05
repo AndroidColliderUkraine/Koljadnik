@@ -4,10 +4,16 @@
     android:orientation="vertical"
     android:background="@color/splash_color">
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_splash"/>
+    <ImageView
         android:layout_width="250dp"
         android:id="@+id/iv_splash_title_main"
         android:src="@drawable/logo_main"
         android:layout_centerInParent="true"
+        android:tint="#e9e9d5"
         android:layout_height="50dp" />
 
     <ImageView

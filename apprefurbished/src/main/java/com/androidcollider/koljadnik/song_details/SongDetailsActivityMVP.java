@@ -7,7 +7,7 @@ import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 public interface SongDetailsActivityMVP {
 
-    interface View extends CoomonView{
+    interface View extends CoomonView {
         void updateView(SongDetailsViewModel songDetailsViewModel);
 
         void changeTextSize(int size, boolean showPlus, boolean showMinus);
@@ -19,6 +19,10 @@ public interface SongDetailsActivityMVP {
         void startShareActivity(String shareActivityTitle, String shareTitle, String shareText);
 
         void updateScrollSpeed(int speed);
+
+        void updateText(String songText);
+
+        void updateChordBlockVisibility(boolean isVisible);
     }
 
     interface Presenter {

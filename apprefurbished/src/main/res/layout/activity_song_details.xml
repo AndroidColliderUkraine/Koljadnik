@@ -36,7 +36,7 @@
                     android:padding="@dimen/common_padding_medium"
                     android:textColor="@color/text_color"
                     android:textIsSelectable="true"
-                    tools:text="(народна колядка)\n \n<chord>Am</chord>            <chord>E</chord> <chord>Am</chord>\nНова радість стала,\n<chord>C</chord>         <chord>G</chord> <chord>C</chord>\nЯка не бувала,\n <chord>C</chord>        <chord>G</chord>    <chord>Am</chord>      <chord>E7</chord>\nНад вертепом звізда ясна\n<chord>Am</chord>       <chord>Dm</chord>  <chord>E</chord> <chord>Am</chord>\nУ весь світ засіяла.\n\nДе Христос родився,\nЗ Діви воплотився,\nЯк чоловік пеленами\nУбого повився.\n\nПастушки з ягнятком\nПеред тим дитятком\nНа колінця припадають,\nЦаря-Бога вихваляють.\n\nОй Ти, Царю, Царю,\nНебесний Владарю,\nДаруй літа щасливії\nСего дому господарю.\n\nСего дому господарю\nІ сій господині,\nДаруй літа щасливії\nНашій славній Україні.\n\n\n"/>
+                    tools:text="Text"/>
 
                 <LinearLayout
                     android:id="@+id/cnt_source"
@@ -169,6 +169,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/cnt_chords"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

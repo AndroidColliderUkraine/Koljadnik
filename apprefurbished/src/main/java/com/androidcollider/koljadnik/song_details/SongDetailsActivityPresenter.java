@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
+import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
 
 public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Presenter {
@@ -108,7 +109,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
     @Override
     public void onAutoscrollChanged(int progress) {
         if (view != null) {
-            view.updateScrollSpeed(Math.round(progress / 10));
+            view.updateScrollSpeed(Math.round(progress / 8));
         }
     }
 
@@ -124,20 +125,30 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
 
     @Override
     public void clickOnChordPlusBtn() {
-
+        if (view != null && songText != null) {
+            songText = ChordUtils.upAccord(songText);
+            view.updateText(songText);
+        }
     }
 
     @Override
     public void clickOnChordMinusBtn() {
-
+        if (view != null && songText != null) {
+            songText = ChordUtils.downAccord(songText);
+            view.updateText(songText);
+        }
     }
+
+    private String songText;
 
     private OnReadListener<SongDetailsViewModel> updateViewListener = new OnReadListener<SongDetailsViewModel>() {
         @Override
         public void onSuccess(SongDetailsViewModel songDetailsViewModel) {
+            songText = songDetailsViewModel.text;
             if (view != null) {
                 view.unblockUi();
                 view.updateView(songDetailsViewModel);
+                view.updateChordBlockVisibility(songDetailsViewModel.text.contains(ChordUtils.CHORD_TAG_OPEN));
             }
         }
 

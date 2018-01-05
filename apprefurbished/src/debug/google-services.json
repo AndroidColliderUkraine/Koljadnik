@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1094838258358",
-    "firebase_url": "https://koljad-2a8ff.firebaseio.com",
-    "project_id": "koljad-2a8ff",
-    "storage_bucket": "koljad-2a8ff.appspot.com"
+    "project_number": "500843459539",
+    "firebase_url": "https://koljadnik-v2-dev.firebaseio.com",
+    "project_id": "koljadnik-v2-dev",
+    "storage_bucket": "koljadnik-v2-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1094838258358:android:d95045e68aeaadc7",
+        "mobilesdk_app_id": "1:500843459539:android:d95045e68aeaadc7",
         "android_client_info": {
           "package_name": "com.androidcollider.koljadnik.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1094838258358-4p29vta50lcgh2814v2j0tpdno0bj1fb.apps.googleusercontent.com",
+          "client_id": "500843459539-2dhlco3dkgm3c3jrdcb4pip94ladptkp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCrzNi80k-vEIFV7hpruKlxi8aXdATGerw"
+          "current_key": "AIzaSyAJWa0Bn1-llXTHMrIN1CgwxWG_aTBolNE"
         }
       ],
       "services": {

@@ -16,6 +16,7 @@ import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.custom_views.AutoscrollScrollView;
 import com.androidcollider.koljadnik.root.App;
+import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;
@@ -55,6 +56,9 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @BindView(R.id.sb_size)
     SeekBar sbSize;
+
+    @BindView(R.id.cnt_chords)
+    View cntChords;
 
     @Inject
     SongDetailsActivityMVP.Presenter presenter;
@@ -182,7 +186,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @Override
     public void updateView(SongDetailsViewModel songDetailsViewModel) {
-        tvText.setText(songDetailsViewModel.text);
+        updateText(songDetailsViewModel.text);
         setToolbarTitle(songDetailsViewModel.name);
 
         if (songDetailsViewModel.source != null && !songDetailsViewModel.source.isEmpty()) {
@@ -190,6 +194,16 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
         } else {
             cntSource.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void updateText(String songText) {
+        tvText.setText(songText.replace(ChordUtils.CHORD_TAG_OPEN,"").replace(ChordUtils.CHORD_TAG_CLOSE,""));
+    }
+
+    @Override
+    public void updateChordBlockVisibility(boolean isVisible) {
+        cntChords.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 
     @Override

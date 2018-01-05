@@ -1,10 +1,11 @@
 package com.androidcollider.koljadnik.songs_list;
 
 
+import com.androidcollider.koljadnik.utils.ChordUtils;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class SongItemViewModel {
 
@@ -19,7 +20,7 @@ public class SongItemViewModel {
         this.name = name;
         this.rating = rating;
         this.text = text;
-        this.hasNota = new Random().nextBoolean();
+        this.hasNota = text.contains(ChordUtils.CHORD_TAG_OPEN);
     }
 
     public static List<SongItemViewModel> orderBy(List<SongItemViewModel> list, OrderType orderType) {
