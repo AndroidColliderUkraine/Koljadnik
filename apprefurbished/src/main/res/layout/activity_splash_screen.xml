@@ -36,8 +36,8 @@
                 android:layout_above="@id/iv_splash_title_main"
                 android:layout_alignLeft="@id/iv_splash_title_main"
                 android:layout_marginBottom="-28dp"
-                android:layout_marginLeft="-15dp"
-                android:src="@drawable/logo_hat"/>
+                android:layout_marginLeft="-18dp"
+                android:src="@drawable/img_santa_hat"/>
         </RelativeLayout>
 
         <View
@@ -53,7 +53,7 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="@string/android_collider_company"
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/text_xsmall"/>
+        android:textColor="#4b220e"
+        android:textSize="13sp"/>
 
 </RelativeLayout>
