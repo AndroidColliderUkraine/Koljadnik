@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Колядник</string>
-    <string name="android_collider_company">Android Collider © 2016</string>
+    <string name="android_collider_company">Android Collider © 2018</string>
     <string name="dzerela">Джерела</string>
     <string name="nadislaty_rozrobniku">Надіслати Розробнику</string>
     <string name="pishit_sudi">Пишіть сюди...</string>
