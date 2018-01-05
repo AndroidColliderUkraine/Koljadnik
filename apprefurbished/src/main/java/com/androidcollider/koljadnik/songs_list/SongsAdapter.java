@@ -32,7 +32,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_song, parent, false);
+            .inflate(R.layout.item_song, parent, false);
         return new Holder(v);
     }
 
@@ -47,6 +47,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.Holder> {
         SongItemViewModel songItemViewModel = songItemViewModels.get(position);
 
         holder.tvName.setText(songItemViewModel.name);
+        holder.ivNota.setVisibility(songItemViewModel.hasNota ? View.VISIBLE : View.GONE);
 
         switch (songItemViewModel.rating) {
             case 1:
@@ -82,6 +83,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.Holder> {
 
         @BindView(R.id.iv_item_song_rating)
         ImageView ivRating;
+
+        @BindView(R.id.iv_nota)
+        ImageView ivNota;
 
         View itemView;
 

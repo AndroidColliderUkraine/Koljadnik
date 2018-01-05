@@ -18,10 +18,17 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+    }
+}
+subprojects{
+    repositories {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
     }
 }
+
+//apply plugin: 'android-reporting'
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

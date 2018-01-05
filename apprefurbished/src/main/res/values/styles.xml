@@ -36,4 +36,9 @@
         <item name="android:overScrollMode">never</item>
     </style>
 
+
+    <style name="SeekBarStyle" parent="AppTheme">
+        <item name="colorAccent">@color/element_color</item>
+    </style>
+
 </resources>

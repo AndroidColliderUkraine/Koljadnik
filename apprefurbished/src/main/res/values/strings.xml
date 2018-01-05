@@ -17,4 +17,9 @@
     <string name="you_cannot_send">Ви не можете відправити лист без тексту</string>
     <string name="wait_please">Зачекайте будь ласка...</string>
     <string name="unable_to_make_current_operation">Неможливо виконати дану операцію</string>
+    <string name="hide_instruments">Сховати інструменти</string>
+    <string name="show_instruments">Показати інструменти</string>
+    <string name="chords">Аккорди</string>
+    <string name="autoscroll">Автопрокрутка</string>
+    <string name="size">Розмір</string>
 </resources>

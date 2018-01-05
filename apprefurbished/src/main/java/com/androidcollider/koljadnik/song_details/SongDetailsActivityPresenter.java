@@ -31,7 +31,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
     @Override
     public void initData() {
         UiAction uiAction = model.getSong(updateViewListener);
-        if (uiAction == UiAction.BLOCK_UI && view != null){
+        if (uiAction == UiAction.BLOCK_UI && view != null) {
             view.blockUi();
         }
         updateTextSize();
@@ -52,8 +52,8 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
     private void updateTextSize() {
         if (view != null) {
             view.changeTextSize(sessionSettingsManager.getTextSize(),
-                    sessionSettingsManager.getTextSize() < MAX_TEXT_SIZE,
-                    sessionSettingsManager.getTextSize() > MIN_TEXT_SIZE);
+                sessionSettingsManager.getTextSize() < MAX_TEXT_SIZE,
+                sessionSettingsManager.getTextSize() > MIN_TEXT_SIZE);
         }
     }
 
@@ -76,7 +76,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
                 }
             }
         });
-        if (uiAction == UiAction.BLOCK_UI && view != null){
+        if (uiAction == UiAction.BLOCK_UI && view != null) {
             view.blockUi();
         }
     }
@@ -100,9 +100,36 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
                 }
             }
         });
-        if (uiAction == UiAction.BLOCK_UI && view != null){
+        if (uiAction == UiAction.BLOCK_UI && view != null) {
             view.blockUi();
         }
+    }
+
+    @Override
+    public void onAutoscrollChanged(int progress) {
+        if (view != null) {
+            view.updateScrollSpeed(Math.round(progress / 10));
+        }
+    }
+
+    @Override
+    public void onSizeChanged(int progress) {
+        if (view != null) {
+            int size = Math.round(((float) (MAX_TEXT_SIZE - MIN_TEXT_SIZE) / 100f) * progress + MIN_TEXT_SIZE);
+            view.changeTextSize(size,
+                sessionSettingsManager.getTextSize() < MAX_TEXT_SIZE,
+                sessionSettingsManager.getTextSize() > MIN_TEXT_SIZE);
+        }
+    }
+
+    @Override
+    public void clickOnChordPlusBtn() {
+
+    }
+
+    @Override
+    public void clickOnChordMinusBtn() {
+
     }
 
     private OnReadListener<SongDetailsViewModel> updateViewListener = new OnReadListener<SongDetailsViewModel>() {

@@ -17,6 +17,8 @@ public interface SongDetailsActivityMVP {
         void startSmsActivity(String smsText);
 
         void startShareActivity(String shareActivityTitle, String shareTitle, String shareText);
+
+        void updateScrollSpeed(int speed);
     }
 
     interface Presenter {
@@ -31,6 +33,14 @@ public interface SongDetailsActivityMVP {
         void clickOnShareBtn();
 
         void clickOnSmsBtn();
+
+        void onAutoscrollChanged(int progress);
+
+        void onSizeChanged(int progress);
+
+        void clickOnChordPlusBtn();
+
+        void clickOnChordMinusBtn();
     }
 
     interface Model {

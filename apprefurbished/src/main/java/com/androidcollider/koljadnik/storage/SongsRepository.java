@@ -50,7 +50,7 @@ public class SongsRepository implements SongsDataSource {
     @Override
     public UiAction getSongTypes(final OnReadListener<List<SongType>> onReadListener) {
         if (!connectionInternetManager.isNetworkConnected() ||
-                isNotExpired(sharedPreferencesManager.getLastUpdateForClass(SongType.class))) {
+            isNotExpired(sharedPreferencesManager.getLastUpdateForClass(SongType.class))) {
             if (cachedSongTypes != null) {
                 onReadListener.onSuccess(cachedSongTypes);
                 return UiAction.DONT_BLOCK_UI;
@@ -101,7 +101,7 @@ public class SongsRepository implements SongsDataSource {
 
             @Override
             public void onError(String error) {
-
+                onReadListener.onError(error);
             }
         });
 
@@ -115,7 +115,7 @@ public class SongsRepository implements SongsDataSource {
     @Override
     public UiAction getSongs(OnReadListener<List<Song>> onReadListener) {
         if (!connectionInternetManager.isNetworkConnected() ||
-                isNotExpired(sharedPreferencesManager.getLastUpdateForClass(Song.class))) {
+            isNotExpired(sharedPreferencesManager.getLastUpdateForClass(Song.class))) {
             if (cachedSongs != null) {
                 onReadListener.onSuccess(cachedSongs);
                 return UiAction.DONT_BLOCK_UI;
@@ -227,7 +227,7 @@ public class SongsRepository implements SongsDataSource {
     @Override
     public UiAction getRatings(OnReadListener<List<SongRating>> onReadListener) {
         if (!connectionInternetManager.isNetworkConnected() ||
-                isNotExpiredRating(sharedPreferencesManager.getLastUpdateForClass(SongRating.class))) {
+            isNotExpiredRating(sharedPreferencesManager.getLastUpdateForClass(SongRating.class))) {
             if (cachedSongRatings != null) {
                 onReadListener.onSuccess(cachedSongRatings);
                 return UiAction.DONT_BLOCK_UI;
@@ -288,7 +288,7 @@ public class SongsRepository implements SongsDataSource {
 
             @Override
             public void onError(String error) {
-
+                onReadListener.onError(error);
             }
         });
 
