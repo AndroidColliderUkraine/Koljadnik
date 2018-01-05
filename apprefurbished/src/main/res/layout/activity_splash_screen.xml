@@ -1,39 +1,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/splash_color">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/splash_color"
+                android:orientation="vertical">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_splash"/>
-    <ImageView
-        android:layout_width="250dp"
-        android:id="@+id/iv_splash_title_main"
-        android:src="@drawable/logo_main"
-        android:layout_centerInParent="true"
-        android:tint="#e9e9d5"
-        android:layout_height="50dp" />
+        android:src="@drawable/bg_splash_orange"/>
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="-15dp"
-        android:layout_marginBottom="-28dp"
-        android:id="@+id/iv_splash_title_hat"
-        android:src="@drawable/logo_hat"
-        android:layout_alignLeft="@id/iv_splash_title_main"
-        android:layout_above="@id/iv_splash_title_main"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_splash_title_main"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo_main"
+                android:tint="#9f4e26"/>
+
+            <ImageView
+                android:id="@+id/iv_splash_title_hat"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/iv_splash_title_main"
+                android:layout_alignLeft="@id/iv_splash_title_main"
+                android:layout_marginBottom="-28dp"
+                android:layout_marginLeft="-15dp"
+                android:src="@drawable/logo_hat"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_padding_xxxlarge"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_ac"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/android_collider_company"
-        android:textColor="@color/edit_text_white_color"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:layout_marginBottom="10dp" />
+        android:text="@string/android_collider_company"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_xsmall"/>
 
 </RelativeLayout>
