@@ -23,6 +23,8 @@ public interface SongsActivityMVP {
         void clickOnOrderMenuBtn();
         void clickOnOrderBtn(OrderType orderType);
         void proceedSearch(String searchStr);
+        void clickOnFabAll();
+        void clickOnFabWithChords();
     }
 
     interface Model {

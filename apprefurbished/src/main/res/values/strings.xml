@@ -22,4 +22,5 @@
     <string name="chords">Аккорди</string>
     <string name="autoscroll">Автопрокрутка</string>
     <string name="size">Розмір</string>
+    <string name="msg_empty_songs">Нажаль, жодна пісня не відповідає заданим критеріям в цій категорії</string>
 </resources>

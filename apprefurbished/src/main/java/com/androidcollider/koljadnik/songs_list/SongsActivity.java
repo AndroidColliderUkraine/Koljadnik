@@ -16,6 +16,7 @@ import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.song_details.SongDetailsActivity;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
     @BindView(R.id.et_search_song)
     EditText etSearchSong;
 
+    @BindView(R.id.fab_menu)
+    FloatingActionMenu fabMenu;
+
+    @BindView(R.id.empty_view)
+    View emptyView;
+
     @Inject
     SongsActivityMVP.Presenter presenter;
 
@@ -50,10 +57,10 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().hasExtra(EXTRA_SONG_TYPE_ID)){
+        if (getIntent().hasExtra(EXTRA_SONG_TYPE_ID)) {
             typeId = getIntent().getIntExtra(EXTRA_SONG_TYPE_ID, 0);
         }
-        if (getIntent().hasExtra(EXTRA_SONG_TYPE_NAME)){
+        if (getIntent().hasExtra(EXTRA_SONG_TYPE_NAME)) {
             String typeName = getIntent().getStringExtra(EXTRA_SONG_TYPE_NAME);
             setToolbarTitle(typeName);
         }
@@ -73,7 +80,7 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
 
     private void buildAndInjectComponent() {
         DaggerSongsComponent.builder()
-                .appComponent(((App)getApplication()).getAppComponent())
+                .appComponent(((App) getApplication()).getAppComponent())
                 .songsModule(new SongsModule(typeId))
                 .build()
                 .inject(this);
@@ -97,6 +104,8 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
     @Override
     public void updateAdapter(List<SongItemViewModel> songItemViewModels) {
         songsAdapter.updateData(songItemViewModels);
+        rvSongs.setVisibility(songItemViewModels.size() > 0 ? View.VISIBLE : View.GONE);
+        emptyView.setVisibility(songItemViewModels.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -133,9 +142,10 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
         }
     };
 
-    @OnClick({R.id.btn_sort, R.id.btn_sort_by_alphabet, R.id.btn_sort_by_rating,})
-    public void onClickSort(View v){
-        switch (v.getId()){
+    @OnClick({R.id.btn_sort, R.id.btn_sort_by_alphabet, R.id.btn_sort_by_rating,
+            R.id.fab_all, R.id.fab_with_chords})
+    public void onClickSort(View v) {
+        switch (v.getId()) {
             case R.id.btn_sort:
                 presenter.clickOnOrderMenuBtn();
                 break;
@@ -145,11 +155,19 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
             case R.id.btn_sort_by_rating:
                 presenter.clickOnOrderBtn(OrderType.BY_RATING);
                 break;
+            case R.id.fab_all:
+                presenter.clickOnFabAll();
+                fabMenu.close(true);
+                break;
+            case R.id.fab_with_chords:
+                presenter.clickOnFabWithChords();
+                fabMenu.close(true);
+                break;
         }
     }
 
     @Override
-    public void switchOrderMenuVisibility(){
+    public void switchOrderMenuVisibility() {
         isOrderMenuOpened = !isOrderMenuOpened;
         cnOrderMenu.setVisibility(isOrderMenuOpened ? View.VISIBLE : View.GONE);
     }

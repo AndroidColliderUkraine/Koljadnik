@@ -16,6 +16,11 @@ public abstract class CommonActivity extends AppCompatActivity implements Coomon
 
     @Inject
     DialogManager dialogManager;
+    private State state = State.PAUSE;
+
+    private enum State{
+        RESUME, PAUSE
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,18 @@ public abstract class CommonActivity extends AppCompatActivity implements Coomon
     }
 
     protected abstract int getContentViewRes();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        state = State.RESUME;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        state = State.PAUSE;
+    }
 
     @Override
     public void blockUi() {
@@ -53,5 +70,13 @@ public abstract class CommonActivity extends AppCompatActivity implements Coomon
     protected void onDestroy() {
         unblockUi();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (state == State.PAUSE){
+            return;
+        }
+        super.onBackPressed();
     }
 }
