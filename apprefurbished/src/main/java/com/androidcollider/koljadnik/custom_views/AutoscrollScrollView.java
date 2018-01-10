@@ -16,6 +16,7 @@ import java.util.TimerTask;
  */
 public class AutoscrollScrollView extends ScrollView {
 
+    private final static int PERIOD = 100;
     private int scrollSpeed;
     private Timer scrollTimer;
 
@@ -48,14 +49,12 @@ public class AutoscrollScrollView extends ScrollView {
         }
         if (scrollSpeed > 0) {
             scrollTimer = new Timer();
-            int period = scrollSpeed < 5 ? 100 : 50;
-            final int speed = scrollSpeed < 5 ? scrollSpeed : scrollSpeed / 2;
             scrollTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    AutoscrollScrollView.this.scrollTo(0, AutoscrollScrollView.this.getScrollY() + speed);
+                    post(() -> AutoscrollScrollView.this.scrollTo(0, AutoscrollScrollView.this.getScrollY() + 1));
                 }
-            }, 0, period);
+            }, 0, Math.round(PERIOD / scrollSpeed));
         }
     }
 }

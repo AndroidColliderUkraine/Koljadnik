@@ -122,6 +122,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
         super.onResume();
         presenter.setView(this);
         presenter.initData();
+        presenter.onSizeChanged(sbSize.getProgress());
     }
 
     @Override
