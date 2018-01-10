@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_color"
     android:orientation="vertical">
 
@@ -43,6 +44,17 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/common_padding_large"
+            android:gravity="center"
+            android:alpha="0.9"
+            android:textColor="@color/element_color"
+            android:text="@string/msg_empty_songs"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_songs"
@@ -53,6 +65,34 @@
             android:paddingLeft="@dimen/common_padding_medium"
             android:paddingRight="@dimen/common_padding_medium" />
 
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            fab:menu_showShadow="true"
+            android:layout_marginRight="@dimen/common_padding_medium"
+            android:layout_marginBottom="@dimen/common_padding_large"
+            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_colorPressed="@color/fab_menu_color_pressed"
+            fab:menu_colorRipple="@color/md_divider_black"
+            fab:menu_icon="@drawable/ic_filter">
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_all"
+                fab:fab_label="Всі пісні"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_with_chords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_nota_white"
+                fab:fab_label="З аккордами"
+                fab:fab_size="mini" />
+        </com.github.clans.fab.FloatingActionMenu>
 
         <LinearLayout
             android:id="@+id/cnt_order_menu"

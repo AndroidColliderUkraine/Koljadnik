@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
@@ -15,7 +16,8 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
 
     private String searchStr = "";
     private OrderType orderType = OrderType.BY_ALPHABET;
-
+    private boolean onlyWithChords = false;
+    private List<SongItemViewModel> currentSongs = new ArrayList<>();
 
     public SongsActivityPresenter(SongsActivityMVP.Model model) {
         this.model = model;
@@ -55,7 +57,8 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
             public void onSuccess(List<SongItemViewModel> songTypes) {
                 if (view != null) {
                     view.unblockUi();
-                    view.updateAdapter(songTypes);
+                    currentSongs = songTypes;
+                    view.updateAdapter(filterSongs(currentSongs));
                     view.switchOrderMenuVisibility();
                 }
             }
@@ -76,12 +79,33 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
         model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener, callDialogCallback);
     }
 
+    @Override
+    public void clickOnFabAll() {
+        if (onlyWithChords) {
+            onlyWithChords = false;
+            if (view != null){
+                view.updateAdapter(filterSongs(currentSongs));
+            }
+        }
+    }
+
+    @Override
+    public void clickOnFabWithChords() {
+        if (!onlyWithChords) {
+            onlyWithChords = true;
+            if (view != null){
+                view.updateAdapter(filterSongs(currentSongs));
+            }
+        }
+    }
+
     private OnReadListener<List<SongItemViewModel>> updateAdapterListener = new OnReadListener<List<SongItemViewModel>>() {
         @Override
         public void onSuccess(List<SongItemViewModel> songTypes) {
             if (view != null) {
                 view.unblockUi();
-                view.updateAdapter(songTypes);
+                currentSongs = songTypes;
+                view.updateAdapter(filterSongs(currentSongs));
             }
         }
 
@@ -102,4 +126,18 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
             }
         }
     };
+
+    private List<SongItemViewModel> filterSongs(List<SongItemViewModel> src){
+        if (!onlyWithChords){
+            return src;
+        } else {
+            List<SongItemViewModel> filteredList = new ArrayList<>();
+            for (SongItemViewModel item : src) {
+                if (item.hasNota){
+                    filteredList.add(item);
+                }
+            }
+            return filteredList;
+        }
+    }
 }

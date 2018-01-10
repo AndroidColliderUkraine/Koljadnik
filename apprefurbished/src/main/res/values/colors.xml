@@ -13,4 +13,5 @@
     <color name="christmas_tree_color">#ff158705</color>
 
     <color name="logo_tint_color">#e9e9d5</color>
+    <color name="fab_menu_color_pressed">#d94235</color>
 </resources>
