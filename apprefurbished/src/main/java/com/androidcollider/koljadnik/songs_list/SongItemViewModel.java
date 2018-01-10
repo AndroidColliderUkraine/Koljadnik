@@ -3,11 +3,15 @@ package com.androidcollider.koljadnik.songs_list;
 
 import com.androidcollider.koljadnik.utils.ChordUtils;
 
+import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class SongItemViewModel {
+
+    private final static Collator ukCollator = Collator.getInstance(new Locale("uk"));
 
     public final int songId;
     public final String name;
@@ -35,7 +39,7 @@ public class SongItemViewModel {
         return list;
     }
 
-    private static Comparator<SongItemViewModel> comparatorByAlphabet = (o1, o2) -> o1.name.compareTo(o2.name);
+    private static Comparator<SongItemViewModel> comparatorByAlphabet = (o1, o2) -> ukCollator.compare(o1.name, o2.name);
 
     private static Comparator<SongItemViewModel> comparatorByRating = (o1, o2) -> Integer.valueOf(o2.rating).compareTo(o1.rating);
 }
