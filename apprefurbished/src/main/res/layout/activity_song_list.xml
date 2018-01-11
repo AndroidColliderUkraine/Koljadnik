@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_all"
-                fab:fab_label="Всі пісні"
+                fab:fab_label="@string/all_songs"
                 fab:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_nota_white"
-                fab:fab_label="З аккордами"
+                fab:fab_label="@string/with_chords"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
 

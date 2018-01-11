@@ -23,4 +23,6 @@
     <string name="autoscroll">Автопрокрутка</string>
     <string name="size">Розмір</string>
     <string name="msg_empty_songs">Нажаль, жодна пісня не відповідає заданим критеріям в цій категорії</string>
+    <string name="all_songs">Всі пісні</string>
+    <string name="with_chords">З акордами</string>
 </resources>
