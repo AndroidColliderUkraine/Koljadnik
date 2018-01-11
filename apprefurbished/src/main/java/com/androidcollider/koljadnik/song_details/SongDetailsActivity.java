@@ -18,6 +18,7 @@ import com.androidcollider.koljadnik.custom_views.AutoscrollScrollView;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.crashlytics.android.Crashlytics;
+import com.github.clans.fab.FloatingActionButton;
 
 import javax.inject.Inject;
 
@@ -59,6 +60,10 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @BindView(R.id.cnt_chords)
     View cntChords;
+
+    @BindView(R.id.fab_disable_scroll)
+    FloatingActionButton fabDisableScroll;
+
 
     @Inject
     SongDetailsActivityMVP.Presenter presenter;
@@ -140,7 +145,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
         return true;
     }
 
-    @OnClick({R.id.btn_chord_minus, R.id.btn_chord_plus, R.id.btn_hide_expand})
+    @OnClick({R.id.btn_chord_minus, R.id.btn_chord_plus, R.id.btn_hide_expand, R.id.fab_disable_scroll})
     public void onClickPlusMinus(View v) {
         switch (v.getId()) {
             case R.id.btn_chord_minus:
@@ -152,6 +157,9 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
             case R.id.btn_hide_expand:
                 isInstrumentExpand = !isInstrumentExpand;
                 animateHideExpand();
+                break;
+            case R.id.fab_disable_scroll:
+                sbAutoscroll.setProgress(0);
                 break;
         }
     }
@@ -199,7 +207,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @Override
     public void updateText(String songText) {
-        tvText.setText(songText.replace(ChordUtils.CHORD_TAG_OPEN,"").replace(ChordUtils.CHORD_TAG_CLOSE,""));
+        tvText.setText(songText.replace(ChordUtils.CHORD_TAG_OPEN, "").replace(ChordUtils.CHORD_TAG_CLOSE, ""));
     }
 
     @Override
@@ -300,6 +308,11 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @Override
     public void updateScrollSpeed(int speed) {
+        if (speed == 0) {
+            fabDisableScroll.hide(!fabDisableScroll.isHidden());
+        } else {
+            fabDisableScroll.show(fabDisableScroll.isHidden());
+        }
         svScroll.setScrollSpeed(speed);
     }
 }

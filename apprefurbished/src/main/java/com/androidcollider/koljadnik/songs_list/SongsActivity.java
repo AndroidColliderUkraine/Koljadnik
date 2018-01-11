@@ -158,10 +158,12 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
             case R.id.fab_all:
                 presenter.clickOnFabAll();
                 fabMenu.close(true);
+                fabMenu.getMenuIconView().setImageResource(R.drawable.ic_filter);
                 break;
             case R.id.fab_with_chords:
                 presenter.clickOnFabWithChords();
                 fabMenu.close(true);
+                fabMenu.getMenuIconView().setImageResource(R.drawable.ic_filter_with_nota);
                 break;
         }
     }
