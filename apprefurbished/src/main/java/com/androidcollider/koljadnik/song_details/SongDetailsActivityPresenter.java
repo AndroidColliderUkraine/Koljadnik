@@ -1,5 +1,6 @@
 package com.androidcollider.koljadnik.song_details;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.contants.UiAction;
@@ -8,6 +9,8 @@ import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
 
 public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Presenter {
+
+    public final static String ARGS_SONG_TEXT = "song_text";
 
     public static final int MIN_TEXT_SIZE = 10;
     public static final int MAX_TEXT_SIZE = 28;
@@ -139,16 +142,32 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
         }
     }
 
+    @Override
+    public void onSaveInstantState(Bundle outState) {
+        outState.putString(ARGS_SONG_TEXT, songText);
+    }
+
+    @Override
+    public void onRestoreInstantState(Bundle savedInstanceState) {
+        if (savedInstanceState.containsKey(ARGS_SONG_TEXT)){
+            songText = savedInstanceState.getString(ARGS_SONG_TEXT);
+        }
+    }
+
     private String songText;
 
     private OnReadListener<SongDetailsViewModel> updateViewListener = new OnReadListener<SongDetailsViewModel>() {
         @Override
         public void onSuccess(SongDetailsViewModel songDetailsViewModel) {
-            songText = songDetailsViewModel.text;
+            if (songText == null) {
+                songText = songDetailsViewModel.getText();
+            } else {
+                songDetailsViewModel.setText(songText);
+            }
             if (view != null) {
                 view.unblockUi();
                 view.updateView(songDetailsViewModel);
-                view.updateChordBlockVisibility(songDetailsViewModel.text.contains(ChordUtils.CHORD_TAG_OPEN));
+                view.updateChordBlockVisibility(songDetailsViewModel.getText().contains(ChordUtils.CHORD_TAG_OPEN));
             }
         }
 

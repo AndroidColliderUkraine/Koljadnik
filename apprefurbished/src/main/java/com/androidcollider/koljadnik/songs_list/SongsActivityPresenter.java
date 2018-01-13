@@ -1,5 +1,6 @@
 package com.androidcollider.koljadnik.songs_list;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
+
+    public final static String ARGS_IS_CHORD_FILTERED_NAME = "is_chord_filtered";
 
     @Nullable
     private SongsActivityMVP.View view;
@@ -31,6 +34,13 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
     @Override
     public void initData() {
         model.getSongsBySearchAndOrdered(searchStr, orderType, updateAdapterListener, callDialogCallback);
+    }
+
+    @Override
+    public void updateFilterState(Bundle savedState) {
+        if (savedState != null && savedState.containsKey(ARGS_IS_CHORD_FILTERED_NAME)){
+            onlyWithChords = savedState.getBoolean(ARGS_IS_CHORD_FILTERED_NAME);
+        }
     }
 
     @Override
@@ -58,7 +68,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
                 if (view != null) {
                     view.unblockUi();
                     currentSongs = songTypes;
-                    view.updateAdapter(filterSongs(currentSongs));
+                    view.updateAdapter(filterSongs(currentSongs), onlyWithChords);
                     view.switchOrderMenuVisibility();
                 }
             }
@@ -84,7 +94,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
         if (onlyWithChords) {
             onlyWithChords = false;
             if (view != null){
-                view.updateAdapter(filterSongs(currentSongs));
+                view.updateAdapter(filterSongs(currentSongs), onlyWithChords);
             }
         }
     }
@@ -94,9 +104,14 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
         if (!onlyWithChords) {
             onlyWithChords = true;
             if (view != null){
-                view.updateAdapter(filterSongs(currentSongs));
+                view.updateAdapter(filterSongs(currentSongs), onlyWithChords);
             }
         }
+    }
+
+    @Override
+    public void onSaveInstantState(Bundle outState) {
+        outState.putBoolean(ARGS_IS_CHORD_FILTERED_NAME, onlyWithChords);
     }
 
     private OnReadListener<List<SongItemViewModel>> updateAdapterListener = new OnReadListener<List<SongItemViewModel>>() {
@@ -105,7 +120,7 @@ public class SongsActivityPresenter implements SongsActivityMVP.Presenter {
             if (view != null) {
                 view.unblockUi();
                 currentSongs = songTypes;
-                view.updateAdapter(filterSongs(currentSongs));
+                view.updateAdapter(filterSongs(currentSongs), onlyWithChords);
             }
         }
 

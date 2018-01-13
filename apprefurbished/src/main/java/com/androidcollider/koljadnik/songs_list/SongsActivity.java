@@ -75,6 +75,8 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
         presenter.setView(this);
         if (savedInstanceState == null) {
             presenter.initData();
+        } else {
+            presenter.updateFilterState(savedInstanceState);
         }
     }
 
@@ -102,10 +104,11 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
     }
 
     @Override
-    public void updateAdapter(List<SongItemViewModel> songItemViewModels) {
+    public void updateAdapter(List<SongItemViewModel> songItemViewModels, boolean withFilter) {
         songsAdapter.updateData(songItemViewModels);
         rvSongs.setVisibility(songItemViewModels.size() > 0 ? View.VISIBLE : View.GONE);
         emptyView.setVisibility(songItemViewModels.size() == 0 ? View.VISIBLE : View.GONE);
+        fabMenu.getMenuIconView().setImageResource(withFilter ? R.drawable.ic_filter_with_nota : R.drawable.ic_filter);
     }
 
     @Override
@@ -158,12 +161,10 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
             case R.id.fab_all:
                 presenter.clickOnFabAll();
                 fabMenu.close(true);
-                fabMenu.getMenuIconView().setImageResource(R.drawable.ic_filter);
                 break;
             case R.id.fab_with_chords:
                 presenter.clickOnFabWithChords();
                 fabMenu.close(true);
-                fabMenu.getMenuIconView().setImageResource(R.drawable.ic_filter_with_nota);
                 break;
         }
     }
@@ -183,5 +184,11 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
             overridePendingTransition(R.anim.right_in, R.anim.left_out);
         }
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        presenter.onSaveInstantState(outState);
     }
 }

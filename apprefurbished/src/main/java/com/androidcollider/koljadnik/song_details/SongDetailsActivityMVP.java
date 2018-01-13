@@ -1,6 +1,8 @@
 package com.androidcollider.koljadnik.song_details;
 
 
+import android.os.Bundle;
+
 import com.androidcollider.koljadnik.common.CoomonView;
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
@@ -45,6 +47,10 @@ public interface SongDetailsActivityMVP {
         void clickOnChordPlusBtn();
 
         void clickOnChordMinusBtn();
+
+        void onSaveInstantState(Bundle outState);
+
+        void onRestoreInstantState(Bundle savedInstanceState);
     }
 
     interface Model {

@@ -79,7 +79,11 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
             songId = getIntent().getIntExtra(EXTRA_SONG_ID, 0);
         }
         buildAndInjectComponent();
-
+        presenter.setView(this);
+        if (savedInstanceState != null){
+            presenter.onRestoreInstantState(savedInstanceState);
+        }
+        presenter.initData();
         sbAutoscroll.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -125,9 +129,6 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.setView(this);
-        presenter.initData();
-        presenter.onSizeChanged(sbSize.getProgress());
     }
 
     @Override
@@ -195,7 +196,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @Override
     public void updateView(SongDetailsViewModel songDetailsViewModel) {
-        updateText(songDetailsViewModel.text);
+        updateText(songDetailsViewModel.getText());
         setToolbarTitle(songDetailsViewModel.name);
 
         if (songDetailsViewModel.source != null && !songDetailsViewModel.source.isEmpty()) {
@@ -314,5 +315,11 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
             fabDisableScroll.show(fabDisableScroll.isHidden());
         }
         svScroll.setScrollSpeed(speed);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        presenter.onSaveInstantState(outState);
     }
 }
