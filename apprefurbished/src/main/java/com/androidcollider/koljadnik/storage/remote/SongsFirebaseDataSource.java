@@ -38,7 +38,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             try {
                                 list.add(postSnapshot.getValue(SongType.class));
-                            } catch (DatabaseException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -77,7 +77,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                             source = postSnapshot.child("source").getValue(String.class);
                         }
                         list.add(new Song(id, name, idType, text, remarks, source, updatedAt));
-                    } catch (DatabaseException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
