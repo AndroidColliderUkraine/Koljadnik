@@ -18,19 +18,50 @@
             android:id="@+id/sp_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_xxlarge"
+            android:background="@android:color/transparent"
+            android:popupBackground = "@android:color/transparent"/>
+
+        <Spinner
+            android:id="@+id/sp_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/common_padding_large"
             android:background="@android:color/transparent"
             android:popupBackground = "@android:color/transparent"/>
 
         <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_large"
+            android:background="@drawable/background_for_big_text"
+            android:gravity="start"
+            android:hint="@string/name"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/common_padding_large"
+            android:textColor="@color/text_color" />
+
+        <EditText
             android:id="@+id/et_feedback"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/common_padding_xlarge"
+            android:layout_marginBottom="@dimen/common_padding_large"
             android:layout_weight="1"
             android:background="@drawable/background_for_big_text"
             android:gravity="start"
             android:hint="@string/pishit_sudi"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/common_padding_large"
+            android:textColor="@color/text_color" />
+        <EditText
+            android:id="@+id/et_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_large"
+            android:background="@drawable/background_for_big_text"
+            android:gravity="start"
+            android:hint="@string/source"
             android:inputType="textMultiLine"
             android:padding="@dimen/common_padding_large"
             android:textColor="@color/text_color" />
@@ -41,6 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/background_for_sort_types"
+            android:layout_marginTop="@dimen/common_padding_small"
             android:padding="@dimen/common_padding_large"
             android:layout_marginBottom="@dimen/common_padding_medium"
             android:text="@string/nadislaty_rozrobniku"

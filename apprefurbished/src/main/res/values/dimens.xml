@@ -35,4 +35,5 @@
     <dimen name="minus_cnt_instruments_height">-75dp</dimen>
     <dimen name="ic_nota_size">20dp</dimen>
     <dimen name="songs_text_extra_margin">120dp</dimen>
+    <dimen name="feedback_desck_height">300dp</dimen>
 </resources>

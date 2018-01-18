@@ -80,7 +80,7 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
         }
         buildAndInjectComponent();
         presenter.setView(this);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             presenter.onRestoreInstantState(savedInstanceState);
         }
         presenter.initData();
@@ -321,5 +321,11 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         presenter.onSaveInstantState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        svScroll.desctroy();
+        super.onDestroy();
     }
 }

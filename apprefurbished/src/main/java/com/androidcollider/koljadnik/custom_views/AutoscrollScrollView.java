@@ -57,4 +57,11 @@ public class AutoscrollScrollView extends ScrollView {
             }, 0, Math.round(PERIOD / scrollSpeed));
         }
     }
+
+    public void desctroy(){
+        if (scrollTimer != null) {
+            scrollTimer.cancel();
+            scrollTimer.purge();
+        }
+    }
 }

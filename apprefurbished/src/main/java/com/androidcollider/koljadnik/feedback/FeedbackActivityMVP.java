@@ -1,12 +1,18 @@
 package com.androidcollider.koljadnik.feedback;
 
 
+import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.listeners.OnReadListener;
+import com.androidcollider.koljadnik.models.SongType;
+
 import java.util.List;
 
 public interface FeedbackActivityMVP {
 
     interface View {
         void updateActionAdapter(String[] labels);
+
+        void updateCategoryAdapter(String[] labels);
 
         void showErrorToast(String text);
 
@@ -28,5 +34,6 @@ public interface FeedbackActivityMVP {
     interface Model {
         String[] getActionsList();
         String getShowSendFeedbackActivityTitle();
+        UiAction getCategoryList(OnReadListener<List<SongType>> listener);
     }
 }

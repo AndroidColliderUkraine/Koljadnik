@@ -2,6 +2,9 @@ package com.androidcollider.koljadnik.feedback;
 
 import android.content.Context;
 
+import com.androidcollider.koljadnik.storage.SongsDataSource;
+import com.androidcollider.koljadnik.storage.SongsRepository;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,8 +17,8 @@ public class FeedbackModule {
     }
 
     @Provides
-    public FeedbackActivityMVP.Model provideFeedbackActivityModel(Context context) {
-        return new FeedbackActivityModel(context);
+    public FeedbackActivityMVP.Model provideFeedbackActivityModel(Context context, SongsDataSource songsDataSource) {
+        return new FeedbackActivityModel(context, songsDataSource);
     }
 
 }
