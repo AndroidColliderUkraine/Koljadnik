@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.utils;
+package rx;
 
 public class Observable {
     // Dummy class required for Jackson-Databind support if
