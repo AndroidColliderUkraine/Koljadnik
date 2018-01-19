@@ -6,6 +6,7 @@ import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
         } catch (Exception e) {
             e.printStackTrace();
             onReadListener.onError(e.getMessage());
+            Crashlytics.log(e.getMessage());
         }
     }
 
@@ -67,6 +69,7 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
         } catch (Exception e) {
             e.printStackTrace();
             onReadListener.onError(e.getMessage());
+            Crashlytics.log(e.getMessage());
         }
 
     }

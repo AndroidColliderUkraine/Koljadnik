@@ -1,6 +1,9 @@
 package com.androidcollider.koljadnik.storage.files;
 
 import android.content.Context;
+
+import com.crashlytics.android.Crashlytics;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +37,7 @@ public class AssetsTextDataManager {
             }
             reader.close();
         } catch (IOException e){
-
+            Crashlytics.log(e.getMessage());
         }
         return text.toString();
     }

@@ -8,6 +8,7 @@ import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -39,6 +40,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                             try {
                                 list.add(postSnapshot.getValue(SongType.class));
                             } catch (Exception e) {
+                                Crashlytics.logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -78,6 +80,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                         }
                         list.add(new Song(id, name, idType, text, remarks, source, updatedAt));
                     } catch (Exception e) {
+                        Crashlytics.logException(e);
                         e.printStackTrace();
                     }
                 }
@@ -108,6 +111,7 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
                                 SongRating songRating = new SongRating(songId, rating, updatedAt);
                                 list.add(songRating);
                             } catch (Exception e) {
+                                Crashlytics.logException(e);
                                 e.printStackTrace();
                             }
                         }

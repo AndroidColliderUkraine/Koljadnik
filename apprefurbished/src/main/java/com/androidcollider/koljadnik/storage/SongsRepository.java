@@ -12,6 +12,7 @@ import com.androidcollider.koljadnik.storage.local.SongsLocalDataSource;
 import com.androidcollider.koljadnik.storage.remote.SongsRemoteDataSource;
 import com.androidcollider.koljadnik.storage.shared_prefs.SharedPreferencesManager;
 import com.androidcollider.koljadnik.utils.ConnectionInternetManager;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -350,6 +351,7 @@ public class SongsRepository implements SongsDataSource {
                 sharedPreferencesManager.setAlreadyParsedDataFromLocal(true);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Crashlytics.log(e.getMessage());
             }
         }
 
@@ -363,6 +365,7 @@ public class SongsRepository implements SongsDataSource {
                 sharedPreferencesManager.setAlreadyParsedSongsRatingsFromLocal(true);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Crashlytics.log(e.getMessage());
             }
         }
     }
