@@ -1,17 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'realm-android'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.androidcollider.koljadnik"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 13
         versionName "1.5.4"
 
@@ -35,16 +33,16 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '25.0.1'
+    supportLibraryVersion = '26.1.0'
     mockitoVersion = '2.5.5'
     jUnitVersion = '4.12'
     espressoVersion = '2.2.2'
     daggerVersion = '2.5'
     daggerAnnotationVersion = '1.0'
-    butterknifeVersion = '8.4.0'
+    butterknifeVersion = '8.8.1'
     gsonVersion = '2.6.2'
-    playServicesVersion = '10.0.1'
-    afollestadMaterialDialogVersion = '0.9.0.1'
+    playServicesVersion = '11.8.0'
+    afollestadMaterialDialogVersion = '0.9.4.4'
     crashlyticsVersion = '2.6.5'
     fabMenuVersion = '1.6.4'
 }
@@ -64,17 +62,19 @@ dependencies {
 
     //android support
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:support-v13:$supportLibraryVersion"
+
     compile "com.android.support:support-v4:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
 
     //dagger2
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
     provided "javax.annotation:jsr250-api:$daggerAnnotationVersion"
 
     //field and method binding
     compile "com.jakewharton:butterknife:$butterknifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     //serialization
     compile "com.google.code.gson:gson:$gsonVersion"
@@ -91,7 +91,7 @@ dependencies {
 
     //Fabric Crashlytics (crash analytics)
     compile("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion@aar") {
-        transitive = true;
+        transitive = true
     }
     compile "com.github.clans:fab:$fabMenuVersion"
 

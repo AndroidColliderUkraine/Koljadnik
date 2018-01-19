@@ -31,7 +31,7 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
             } else {
                 realmResults.addChangeListener(element -> {
                     onReadListener.onSuccess(realm.copyFromRealm(element));
-                    realmResults.removeChangeListeners();
+                    realmResults.removeAllChangeListeners();
                 });
             }
 
@@ -62,7 +62,7 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
             } else {
                 realmResults.addChangeListener(element -> {
                     onReadListener.onSuccess(realm.copyFromRealm(element));
-                    realmResults.removeChangeListeners();
+                    realmResults.removeAllChangeListeners();
 
                 });
             }
