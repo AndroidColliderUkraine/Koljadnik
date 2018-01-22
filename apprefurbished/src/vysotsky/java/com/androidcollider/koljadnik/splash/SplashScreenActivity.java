@@ -3,6 +3,8 @@ package com.androidcollider.koljadnik.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -12,6 +14,10 @@ import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.song_types.SongTypesActivity;
+import com.androidcollider.koljadnik.songs_list.SongsActivity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -20,14 +26,8 @@ import butterknife.BindView;
 
 public class SplashScreenActivity extends CommonActivity implements SplashActivityMVP.View {
 
-    @BindView(R.id.iv_splash_title_main)
-    ImageView iv_splash_title_main;
-
-    @BindView(R.id.iv_splash_title_hat)
-    ImageView iv_splash_title_hat;
-
-    @BindView(R.id.tv_ac)
-    TextView tv_ac;
+    @BindView(R.id.cnt_main)
+    View cntMain;
 
     @Inject
     SplashActivityMVP.Presenter presenter;
@@ -40,13 +40,10 @@ public class SplashScreenActivity extends CommonActivity implements SplashActivi
 
     @Override
     public void startAnimationAndShowSongTypesUI() {
-        Animation slideDownHat = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
-        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
-
-        iv_splash_title_main.setAnimation(fadeIn);
-        iv_splash_title_hat.setAnimation(slideDownHat);
-        tv_ac.setAnimation(fadeIn);
-        slideDownHat.setAnimationListener(new Animation.AnimationListener() {
+        AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(2000);
+        cntMain.setAnimation(fadeIn);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -54,14 +51,12 @@ public class SplashScreenActivity extends CommonActivity implements SplashActivi
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(SplashScreenActivity.this, SongTypesActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                        finish();
-                    }
+                new Handler().postDelayed(() -> {
+                    Intent intent = new Intent(SplashScreenActivity.this, SongsActivity.class);
+                    intent.putExtra(SongsActivity.EXTRA_SONG_TYPE_ID, 0);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                    finish();
                 }, 1000);
             }
 

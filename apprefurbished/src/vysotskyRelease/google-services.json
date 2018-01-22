@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "194356482964",
+    "firebase_url": "https://vysotsky-dev.firebaseio.com",
+    "project_id": "vysotsky-dev",
+    "storage_bucket": "vysotsky-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194356482964:android:5bb4f0d9c7dee7d6",
+        "android_client_info": {
+          "package_name": "com.androidcollider.vysotsky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "194356482964-glkcucqg74huc8lqs7sj1fh9fan48309.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbDHKf30i4VQdgB-gCxcO1p08ZP4arZ9A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

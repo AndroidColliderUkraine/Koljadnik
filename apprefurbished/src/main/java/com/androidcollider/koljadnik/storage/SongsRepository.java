@@ -343,11 +343,16 @@ public class SongsRepository implements SongsDataSource {
         if (!sharedPreferencesManager.isAlreadyParsedDataFromLocal()) {
             jsonString = assetsTextDataManager.getLocalData();
             try {
-                List<Song> songsData = Song.generateSongList(new JSONObject(jsonString).getJSONArray("songs"));
-                List<SongType> songsTypesData = SongType.generateSongTypesList(new JSONObject(jsonString).getJSONArray("songTypes"));
+                JSONObject json = new JSONObject(jsonString);
+                if (json.has("songs")) {
+                    List<Song> songsData = Song.generateSongList(json.getJSONArray("songs"));
+                    songsRealmDataSource.saveSongs(songsData, null);
+                }
+                if (json.has("songTypes")) {
+                    List<SongType> songsTypesData = SongType.generateSongTypesList(json.getJSONArray("songTypes"));
+                    songsRealmDataSource.saveSongTypes(songsTypesData, null);
+                }
 
-                songsRealmDataSource.saveSongs(songsData, null);
-                songsRealmDataSource.saveSongTypes(songsTypesData, null);
                 sharedPreferencesManager.setAlreadyParsedDataFromLocal(true);
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2e7d32</color>
+    <color name="colorPrimaryDark">#1b5e20</color>
+    <color name="colorAccent">#5d4037</color>
+
+    <color name="bg_color">#ebebec</color>
+    <color name="element_color">#f8f8f8</color>
+    <color name="text_color">#ff000000</color>
+    <color name="action_bar_color">#ff867429</color>
+    <color name="edit_text_white_color">#ffffffff</color>
+    <color name="christmas_tree_color">#ff158705</color>
+
+    <color name="logo_tint_color">#e9e9d5</color>
+    <color name="fab_menu_color_pressed">#d94235</color>
+</resources>

@@ -1,0 +1,43 @@
+<RelativeLayout
+    android:id="@+id/cnt_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/v_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="@dimen/common_padding_xxlarge"
+        android:layout_marginRight="@dimen/common_padding_xxlarge"
+        android:layout_marginTop="@dimen/common_padding_xmega"
+        android:src="@drawable/img_vysotsky"/>
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_padding_xlarge"
+        android:layout_below="@+id/v_image"
+        android:gravity="center"
+        android:text="@string/vysotsky"
+        android:textSize="@dimen/text_xxlarge"
+        android:alpha="0.9"
+        android:textColor="@color/text_color"/>
+
+    <TextView
+        android:id="@+id/tv_ac"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/android_collider_company"
+        android:textColor="@color/text_color"/>
+
+</RelativeLayout>

@@ -1,7 +1,7 @@
 package com.androidcollider.koljadnik.songs_list;
 
 
-import com.androidcollider.koljadnik.utils.ChordUtils;
+import com.androidcollider.koljadnik.utils.ChordTags;
 
 import java.text.Collator;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class SongItemViewModel {
         this.name = name;
         this.rating = rating;
         this.text = text;
-        this.hasNota = text.contains(ChordUtils.CHORD_TAG_OPEN);
+        this.hasNota = text.contains(ChordTags.CHORD_TAG_OPEN);
     }
 
     public static List<SongItemViewModel> orderBy(List<SongItemViewModel> list, OrderType orderType) {

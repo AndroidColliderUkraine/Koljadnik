@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.contants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
+import com.androidcollider.koljadnik.utils.ChordTags;
 import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
 
@@ -167,7 +168,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
             if (view != null) {
                 view.unblockUi();
                 view.updateView(songDetailsViewModel);
-                view.updateChordBlockVisibility(songDetailsViewModel.getText().contains(ChordUtils.CHORD_TAG_OPEN));
+                view.updateChordBlockVisibility(songDetailsViewModel.getText().contains(ChordTags.CHORD_TAG_OPEN));
             }
         }
 

@@ -1,9 +1,9 @@
 package com.androidcollider.koljadnik.utils;
 
-public class ChordUtils {
+import static com.androidcollider.koljadnik.utils.ChordTags.CHORD_TAG_CLOSE;
+import static com.androidcollider.koljadnik.utils.ChordTags.CHORD_TAG_OPEN;
 
-    public final static String CHORD_TAG_OPEN = "<chord>";
-    public final static String CHORD_TAG_CLOSE = "</chord>";
+public class ChordUtils {
 
     private static String[] major = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"};
     private static String[] minor = new String[]{"Cm", "C#m", "Dm", "D#m", "Em", "Fm", "F#m", "Gm", "G#m", "Am", "A#m", "Hm"};

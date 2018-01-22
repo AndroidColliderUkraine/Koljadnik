@@ -16,6 +16,7 @@ import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
 import com.androidcollider.koljadnik.custom_views.AutoscrollScrollView;
 import com.androidcollider.koljadnik.root.App;
+import com.androidcollider.koljadnik.utils.ChordTags;
 import com.androidcollider.koljadnik.utils.ChordUtils;
 import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
@@ -208,7 +209,11 @@ public class SongDetailsActivity extends CommonToolbarActivity implements SongDe
 
     @Override
     public void updateText(String songText) {
-        tvText.setText(songText.replace(ChordUtils.CHORD_TAG_OPEN, "").replace(ChordUtils.CHORD_TAG_CLOSE, ""));
+        tvText.setText(songText
+            .replace(ChordTags.CHORD_TAG_OPEN, "")
+            .replace(ChordTags.CHORD_TAG_CLOSE, "")
+            .replace("<pre>", "")
+            .replace("</pre>", ""));
     }
 
     @Override
