@@ -18,19 +18,13 @@
         android:src="@drawable/img_vysotsky"/>
 
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/iv_title"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_padding_xlarge"
+        android:src="@drawable/vv_sign"
         android:layout_below="@+id/v_image"
-        android:gravity="center"
-        android:text="@string/vysotsky"
-        android:fontFamily="serif"
-        android:textStyle="italic"
-        android:textSize="@dimen/text_xxlarge"
-        android:alpha="0.9"
-        android:textColor="@color/text_color"/>
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/tv_ac"

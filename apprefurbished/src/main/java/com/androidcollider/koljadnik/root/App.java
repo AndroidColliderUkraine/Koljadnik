@@ -1,8 +1,8 @@
 package com.androidcollider.koljadnik.root;
 
 import android.app.Application;
-import android.support.v4.BuildConfig;
 
+import com.androidcollider.koljadnik.BuildConfig;
 import com.androidcollider.koljadnik.constants.Settings;
 import com.androidcollider.koljadnik.utils.RealmInitializer;
 import com.crashlytics.android.Crashlytics;

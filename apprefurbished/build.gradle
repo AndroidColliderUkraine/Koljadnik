@@ -17,10 +17,12 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+            buildConfigField "boolean", "IS_DEBUG", "true"
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "IS_DEBUG", "false"
         }
     }
 
@@ -35,9 +37,8 @@ android {
         vysotsky {
             dimension "mode"
             applicationId "com.androidcollider.vysotsky"
-            versionNameSuffix "-vysotsky"
-            versionCode 6
-            versionName "1.5.0"
+            versionCode 8
+            versionName "1.5.1"
         }
     }
 
