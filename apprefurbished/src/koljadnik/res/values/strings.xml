@@ -19,7 +19,7 @@
     <string name="unable_to_make_current_operation">Неможливо виконати дану операцію</string>
     <string name="hide_instruments">Сховати інструменти</string>
     <string name="show_instruments">Показати інструменти</string>
-    <string name="chords">Аккорди</string>
+    <string name="chords">Акорди</string>
     <string name="autoscroll">Автопрокрутка</string>
     <string name="size">Розмір</string>
     <string name="msg_empty_songs">Нажаль, жодна пісня не відповідає заданим критеріям в цій категорії</string>
@@ -28,5 +28,5 @@
     <string name="name">Назва</string>
     <string name="source">Джерело</string>
     <string name="other">Інше</string>
-    <string name="vysotsky">Высоцкий</string>
+    <string name="search">Пошук...</string>
 </resources>

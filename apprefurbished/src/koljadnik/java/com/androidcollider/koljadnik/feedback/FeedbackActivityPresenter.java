@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.SongType;
 
 import java.util.List;
 
-import static com.androidcollider.koljadnik.contants.Settings.FEEDBACK_MAILS;
+import static com.androidcollider.koljadnik.constants.Settings.FEEDBACK_MAILS;
 
 public class FeedbackActivityPresenter implements FeedbackActivityMVP.Presenter {
 

@@ -2,7 +2,7 @@ package com.androidcollider.koljadnik.models;
 
 import android.support.v4.util.Pair;
 
-import com.androidcollider.koljadnik.contants.Settings;
+import com.androidcollider.koljadnik.constants.Settings;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 

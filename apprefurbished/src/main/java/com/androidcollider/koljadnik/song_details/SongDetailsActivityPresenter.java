@@ -3,7 +3,7 @@ package com.androidcollider.koljadnik.song_details;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.utils.ChordTags;
 import com.androidcollider.koljadnik.utils.ChordUtils;

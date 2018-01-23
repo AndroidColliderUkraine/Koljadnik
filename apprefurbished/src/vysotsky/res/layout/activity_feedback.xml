@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_color"
+              android:orientation="vertical"
+              tools:context="com.androidcollider.koljadnik.feedback.FeedbackActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/common_padding_large">
+
+        <Spinner
+            android:id="@+id/sp_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_xxlarge"
+            android:background="@android:color/transparent"
+            android:popupBackground="@android:color/transparent"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_large">
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="start"
+                android:hint="@string/name"
+                android:inputType="textMultiLine"
+                android:padding="@dimen/common_padding_large"
+                android:textColor="@color/text_color"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/common_padding_large"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/et_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="start"
+                android:hint="@string/pishit_sudi"
+                android:inputType="textMultiLine"
+                android:padding="@dimen/common_padding_large"
+                android:textColor="@color/text_color"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_padding_large">
+
+            <EditText
+                android:id="@+id/et_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="start"
+                android:hint="@string/source"
+                android:inputType="textMultiLine"
+                android:padding="@dimen/common_padding_large"
+                android:textColor="@color/text_color"/>
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/common_padding_medium"
+            android:layout_marginTop="@dimen/common_padding_small"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/common_padding_large"
+            android:text="@string/nadislaty_rozrobniku"
+            android:textColor="@color/element_color"
+            android:textSize="@dimen/text_small"/>
+    </LinearLayout>
+</LinearLayout>

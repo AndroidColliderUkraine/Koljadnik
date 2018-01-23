@@ -3,8 +3,8 @@ package com.androidcollider.koljadnik.root;
 import android.app.Application;
 import android.support.v4.BuildConfig;
 
-import com.androidcollider.koljadnik.contants.Settings;
-import com.androidcollider.koljadnik.utils.KoljadnikRealmMigration;
+import com.androidcollider.koljadnik.constants.Settings;
+import com.androidcollider.koljadnik.utils.RealmInitializer;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -13,8 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Description of ${CLASS_NAME}
@@ -42,11 +40,7 @@ public class App extends Application/*MultiDexApplication*/ {
 
         Fabric.with(this, new Crashlytics(), new Answers());
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.INFO);
-
-        Realm.init(this);
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().
-                schemaVersion(Settings.REALM_SCHEMA_VERSION).
-                migration(new KoljadnikRealmMigration()).build());
+        RealmInitializer.initRealm(this);
     }
 
     public AppComponent getAppComponent() {

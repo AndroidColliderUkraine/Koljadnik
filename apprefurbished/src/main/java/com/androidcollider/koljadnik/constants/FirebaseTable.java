@@ -1,4 +1,4 @@
-package com.androidcollider.koljadnik.contants;
+package com.androidcollider.koljadnik.constants;
 
 public enum FirebaseTable {
     SONGS("songs"),

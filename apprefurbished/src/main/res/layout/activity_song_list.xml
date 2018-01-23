@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/common_padding_medium"
-                android:alpha="0.7"
+                android:tint="@color/sort_icon_tint_color"
                 android:src="@drawable/ic_sort" />
         </FrameLayout>
         <EditText
@@ -36,7 +36,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/text_color"
-            android:hint="Пошук..."
+            android:hint="@string/search"
             android:textCursorDrawable="@drawable/cursor" />
     </LinearLayout>
 
@@ -52,7 +52,7 @@
             android:layout_margin="@dimen/common_padding_large"
             android:gravity="center"
             android:alpha="0.9"
-            android:textColor="@color/element_color"
+            android:textColor="@color/text_color"
             android:text="@string/msg_empty_songs"
             android:visibility="gone"/>
 
@@ -73,7 +73,7 @@
             fab:menu_showShadow="true"
             android:layout_marginRight="@dimen/common_padding_medium"
             android:layout_marginBottom="@dimen/common_padding_large"
-            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_colorNormal="@color/fab_big_color"
             fab:menu_colorPressed="@color/fab_menu_color_pressed"
             fab:menu_colorRipple="@color/md_divider_black"
             fab:menu_icon="@drawable/ic_filter">
@@ -82,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_all"
+                fab:fab_colorNormal="@color/fab_small_color"
                 fab:fab_label="@string/all_songs"
                 fab:fab_size="mini" />
 
@@ -91,34 +92,10 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_nota_white"
                 fab:fab_label="@string/with_chords"
+                fab:fab_colorNormal="@color/fab_small_color"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
 
-        <LinearLayout
-            android:id="@+id/cnt_order_menu"
-            android:layout_width="@dimen/cnt_sort_width"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/common_padding_medium"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:background="@drawable/background_for_bg_for_sort_types">
-            <TextView
-                android:id="@+id/btn_sort_by_alphabet"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/et_search_height"
-                android:textColor="@color/text_color"
-                android:background="@drawable/background_for_sort_types"
-                android:layout_marginBottom="@dimen/common_padding_medium"
-                android:gravity="center"
-                android:text="@string/by_alphabet"/>
-            <TextView
-                android:id="@+id/btn_sort_by_rating"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/et_search_height"
-                android:textColor="@color/text_color"
-                android:background="@drawable/background_for_sort_types"
-                android:gravity="center"
-                android:text="@string/by_rating"/>
-        </LinearLayout>
+        <include layout="@layout/layout_order_menu"/>
     </FrameLayout>
 </LinearLayout>

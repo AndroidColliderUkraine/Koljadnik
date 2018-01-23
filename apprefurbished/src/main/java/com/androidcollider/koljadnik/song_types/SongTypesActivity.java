@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.androidcollider.koljadnik.R;
 import com.androidcollider.koljadnik.common.CommonToolbarActivity;
-import com.androidcollider.koljadnik.contants.Tags;
+import com.androidcollider.koljadnik.constants.Tags;
 import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.songs_list.SongsActivity;

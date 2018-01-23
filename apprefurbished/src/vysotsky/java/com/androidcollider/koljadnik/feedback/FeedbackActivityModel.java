@@ -3,13 +3,7 @@ package com.androidcollider.koljadnik.feedback;
 import android.content.Context;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.contants.UiAction;
-import com.androidcollider.koljadnik.listeners.OnReadListener;
-import com.androidcollider.koljadnik.models.SongType;
 import com.androidcollider.koljadnik.storage.SongsDataSource;
-import com.androidcollider.koljadnik.storage.SongsRepository;
-
-import java.util.List;
 
 public class FeedbackActivityModel implements FeedbackActivityMVP.Model {
 
@@ -29,10 +23,5 @@ public class FeedbackActivityModel implements FeedbackActivityMVP.Model {
     @Override
     public String getShowSendFeedbackActivityTitle() {
         return context.getResources().getString(R.string.letter_sending);
-    }
-
-    @Override
-    public UiAction getCategoryList(OnReadListener<List<SongType>> listener) {
-        return songsRepository.getSongTypes(listener);
     }
 }

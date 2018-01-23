@@ -10,8 +10,6 @@ android {
         applicationId "com.androidcollider.koljadnik"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 13
-        versionName "1.5.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,12 +28,16 @@ android {
     productFlavors {
         koljadnik {
             dimension "mode"
+            versionCode 13
+            versionName "1.5.4"
         }
 
         vysotsky {
             dimension "mode"
             applicationId "com.androidcollider.vysotsky"
             versionNameSuffix "-vysotsky"
+            versionCode 5
+            versionName "1.5.0"
         }
     }
 
@@ -58,6 +60,8 @@ ext {
     afollestadMaterialDialogVersion = '0.9.4.4'
     crashlyticsVersion = '2.6.5'
     fabMenuVersion = '1.6.4'
+    rxVersion = '2.0.1'
+    rxJava = '2.0.9'
 }
 
 dependencies {
@@ -109,6 +113,9 @@ dependencies {
         transitive = true
     }
     compile "com.github.clans:fab:$fabMenuVersion"
+
+    compile "io.reactivex.rxjava2:rxjava:$rxJava"
+    compile "io.reactivex.rxjava2:rxandroid:$rxVersion"
 
     apply plugin: 'com.google.gms.google-services'
 }

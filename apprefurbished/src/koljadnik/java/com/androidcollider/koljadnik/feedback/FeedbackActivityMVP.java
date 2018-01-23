@@ -1,7 +1,7 @@
 package com.androidcollider.koljadnik.feedback;
 
 
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.SongType;
 

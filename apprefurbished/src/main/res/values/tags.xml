@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="song_type_name_tag">songTypeNameTag</string>
+    <string name="song_type_name_tag" translatable="false">songTypeNameTag</string>
 </resources>

@@ -2,7 +2,7 @@ package com.androidcollider.koljadnik.storage.remote;
 
 import android.util.Log;
 
-import com.androidcollider.koljadnik.contants.FirebaseTable;
+import com.androidcollider.koljadnik.constants.FirebaseTable;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.Song;
@@ -11,7 +11,6 @@ import com.androidcollider.koljadnik.models.SongType;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;

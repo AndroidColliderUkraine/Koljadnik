@@ -26,6 +26,8 @@
         android:layout_below="@+id/v_image"
         android:gravity="center"
         android:text="@string/vysotsky"
+        android:fontFamily="serif"
+        android:textStyle="italic"
         android:textSize="@dimen/text_xxlarge"
         android:alpha="0.9"
         android:textColor="@color/text_color"/>

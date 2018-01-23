@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="submit_array">
+        <item>Добавить песню</item>
+        <item>Соощить об ошибке</item>
+        <item>Написать жалобу или замечание</item>
+        <item>Другое</item>
+    </string-array>
+</resources>

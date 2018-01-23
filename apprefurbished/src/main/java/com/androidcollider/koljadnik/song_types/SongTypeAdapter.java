@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidcollider.koljadnik.R;
-import com.androidcollider.koljadnik.contants.Tags;
+import com.androidcollider.koljadnik.constants.Tags;
 import com.androidcollider.koljadnik.utils.NumberConverter;
 
 import java.util.ArrayList;

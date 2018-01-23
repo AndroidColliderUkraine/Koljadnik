@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cnt_order_menu"
+    android:layout_width="@dimen/cnt_sort_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_for_bg_for_sort_types"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/common_padding_medium"
+    android:paddingLeft="@dimen/common_padding_medium"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/btn_sort_by_alphabet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/et_search_height"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/by_alphabet"
+        android:textColor="@color/element_color"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/element_color"/>
+
+    <TextView
+        android:id="@+id/btn_sort_by_rating"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/et_search_height"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/by_rating"
+        android:textColor="@color/element_color"/>
+</LinearLayout>

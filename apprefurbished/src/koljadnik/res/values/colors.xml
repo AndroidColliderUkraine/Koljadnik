@@ -8,10 +8,14 @@
     <color name="splash_color">#2c1609</color>
     <color name="element_color">#fffdfdcc</color>
     <color name="text_color">#ff000000</color>
-    <color name="action_bar_color">#ff867429</color>
+    <color name="drop_down_and_sort_color">#ff867429</color>
     <color name="edit_text_white_color">#ffffffff</color>
     <color name="christmas_tree_color">#ff158705</color>
 
     <color name="logo_tint_color">#e9e9d5</color>
     <color name="fab_menu_color_pressed">#d94235</color>
+    <color name="fab_big_color">#5d4037</color>
+    <color name="fab_small_color">#d84235</color>
+
+    <color name="sort_icon_tint_color">@color/text_color</color>
 </resources>

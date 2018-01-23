@@ -4,7 +4,7 @@ package com.androidcollider.koljadnik.song_details;
 import android.os.Bundle;
 
 import com.androidcollider.koljadnik.common.CoomonView;
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 
 public interface SongDetailsActivityMVP {

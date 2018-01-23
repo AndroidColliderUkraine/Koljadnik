@@ -100,7 +100,7 @@ public class SongsActivity extends CommonToolbarActivity implements SongsActivit
 
     @Override
     protected boolean isDisplayHomeAsUpEnabled() {
-        return true;
+        return getResources().getBoolean(R.bool.has_song_types);
     }
 
     @Override

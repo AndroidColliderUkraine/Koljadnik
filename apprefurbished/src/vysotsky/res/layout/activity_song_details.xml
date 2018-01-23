@@ -1,0 +1,256 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical"
+    tools:context="com.androidcollider.koljadnik.song_details.SongDetailsActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.androidcollider.koljadnik.custom_views.AutoscrollScrollView
+            android:id="@+id/sv_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="insideInset">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/songs_text_extra_margin"
+                android:paddingLeft="@dimen/common_padding_large"
+                android:paddingRight="@dimen/common_padding_large"
+                android:paddingTop="@dimen/common_padding_large">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:textColor="@color/text_color"
+                        android:textIsSelectable="true"
+                        android:layout_margin="@dimen/common_padding_medium"
+                        tools:text="Text"/>
+                </android.support.v7.widget.CardView>
+
+
+                <LinearLayout
+                    android:id="@+id/cnt_source"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_padding_xlarge"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/common_padding_large">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:gravity="center_horizontal"
+                            android:layout_margin="@dimen/common_padding_medium"
+                            android:text="@string/dzerela"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_small"/>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_song_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:layout_margin="@dimen/common_padding_medium"
+                            android:textColor="@color/text_color"/>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </LinearLayout>
+        </com.androidcollider.koljadnik.custom_views.AutoscrollScrollView>
+
+        <LinearLayout
+            android:id="@+id/cnt_expanded_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/minus_cnt_instruments_height"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/common_padding_large">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_disable_scroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_disable_scroll"
+                    android:visibility="invisible"
+                    fab:fab_size="mini"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/btn_hide_expand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/common_padding_medium">
+
+                    <TextView
+                        android:id="@+id/tv_instruments_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/show_instruments"
+                        android:textColor="@color/element_color"
+                        android:textSize="@dimen/text_xsmall"/>
+
+                    <ImageView
+                        android:id="@+id/iv_instruments_label"
+                        android:layout_width="@dimen/settings_ic_height"
+                        android:layout_height="@dimen/settings_ic_width"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/common_padding_medium"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_arrow_up"
+                        android:tint="@color/element_color"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/cnt_instruments_height"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginLeft="@dimen/common_padding_large"
+                        android:layout_marginRight="@dimen/common_padding_large"
+                        android:background="@color/element_color"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/common_padding_medium"
+                        android:paddingRight="@dimen/common_padding_medium"
+                        android:paddingTop="@dimen/common_padding_medium">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/common_padding_medium"
+                                android:text="@string/size"
+                                android:textColor="@color/element_color"
+                                android:textSize="@dimen/text_xsmall"/>
+
+                            <android.support.v7.widget.AppCompatSeekBar
+                                android:id="@+id/sb_size"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:progress="40"
+                                android:theme="@style/SeekBarStyle"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/common_padding_medium"
+                                android:text="@string/autoscroll"
+                                android:textColor="@color/element_color"
+                                android:textSize="@dimen/text_xsmall"/>
+
+                            <android.support.v7.widget.AppCompatSeekBar
+                                android:id="@+id/sb_autoscroll"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/SeekBarStyle"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/cnt_chords"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/common_padding_medium"
+                                android:text="@string/chords"
+                                android:textColor="@color/element_color"
+                                android:textSize="@dimen/text_xsmall"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/btn_chord_plus"
+                                    android:layout_width="@dimen/chord_btn_width"
+                                    android:layout_height="@dimen/chord_btn_height"
+                                    android:background="@drawable/background_for_element_buttons"
+                                    android:padding="@dimen/common_padding_small"
+                                    android:src="@drawable/ic_bmol"
+                                    android:tint="@color/text_color"/>
+
+                                <ImageView
+                                    android:id="@+id/btn_chord_minus"
+                                    android:layout_width="@dimen/chord_btn_width"
+                                    android:layout_height="@dimen/chord_btn_height"
+                                    android:layout_marginLeft="@dimen/common_padding_xxlarge"
+                                    android:background="@drawable/background_for_element_buttons"
+                                    android:padding="@dimen/common_padding_small"
+                                    android:src="@drawable/ic_sharp"
+                                    android:tint="@color/text_color"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

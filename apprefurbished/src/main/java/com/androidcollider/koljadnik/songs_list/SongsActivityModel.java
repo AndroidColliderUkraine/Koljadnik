@@ -2,8 +2,8 @@ package com.androidcollider.koljadnik.songs_list;
 
 import android.support.v4.util.Pair;
 
-import com.androidcollider.koljadnik.contants.Settings;
-import com.androidcollider.koljadnik.contants.UiAction;
+import com.androidcollider.koljadnik.constants.Settings;
+import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.CallStartProgressDialog;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.models.Song;

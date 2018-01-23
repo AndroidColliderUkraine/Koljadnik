@@ -1,6 +1,6 @@
 package com.androidcollider.koljadnik.storage;
 
-import com.androidcollider.koljadnik.contants.Settings;
+import com.androidcollider.koljadnik.constants.Settings;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
 import com.androidcollider.koljadnik.models.SongType;

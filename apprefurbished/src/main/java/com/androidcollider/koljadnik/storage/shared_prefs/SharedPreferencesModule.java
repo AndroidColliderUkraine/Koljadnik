@@ -3,7 +3,7 @@ package com.androidcollider.koljadnik.storage.shared_prefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.androidcollider.koljadnik.contants.Settings;
+import com.androidcollider.koljadnik.constants.Settings;
 
 import javax.inject.Singleton;
 
