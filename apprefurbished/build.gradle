@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
+apply plugin: 'project-report'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
-
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.androidcollider.koljadnik"
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 28
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,15 +29,15 @@ android {
     productFlavors {
         koljadnik {
             dimension "mode"
-            versionCode 13
-            versionName "1.5.4"
+            versionCode 14
+            versionName "1.5.5"
         }
 
         vysotsky {
             dimension "mode"
             applicationId "com.androidcollider.vysotsky"
-            versionCode 8
-            versionName "1.5.1"
+            versionCode 9
+            versionName "1.5.2"
         }
     }
 
@@ -49,7 +48,7 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '28.0.0'
     mockitoVersion = '2.5.5'
     jUnitVersion = '4.12'
     espressoVersion = '2.2.2'
@@ -57,66 +56,65 @@ ext {
     daggerAnnotationVersion = '1.0'
     butterknifeVersion = '8.8.1'
     gsonVersion = '2.6.2'
-    playServicesVersion = '11.8.0'
+    playServicesVersion = '16.0.4'
     afollestadMaterialDialogVersion = '0.9.4.4'
-    crashlyticsVersion = '2.6.5'
+    crashlyticsVersion = '2.9.5'
     fabMenuVersion = '1.6.4'
-    rxVersion = '2.0.1'
+    rxVersion = '2.0.2'
     rxJava = '2.0.9'
 }
 
 dependencies {
 
     //ui testing
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //unit testing
-    testCompile "junit:junit:$jUnitVersion"
+    testImplementation "junit:junit:$jUnitVersion"
 
     //mock framework
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     //android support
-    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support:support-v13:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:support-v13:$supportLibraryVersion"
 
-    compile "com.android.support:support-v4:$supportLibraryVersion"
-    compile "com.android.support:design:$supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
 
 
     //dagger2
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    compile "com.google.dagger:dagger:$daggerVersion"
-    provided "javax.annotation:jsr250-api:$daggerAnnotationVersion"
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    compileOnly "javax.annotation:jsr250-api:$daggerAnnotationVersion"
 
     //field and method binding
-    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     //serialization
-    compile "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     //Google Play Services
-    compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-analytics:$playServicesVersion"
 
     //Google Firebase services (realtime db)
-    compile "com.google.firebase:firebase-core:$playServicesVersion"
-    compile "com.google.firebase:firebase-database:$playServicesVersion"
+    implementation "com.google.firebase:firebase-core:$playServicesVersion"
+    implementation "com.google.firebase:firebase-database:$playServicesVersion"
 
     //material dialogs
-    compile "com.afollestad.material-dialogs:core:$afollestadMaterialDialogVersion"
+    implementation "com.afollestad.material-dialogs:core:$afollestadMaterialDialogVersion"
 
     //Fabric Crashlytics (crash analytics)
-    compile("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion@aar") {
+    implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion@aar") {
         transitive = true
     }
-    compile "com.github.clans:fab:$fabMenuVersion"
+    implementation "com.github.clans:fab:$fabMenuVersion"
 
-    compile "io.reactivex.rxjava2:rxjava:$rxJava"
-    compile "io.reactivex.rxjava2:rxandroid:$rxVersion"
-
-    apply plugin: 'com.google.gms.google-services'
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxVersion"
 }
+apply plugin: 'com.google.gms.google-services'
