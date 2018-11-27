@@ -29,14 +29,14 @@ android {
     productFlavors {
         koljadnik {
             dimension "mode"
-            versionCode 14
+            versionCode 15
             versionName "1.5.5"
         }
 
         vysotsky {
             dimension "mode"
             applicationId "com.androidcollider.vysotsky"
-            versionCode 9
+            versionCode 10
             versionName "1.5.2"
         }
     }
