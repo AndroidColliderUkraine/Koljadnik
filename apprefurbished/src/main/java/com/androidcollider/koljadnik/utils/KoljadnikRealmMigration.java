@@ -22,5 +22,14 @@ public class KoljadnikRealmMigration implements RealmMigration {
 
             schema.get("Song").removeField("rating").removeField("localRating");
         }
+        if (oldVersion < 3) {
+            schema.create("LocationEvent")
+                    .addField("id", String.class)
+                    .addField("songId", int.class)
+                    .addField("lat", String.class)
+                    .addField("lng", String.class)
+                    .addField("timestamp", String.class)
+                    .addPrimaryKey("id");
+        }
     }
 }

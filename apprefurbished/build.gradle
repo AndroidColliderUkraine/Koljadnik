@@ -29,8 +29,8 @@ android {
     productFlavors {
         koljadnik {
             dimension "mode"
-            versionCode 15
-            versionName "1.5.5"
+            versionCode 16
+            versionName "1.6.0"
         }
 
         vysotsky {
@@ -57,6 +57,7 @@ ext {
     butterknifeVersion = '8.8.1'
     gsonVersion = '2.6.2'
     playServicesVersion = '16.0.4'
+    playServicesLocationVersion = '16.0.0'
     afollestadMaterialDialogVersion = '0.9.4.4'
     crashlyticsVersion = '2.9.5'
     fabMenuVersion = '1.6.4'
@@ -100,6 +101,8 @@ dependencies {
 
     //Google Play Services
     implementation "com.google.android.gms:play-services-analytics:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+
 
     //Google Firebase services (realtime db)
     implementation "com.google.firebase:firebase-core:$playServicesVersion"

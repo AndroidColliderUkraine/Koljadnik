@@ -4,6 +4,7 @@ import com.androidcollider.koljadnik.constants.Settings;
 import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
+import com.androidcollider.koljadnik.models.LocationEvent;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
@@ -13,6 +14,7 @@ import com.androidcollider.koljadnik.storage.remote.SongsRemoteDataSource;
 import com.androidcollider.koljadnik.storage.shared_prefs.SharedPreferencesManager;
 import com.androidcollider.koljadnik.utils.ConnectionInternetManager;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -372,6 +374,29 @@ public class SongsRepository implements SongsDataSource {
                 e.printStackTrace();
                 Crashlytics.log(e.getMessage());
             }
+        }
+    }
+
+    @Override
+    public void saveLocationEvent(int songId, String lat, String lng) {
+        songsRealmDataSource.addLocationEvent(new LocationEvent(songId, lat, lng), new OnWriteListener() {
+            @Override
+            public void onSuccess() {
+                tryToUpdateLocationEvents();
+            }
+
+            @Override
+            public void onError(String error) {
+                Crashlytics.log(error);
+            }
+        });
+    }
+
+    @Override
+    public void tryToUpdateLocationEvents() {
+        if (connectionInternetManager.isNetworkConnected()){
+            songsFirebaseDataSource.addLocationEvents(songsRealmDataSource.getLocationEvents(),
+                    aVoid -> songsRealmDataSource.clearLocationEvents());
         }
     }
 }

@@ -3,6 +3,7 @@ package com.androidcollider.koljadnik.storage.local;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
+import com.androidcollider.koljadnik.models.LocationEvent;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
@@ -138,6 +139,36 @@ public class SongsRealmDataSource implements SongsLocalDataSource {
     public void increaseSongLocalRating(SongRating songRating) {
         realm.executeTransactionAsync(realm1 -> {
             realm1.copyToRealmOrUpdate(songRating);
+        });
+    }
+
+    @Override
+    public void addLocationEvent(LocationEvent locationEvent, OnWriteListener onWriteListener) {
+        if (onWriteListener != null) {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(locationEvent);
+            }, onWriteListener::onSuccess);
+        } else {
+            realm.executeTransactionAsync(realm1 -> {
+                realm1.copyToRealmOrUpdate(locationEvent);
+            });
+        }
+    }
+
+    @Override
+    public List<LocationEvent> getLocationEvents() {
+        realm.beginTransaction();
+        List<LocationEvent> locationEvents = realm.copyFromRealm(realm.where(LocationEvent.class).
+                findAll());
+
+        realm.commitTransaction();
+        return locationEvents;
+    }
+
+    @Override
+    public void clearLocationEvents() {
+        realm.executeTransactionAsync(realm1 -> {
+            realm1.delete(LocationEvent.class);
         });
     }
 }

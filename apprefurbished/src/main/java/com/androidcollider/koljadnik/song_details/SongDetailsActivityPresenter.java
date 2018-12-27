@@ -1,13 +1,18 @@
 package com.androidcollider.koljadnik.song_details;
 
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.androidcollider.koljadnik.constants.UiAction;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.utils.ChordTags;
 import com.androidcollider.koljadnik.utils.ChordUtils;
+import com.androidcollider.koljadnik.utils.LocationManager;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Presenter {
 
@@ -15,6 +20,7 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
 
     public static final int MIN_TEXT_SIZE = 10;
     public static final int MAX_TEXT_SIZE = 28;
+    private final LocationManager locationManager;
 
     @Nullable
     private SongDetailsActivityMVP.View view;
@@ -23,9 +29,11 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
     private SessionSettingsManager sessionSettingsManager;
 
     public SongDetailsActivityPresenter(SongDetailsActivityMVP.Model model,
-                                        SessionSettingsManager sessionSettingsManager) {
+                                        SessionSettingsManager sessionSettingsManager,
+                                        LocationManager locationManager) {
         this.model = model;
         this.sessionSettingsManager = sessionSettingsManager;
+        this.locationManager = locationManager;
     }
 
     @Override
@@ -161,10 +169,18 @@ public class SongDetailsActivityPresenter implements SongDetailsActivityMVP.Pres
         @Override
         public void onSuccess(SongDetailsViewModel songDetailsViewModel) {
             if (songText == null) {
+                locationManager.getLastKnowLocation(task -> {
+                    Location location = task.getResult();
+                    if (location != null){
+                        model.addLocationEvent(songDetailsViewModel.songId,
+                                String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                    }
+                });
                 songText = songDetailsViewModel.getText();
             } else {
                 songDetailsViewModel.setText(songText);
             }
+
             if (view != null) {
                 view.unblockUi();
                 view.updateView(songDetailsViewModel);

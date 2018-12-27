@@ -59,5 +59,7 @@ public interface SongDetailsActivityMVP {
         UiAction getSongText(final OnReadListener<String> listener);
 
         UiAction getShareData(final OnReadListener<ShareModel> listener);
+
+        void addLocationEvent(int songId, String lat, String lng);
     }
 }

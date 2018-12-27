@@ -23,4 +23,8 @@ public interface SongsDataSource {
     void increaseSongLocalRating(Song song);
 
     void tryToLoadDataFromLocalFile();
+
+    void saveLocationEvent(int songId, String lat, String lng);
+
+    void tryToUpdateLocationEvents();
 }

@@ -30,5 +30,6 @@ public interface SongTypesActivityMVP {
 
     interface Model {
         UiAction getSongTypes(OnReadListener<List<SongTypeViewModel>> listener);
+        void tryToUpdateLocationEvents();
     }
 }

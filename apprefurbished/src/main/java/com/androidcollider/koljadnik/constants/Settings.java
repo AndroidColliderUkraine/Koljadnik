@@ -16,4 +16,7 @@ public class Settings {
     public final static int DEFAULT_RATING = 4;
     public final static int RATING_DEFAULT_LIMIT = 20;
     public final static String[] FEEDBACK_MAILS = new String[]{"android.collider@gmail.com", "pseverin@ukr.net"};
+
+    public final static int LOCATION_POPUP_SHOWS_COUNT_START_BATCH = 3;
+    public final static int LOCATION_POPUP_SHOWS_COUNT_PERIOD = 5;
 }

@@ -2,6 +2,7 @@ package com.androidcollider.koljadnik.storage.local;
 
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
+import com.androidcollider.koljadnik.models.LocationEvent;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
@@ -26,4 +27,10 @@ public interface SongsLocalDataSource {
     void saveSongRatings(List<SongRating> songs, OnWriteListener onWriteListener);
 
     void increaseSongLocalRating(SongRating songRating);
+
+    void addLocationEvent(LocationEvent locationEvent, OnWriteListener onWriteListener);
+
+    List<LocationEvent> getLocationEvents();
+
+    void clearLocationEvents();
 }

@@ -13,6 +13,7 @@ public class SharedPreferencesManager {
     public final static String ALREADY_PARSED_DATA_FROM_LOCAL = "already_parsed_data_from_local";
     public final static String ALREADY_PARSED_SONGS_RATINGS_FROM_LOCAL = "already_parsed_songs_ratings_from_local";
     public final static String LAST_VERSION_CODE = "last_version_code";
+    public final static String LOCATION_POPUP_SHOWS_COUNT = "location_popup_shows_count";
 
     private SharedPreferences sharedPreferences;
 
@@ -57,5 +58,13 @@ public class SharedPreferencesManager {
 
     public boolean isAlreadyParsedSongsRatingsFromLocal() {
         return sharedPreferences.getBoolean(ALREADY_PARSED_SONGS_RATINGS_FROM_LOCAL, false);
+    }
+
+    public int getLocationPopupTriesCount() {
+        return sharedPreferences.getInt(LOCATION_POPUP_SHOWS_COUNT, 0);
+    }
+
+    public void incrementLocationPopupTriesCount() {
+        sharedPreferences.edit().putInt(LOCATION_POPUP_SHOWS_COUNT, getLocationPopupTriesCount()+1).apply();
     }
 }

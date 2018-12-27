@@ -15,6 +15,8 @@ import com.androidcollider.koljadnik.constants.Tags;
 import com.androidcollider.koljadnik.feedback.FeedbackActivity;
 import com.androidcollider.koljadnik.root.App;
 import com.androidcollider.koljadnik.songs_list.SongsActivity;
+import com.androidcollider.koljadnik.storage.shared_prefs.SharedPreferencesManager;
+import com.androidcollider.koljadnik.utils.LocationManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,14 +36,23 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+import static com.androidcollider.koljadnik.constants.Settings.LOCATION_POPUP_SHOWS_COUNT_PERIOD;
+import static com.androidcollider.koljadnik.constants.Settings.LOCATION_POPUP_SHOWS_COUNT_START_BATCH;
+
 
 public class SongTypesActivity extends CommonToolbarActivity implements SongTypesActivityMVP.View {
+
+    private final int LOCATION_REQUEST_CODE = 1927;
 
     @BindView(R.id.rv_types)
     RecyclerView rvTypes;
 
     @Inject
     SongTypesActivityMVP.Presenter presenter;
+
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
+
     private SongTypeAdapter songTypeAdapter;
 
     @Override
@@ -52,6 +63,20 @@ public class SongTypesActivity extends CommonToolbarActivity implements SongType
         songTypeAdapter = new SongTypeAdapter(itemClickListener);
         rvTypes.setLayoutManager(new LinearLayoutManager(this));
         rvTypes.setAdapter(songTypeAdapter);
+
+        if (isNeedToAskLocationPermission()) {
+            LocationManager.checkLocationPermission(this, LOCATION_REQUEST_CODE);
+        }
+        sharedPreferencesManager.incrementLocationPopupTriesCount();
+    }
+
+    private boolean isNeedToAskLocationPermission(){
+        int showsCount = sharedPreferencesManager.getLocationPopupTriesCount();
+        if (showsCount < LOCATION_POPUP_SHOWS_COUNT_START_BATCH){
+            return true;
+        } else {
+            return (showsCount - LOCATION_POPUP_SHOWS_COUNT_START_BATCH) % LOCATION_POPUP_SHOWS_COUNT_PERIOD == 0;
+        }
     }
 
     @Override

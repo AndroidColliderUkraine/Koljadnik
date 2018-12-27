@@ -5,10 +5,12 @@ import android.util.Log;
 import com.androidcollider.koljadnik.constants.FirebaseTable;
 import com.androidcollider.koljadnik.listeners.OnReadListener;
 import com.androidcollider.koljadnik.listeners.OnWriteListener;
+import com.androidcollider.koljadnik.models.LocationEvent;
 import com.androidcollider.koljadnik.models.Song;
 import com.androidcollider.koljadnik.models.SongRating;
 import com.androidcollider.koljadnik.models.SongType;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -132,5 +134,15 @@ public class SongsFirebaseDataSource implements SongsRemoteDataSource {
             listToUpdate.put(String.valueOf(songRating.getIdSong()), songRating.toMap());
             mDatabase.child(FirebaseTable.SONG_RATINGS.label).updateChildren(listToUpdate);
         }
+    }
+
+    @Override
+    public void addLocationEvents(List<LocationEvent> locationEvents, OnSuccessListener<Void> onSuccessListener) {
+        Map<String, Object> listToUpdate = new HashMap<>();
+        for (LocationEvent locationEvent : locationEvents) {
+            listToUpdate.put(String.valueOf(locationEvent.getId()), locationEvent.toMap());
+        }
+        mDatabase.child(FirebaseTable.LOCATION_EVENT.label).updateChildren(listToUpdate)
+                .addOnSuccessListener(onSuccessListener);
     }
 }

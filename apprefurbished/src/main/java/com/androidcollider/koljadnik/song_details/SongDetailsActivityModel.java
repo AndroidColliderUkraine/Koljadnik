@@ -25,7 +25,7 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
         return songsDataSource.getSongById(songId, new OnReadListener<Song>() {
             @Override
             public void onSuccess(Song song) {
-                listener.onSuccess(new SongDetailsViewModel(song.getName(), song.getText(), song.getSource()));
+                listener.onSuccess(new SongDetailsViewModel(song.getId(), song.getName(), song.getText(), song.getSource()));
             }
 
             @Override
@@ -66,5 +66,10 @@ public class SongDetailsActivityModel implements SongDetailsActivityMVP.Model {
                 listener.onError(error);
             }
         });
+    }
+
+    @Override
+    public void addLocationEvent(int songId, String lat, String lng) {
+        songsDataSource.saveLocationEvent(songId, lat, lng);
     }
 }

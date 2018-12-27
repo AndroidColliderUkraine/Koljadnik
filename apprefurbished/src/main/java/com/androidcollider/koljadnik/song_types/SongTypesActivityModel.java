@@ -52,4 +52,10 @@ public class SongTypesActivityModel implements SongTypesActivityMVP.Model {
             }
         });
     }
+
+
+    @Override
+    public void tryToUpdateLocationEvents() {
+        songsDataSource.tryToUpdateLocationEvents();
+    }
 }

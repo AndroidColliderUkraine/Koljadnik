@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.androidcollider.koljadnik.storage.SongsDataSource;
 import com.androidcollider.koljadnik.utils.ActivityScoped;
+import com.androidcollider.koljadnik.utils.LocationManager;
 import com.androidcollider.koljadnik.utils.SessionSettingsManager;
 
 import dagger.Module;
@@ -26,8 +27,9 @@ public class SongDetailsModule {
     @Provides
     @ActivityScoped
     public SongDetailsActivityMVP.Presenter provideSongDetailsActivityPresenter(SongDetailsActivityMVP.Model model,
-                                                                                SessionSettingsManager sessionSettingsManager) {
-        return new SongDetailsActivityPresenter(model, sessionSettingsManager);
+                                                                                SessionSettingsManager sessionSettingsManager,
+                                                                                LocationManager locationManager) {
+        return new SongDetailsActivityPresenter(model, sessionSettingsManager, locationManager);
     }
 
     @Provides

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_location_permission">Нова функція</string>
+    <string name="text_location_permission">Ми додали нову класну функцію, яка генерує статистику про поширеність колядок у різних регіонах України та світу.
+        Будь ласка, надайте можливість вашому смартфону відправляти дані про місцезнаходження вашого смартфону</string>
+    <string name="give_access">Надати</string>
+</resources>
